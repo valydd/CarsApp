@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   X, 
   QrCode, 
@@ -28,8 +28,8 @@ export const ConnectModal = ({
   const [toastMessage, setToastMessage] = useState('');
 
   const appUrl = "https://valydd.github.io/CarsApp/";
-  const apkDownloadUrl = "https://valydd.github.io/CarsApp/CarsApp.apk";
-  const apkGithubUrl = "https://github.com/valydd/CarsApp/raw/main/CarsApp.apk";
+  const apkDownloadUrl = "https://valydd.github.io/CarsApp/CarsApp_v1.3.9.apk";
+  const apkGithubUrl = "https://github.com/valydd/CarsApp/raw/main/public/CarsApp_v1.3.9.apk";
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -181,13 +181,13 @@ export const ConnectModal = ({
           <div className="space-y-2">
             <a
               href={apkDownloadUrl}
-              download="CarsApp.apk"
+              download="CarsApp_v1.3.9.apk"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-500/25 transition-all transform active:scale-[0.98] cursor-pointer"
             >
               <Download className="w-5 h-5 stroke-[2.5]" />
-              <span>{t.downloadApk || "Descarcă Aplicația (CarsApp.apk)"}</span>
+              <span>{t.downloadApk || "Descarcă Aplicația (CarsApp_v1.3.9.apk)"}</span>
             </a>
 
             <div className="flex items-center justify-between gap-2 px-1">
