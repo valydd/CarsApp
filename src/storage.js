@@ -224,65 +224,117 @@ export const parseBackupData = (input) => {
   if (!input) return null;
   let data = input;
 
-  // Handle string JSON (even if double serialized)
   if (typeof data === 'string') {
+    let cleanStr = data.trim();
+
+    // Strip UTF-8 BOM if present
+    if (cleanStr.charCodeAt(0) === 0xFEFF) {
+      cleanStr = cleanStr.slice(1).trim();
+    }
+
+    // Strip Markdown code blocks if user copied from chat/AI
+    if (cleanStr.startsWith('```')) {
+      cleanStr = cleanStr.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+    }
+
     try {
-      data = JSON.parse(data.trim());
+      data = JSON.parse(cleanStr);
       if (typeof data === 'string') {
         data = JSON.parse(data.trim());
       }
     } catch (e) {
-      console.error("CarsApp: JSON parse error in parseBackupData:", e);
-      return null;
+      console.warn("CarsApp JSON parse failed, trying substring extraction:", e);
+      // Try finding JSON object { ... }
+      const firstBrace = cleanStr.indexOf('{');
+      const lastBrace = cleanStr.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        try {
+          data = JSON.parse(cleanStr.substring(firstBrace, lastBrace + 1));
+        } catch (err2) {}
+      }
+
+      // Try finding JSON array [ ... ]
+      if (!data || typeof data !== 'object') {
+        const firstBracket = cleanStr.indexOf('[');
+        const lastBracket = cleanStr.lastIndexOf(']');
+        if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+          try {
+            data = JSON.parse(cleanStr.substring(firstBracket, lastBracket + 1));
+          } catch (err3) {}
+        }
+      }
     }
   }
 
   if (!data || typeof data !== 'object') return null;
 
-  // Handle wrappers like { data: { ... } } or { backup: { ... } }
-  if (data.data && typeof data.data === 'object' && !Array.isArray(data.data)) {
-    data = { ...data, ...data.data };
+  // Unwrap potential wrapper keys
+  let source = data;
+  if (source.data && typeof source.data === 'object' && !Array.isArray(source.data)) {
+    source = { ...source, ...source.data };
   }
-  if (data.backup && typeof data.backup === 'object' && !Array.isArray(data.backup)) {
-    data = { ...data, ...data.backup };
+  if (source.backup && typeof source.backup === 'object' && !Array.isArray(source.backup)) {
+    source = { ...source, ...source.backup };
   }
 
-  // Detect vehicles array
+  // 1. Extract Vehicles
   let vehicles = null;
-  if (Array.isArray(data)) {
-    vehicles = data;
-  } else if (Array.isArray(data.vehicles)) {
-    vehicles = data.vehicles;
-  } else if (Array.isArray(data.cars)) {
-    vehicles = data.cars;
-  } else if (Array.isArray(data.vehicule)) {
-    vehicles = data.vehicule;
-  } else if (Array.isArray(data.fleet)) {
-    vehicles = data.fleet;
+  if (Array.isArray(source)) {
+    if (source.length > 0 && (source[0].plate || source[0].make || source[0].model || source[0].name)) {
+      vehicles = source;
+    }
+  } else if (Array.isArray(source.vehicles)) {
+    vehicles = source.vehicles;
+  } else if (Array.isArray(source.cars)) {
+    vehicles = source.cars;
+  } else if (Array.isArray(source.vehicule)) {
+    vehicles = source.vehicule;
+  } else if (Array.isArray(source.fleet)) {
+    vehicles = source.fleet;
+  } else if (source.vehicles && typeof source.vehicles === 'object') {
+    vehicles = Object.values(source.vehicles);
   }
 
-  // Detect records array
+  // 2. Extract Records
   let records = [];
-  if (Array.isArray(data.records)) {
-    records = data.records;
-  } else if (Array.isArray(data.expenses)) {
-    records = data.expenses;
-  } else if (Array.isArray(data.cheltuieli)) {
-    records = data.cheltuieli;
-  } else if (Array.isArray(data.inregistrari)) {
-    records = data.inregistrari;
+  if (Array.isArray(source.records)) {
+    records = source.records;
+  } else if (Array.isArray(source.expenses)) {
+    records = source.expenses;
+  } else if (Array.isArray(source.cheltuieli)) {
+    records = source.cheltuieli;
+  } else if (Array.isArray(source.inregistrari)) {
+    records = source.inregistrari;
+  } else if (source.records && typeof source.records === 'object') {
+    records = Object.values(source.records);
   }
 
-  // Detect personal trips array
+  // 3. Extract Personal Trips
   let personalTrips = [];
-  if (Array.isArray(data.personalTrips)) {
-    personalTrips = data.personalTrips;
-  } else if (Array.isArray(data.trips)) {
-    personalTrips = data.trips;
-  } else if (Array.isArray(data.curse)) {
-    personalTrips = data.curse;
-  } else if (Array.isArray(data.cursePersonale)) {
-    personalTrips = data.cursePersonale;
+  if (Array.isArray(source.personalTrips)) {
+    personalTrips = source.personalTrips;
+  } else if (Array.isArray(source.trips)) {
+    personalTrips = source.trips;
+  } else if (Array.isArray(source.curse)) {
+    personalTrips = source.curse;
+  } else if (Array.isArray(source.cursePersonale)) {
+    personalTrips = source.cursePersonale;
+  } else if (source.personalTrips && typeof source.personalTrips === 'object') {
+    personalTrips = Object.values(source.personalTrips);
+  }
+
+  // If no vehicles array found directly, but records exist with vehicle IDs
+  if ((!vehicles || vehicles.length === 0) && records.length > 0) {
+    const uniqueVehIds = [...new Set(records.map(r => r.vehicleId).filter(Boolean))];
+    if (uniqueVehIds.length > 0) {
+      vehicles = uniqueVehIds.map((id, idx) => ({
+        id: id,
+        name: `Vehicul ${id}`,
+        plate: id,
+        type: 'personal',
+        currentKm: 0
+      }));
+    }
   }
 
   if (!vehicles || !Array.isArray(vehicles) || vehicles.length === 0) {
