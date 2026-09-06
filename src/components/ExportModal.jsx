@@ -9,10 +9,7 @@ import {
   Share2, 
   Copy, 
   Check, 
-  ClipboardPaste,
-  Globe,
-  QrCode,
-  ChevronRight
+  ClipboardPaste
 } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { Share } from '@capacitor/share';
@@ -84,38 +81,6 @@ export const ExportModal = ({
 
   const handleShareJSON = async () => {
     await exportAllDataJSON(vehicles, records, personalTrips);
-  };
-
-  const handleShareBrowserLink = async () => {
-    const browserUrl = "http://192.168.3.13:5173/";
-    const message = `Deschide aplicația CarsApp în browser:\n${browserUrl}`;
-    
-    if (Capacitor.isNativePlatform()) {
-      try {
-        await Share.share({
-          title: "CarsApp Web",
-          text: message,
-          url: browserUrl,
-          dialogTitle: "Trimite Link Deschidere în Browser pe WhatsApp"
-        });
-        return;
-      } catch (e) {
-        // user cancelled or fallback
-      }
-    }
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "CarsApp Web",
-          text: message,
-          url: browserUrl
-        });
-        return;
-      } catch (err) {}
-    }
-    
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleExportCSV = async () => {
@@ -202,30 +167,8 @@ export const ExportModal = ({
           {/* SECTION: EXPORT DATA */}
           <div className="space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block px-1">
-              Deschidere Directă & Transfer
+              Exportă Date (Salvare / Trimitere)
             </span>
-
-            {/* 0. Send Browser Link directly to WhatsApp */}
-            <button
-              onClick={handleShareBrowserLink}
-              className="w-full p-3 rounded-2xl bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-blue-500/5 border border-blue-500/40 hover:border-blue-500 text-left flex items-center justify-between group transition-all shadow-xs"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-blue-600 text-white font-black shadow-md shadow-blue-500/20 shrink-0">
-                  <Globe className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-black text-slate-900 dark:text-white">Trimite Link Deschidere Browser</h4>
-                    <span className="text-[9px] uppercase font-black bg-blue-500 text-white px-1.5 py-0.2 rounded-md">
-                      WhatsApp
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400">Trimite linkul pe WhatsApp pentru a deschide aplicația în browser</p>
-                </div>
-              </div>
-              <Share2 className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform shrink-0" />
-            </button>
 
             {/* 1. Share / Send directly (WhatsApp, Drive, Bluetooth, Email) */}
             <button
@@ -306,7 +249,7 @@ export const ExportModal = ({
           {/* SECTION: IMPORT DATA */}
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block px-1">
-              Pasul 2: Importă pe laptop
+              Importă Date (Restaurare)
             </span>
 
             {/* File Upload */}
