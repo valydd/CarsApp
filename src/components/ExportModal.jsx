@@ -14,7 +14,7 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { Share } from '@capacitor/share';
 import { translations } from '../i18n';
-import { exportAllDataJSON, exportRecordsCSV, resetToDefaultData } from '../storage';
+import { exportAllDataJSON, exportRecordsCSV, resetToDefaultData, parseBackupData } from '../storage';
 
 export const ExportModal = ({
   isOpen,
@@ -101,31 +101,35 @@ export const ExportModal = ({
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const json = JSON.parse(event.target.result);
-        if (json.vehicles && json.records) {
-          onDataRestored(json.vehicles, json.records, json.personalTrips || []);
-          alert(`Datele au fost restaurate cu succes! (${json.vehicles.length} mașini, ${json.records.length} înregistrări)`);
+        const text = event.target.result;
+        const parsed = parseBackupData(text);
+        if (parsed && Array.isArray(parsed.vehicles) && parsed.vehicles.length > 0) {
+          onDataRestored(parsed.vehicles, parsed.records || [], parsed.personalTrips || []);
+          alert(`Datele au fost restaurate cu succes! (${parsed.vehicles.length} mașini, ${(parsed.records || []).length} înregistrări, ${(parsed.personalTrips || []).length} curse)`);
           onClose();
         } else {
-          alert("Fișierul JSON nu este în formatul corect CarsApp.");
+          alert("Fișierul JSON nu a putut fi recunoscut ca un backup valid CarsApp. Verifică fișierul selectat.");
         }
       } catch (err) {
         alert("Eroare la citirea fișierului JSON.");
       }
     };
     reader.readAsText(file);
+    if (e.target) {
+      e.target.value = '';
+    }
   };
 
   const handleRestoreFromText = () => {
     if (!pastedText.trim()) return;
     try {
-      const json = JSON.parse(pastedText);
-      if (json.vehicles && json.records) {
-        onDataRestored(json.vehicles, json.records, json.personalTrips || []);
-        alert(`Datele au fost restaurate cu succes! (${json.vehicles.length} mașini, ${json.records.length} înregistrări)`);
+      const parsed = parseBackupData(pastedText);
+      if (parsed && Array.isArray(parsed.vehicles) && parsed.vehicles.length > 0) {
+        onDataRestored(parsed.vehicles, parsed.records || [], parsed.personalTrips || []);
+        alert(`Datele au fost restaurate cu succes! (${parsed.vehicles.length} mașini, ${(parsed.records || []).length} înregistrări, ${(parsed.personalTrips || []).length} curse)`);
         onClose();
       } else {
-        alert("Textul introdus nu conține structura validă CarsApp (lipsesc mașinile sau înregistrările).");
+        alert("Textul introdus nu conține o structură validă CarsApp (lipsesc vehiculele).");
       }
     } catch (e) {
       alert("Format JSON invalid. Verifică dacă ai copiat întregul text al fișierului de backup.");

@@ -215,13 +215,19 @@ export function App() {
   };
 
   const handleDataRestored = (restoredVehicles, restoredRecords, restoredTrips = null) => {
-    setVehicles(restoredVehicles);
-    setRecords(restoredRecords);
-    setSelectedVehicleIds(restoredVehicles.map(v => v.id));
-    if (restoredTrips && Array.isArray(restoredTrips)) {
-      setPersonalTrips(restoredTrips);
-      saveStoredPersonalTrips(restoredTrips);
-    }
+    const v = Array.isArray(restoredVehicles) ? restoredVehicles : [];
+    const r = Array.isArray(restoredRecords) ? restoredRecords : [];
+    const pt = Array.isArray(restoredTrips) ? restoredTrips : [];
+
+    setVehicles(v);
+    saveStoredVehicles(v);
+    setRecords(r);
+    saveStoredRecords(r);
+    setPersonalTrips(pt);
+    saveStoredPersonalTrips(pt);
+    const selIds = v.map(item => item.id);
+    setSelectedVehicleIds(selIds);
+    saveStoredSelectedVehicleIds(selIds);
   };
 
   const handleSavePersonalTrip = (tripData) => {

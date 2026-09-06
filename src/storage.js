@@ -220,6 +220,82 @@ export const resetToDefaultData = () => {
   return { vehicles: initialVehicles, records: initialRecords };
 };
 
+export const parseBackupData = (input) => {
+  if (!input) return null;
+  let data = input;
+
+  // Handle string JSON (even if double serialized)
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data.trim());
+      if (typeof data === 'string') {
+        data = JSON.parse(data.trim());
+      }
+    } catch (e) {
+      console.error("CarsApp: JSON parse error in parseBackupData:", e);
+      return null;
+    }
+  }
+
+  if (!data || typeof data !== 'object') return null;
+
+  // Handle wrappers like { data: { ... } } or { backup: { ... } }
+  if (data.data && typeof data.data === 'object' && !Array.isArray(data.data)) {
+    data = { ...data, ...data.data };
+  }
+  if (data.backup && typeof data.backup === 'object' && !Array.isArray(data.backup)) {
+    data = { ...data, ...data.backup };
+  }
+
+  // Detect vehicles array
+  let vehicles = null;
+  if (Array.isArray(data)) {
+    vehicles = data;
+  } else if (Array.isArray(data.vehicles)) {
+    vehicles = data.vehicles;
+  } else if (Array.isArray(data.cars)) {
+    vehicles = data.cars;
+  } else if (Array.isArray(data.vehicule)) {
+    vehicles = data.vehicule;
+  } else if (Array.isArray(data.fleet)) {
+    vehicles = data.fleet;
+  }
+
+  // Detect records array
+  let records = [];
+  if (Array.isArray(data.records)) {
+    records = data.records;
+  } else if (Array.isArray(data.expenses)) {
+    records = data.expenses;
+  } else if (Array.isArray(data.cheltuieli)) {
+    records = data.cheltuieli;
+  } else if (Array.isArray(data.inregistrari)) {
+    records = data.inregistrari;
+  }
+
+  // Detect personal trips array
+  let personalTrips = [];
+  if (Array.isArray(data.personalTrips)) {
+    personalTrips = data.personalTrips;
+  } else if (Array.isArray(data.trips)) {
+    personalTrips = data.trips;
+  } else if (Array.isArray(data.curse)) {
+    personalTrips = data.curse;
+  } else if (Array.isArray(data.cursePersonale)) {
+    personalTrips = data.cursePersonale;
+  }
+
+  if (!vehicles || !Array.isArray(vehicles) || vehicles.length === 0) {
+    return null;
+  }
+
+  return {
+    vehicles,
+    records,
+    personalTrips
+  };
+};
+
 export const exportAllDataJSON = async (vehicles, records, personalTrips = []) => {
   const data = {
     appName: "CarsApp",
