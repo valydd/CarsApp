@@ -1,0 +1,420 @@
+import React, { useState } from 'react';
+import { 
+  ArrowLeft, 
+  Navigation, 
+  Plus, 
+  Calendar, 
+  Gauge, 
+  Fuel, 
+  DollarSign, 
+  Trash2, 
+  Edit3, 
+  CheckCircle2, 
+  Circle, 
+  Clock, 
+  Sparkles,
+  CheckCheck
+} from 'lucide-react';
+import { translations } from '../i18n';
+
+export const PersonalTripsView = ({
+  personalTrips = [],
+  vehicles = [],
+  records = [],
+  selectedVehicle = null,
+  onNavigateBack,
+  onOpenAddTrip,
+  onEditTrip,
+  onDeleteTrip,
+  onToggleTripPaid,
+  lang = 'ro'
+}) => {
+  const t = translations[lang] || translations.ro;
+  const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'unpaid' | 'paid'
+
+  // Filter trips if a specific vehicle is selected
+  const vehicleFilteredTrips = selectedVehicle
+    ? personalTrips.filter(trip => trip.vehicleId === selectedVehicle.id)
+    : personalTrips;
+
+  // Compute stats for ALL trips (Istoric Total)
+  const totalPersonalKm = vehicleFilteredTrips.reduce((sum, trip) => sum + (Number(trip.kmDriven) || 0), 0);
+  const totalPersonalLiters = Number(vehicleFilteredTrips.reduce((sum, trip) => sum + (Number(trip.litersUsed) || 0), 0).toFixed(2));
+  const totalPersonalCost = Number(vehicleFilteredTrips.reduce((sum, trip) => sum + (Number(trip.tripCost) || 0), 0).toFixed(2));
+
+  // Compute stats for UNPAID trips (Rămas de Achitat)
+  const unpaidTrips = vehicleFilteredTrips.filter(trip => !trip.isPaid);
+  const unpaidKm = unpaidTrips.reduce((sum, trip) => sum + (Number(trip.kmDriven) || 0), 0);
+  const unpaidLiters = Number(unpaidTrips.reduce((sum, trip) => sum + (Number(trip.litersUsed) || 0), 0).toFixed(2));
+  const unpaidCost = Number(unpaidTrips.reduce((sum, trip) => sum + (Number(trip.tripCost) || 0), 0).toFixed(2));
+
+  // Compute stats for PAID trips (Deja Achitat)
+  const paidTrips = vehicleFilteredTrips.filter(trip => trip.isPaid);
+  const paidKm = paidTrips.reduce((sum, trip) => sum + (Number(trip.kmDriven) || 0), 0);
+  const paidLiters = Number(paidTrips.reduce((sum, trip) => sum + (Number(trip.litersUsed) || 0), 0).toFixed(2));
+  const paidCost = Number(paidTrips.reduce((sum, trip) => sum + (Number(trip.tripCost) || 0), 0).toFixed(2));
+
+  // Active list based on status filter
+  const displayedTrips = vehicleFilteredTrips.filter(trip => {
+    if (statusFilter === 'unpaid') return !trip.isPaid;
+    if (statusFilter === 'paid') return trip.isPaid;
+    return true;
+  });
+
+  // Helper for date range
+  const formatTripDateRange = (startDate, endDate) => {
+    if (!startDate) return '';
+    if (!endDate || startDate === endDate) {
+      const parts = startDate.split('-');
+      return parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : startDate;
+    }
+    const [sY, sM, sD] = startDate.split('-');
+    const [eY, eM, eD] = endDate.split('-');
+    if (sY === eY && sM === eM) {
+      return `${sD}–${eD}.${sM}.${sY}`;
+    }
+    return `${sD}.${sM}–${eD}.${eM}.${eY}`;
+  };
+
+  return (
+    <div className="space-y-4 animate-in fade-in duration-200">
+      
+      {/* Top Action Bar */}
+      <div className="flex items-center justify-between gap-2 px-1">
+        <button
+          onClick={onNavigateBack}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors cursor-pointer"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>{lang === 'en' ? "Back" : "Înapoi"}</span>
+        </button>
+
+        {onOpenAddTrip && (
+          <button
+            onClick={onOpenAddTrip}
+            className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 stroke-[3]" />
+            <span>{lang === 'en' ? "Personal Trip" : "Cursă Personală"}</span>
+          </button>
+        )}
+      </div>
+
+      {/* Summary Header Banner */}
+      <div className="bg-gradient-to-br from-purple-700 via-indigo-700 to-slate-900 rounded-3xl p-4 sm:p-6 text-white shadow-md relative overflow-hidden">
+        <div className="absolute right-3 -bottom-4 opacity-10 pointer-events-none">
+          <Navigation className="w-36 h-36" />
+        </div>
+
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-2.5 py-1 rounded-xl text-xs font-bold mb-2">
+            <Navigation className="w-3.5 h-3.5" />
+            <span>
+              {selectedVehicle 
+                ? `${selectedVehicle.plate} • ${selectedVehicle.makeModel}` 
+                : (lang === 'en' ? "All Vehicles" : "Toate Mașinile")}
+            </span>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+            {lang === 'en' ? "Personal Consumption & Weekend Trips" : "Consum Personal & Decontare Curse"}
+          </h2>
+          <p className="text-xs text-purple-200 mt-1 max-w-md">
+            {lang === 'en'
+              ? "Track personal trips, separate paid from unpaid balance, and compute exact fuel costs."
+              : "Evidența curselor personale, calculul sumelor de achitat și separarea curselor deja decontate."}
+          </p>
+
+          {/* DUAL KPI STRIP: RĂMAS DE ACHITAT + TOTAL CĂLĂTORII */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/15">
+            
+            {/* 1. RĂMAS DE ACHITAT (Principal) */}
+            <div className="bg-amber-500/20 backdrop-blur-md p-3.5 rounded-2xl border border-amber-400/40 relative overflow-hidden">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>{lang === 'en' ? "Remaining Unpaid Balance" : "Rămas de Achitat"}</span>
+                </span>
+                <span className="text-[10px] font-bold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-md">
+                  {unpaidTrips.length} {lang === 'en' ? "trips" : "curse"}
+                </span>
+              </div>
+
+              <div className="text-2xl sm:text-3xl font-black text-amber-300 font-mono tracking-tight my-1">
+                {unpaidCost.toLocaleString('ro-RO')} <span className="text-sm font-bold text-white">RON</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-purple-100 font-semibold pt-1 border-t border-amber-400/20">
+                <span>🛣️ <strong>{unpaidKm.toLocaleString('ro-RO')} km</strong></span>
+                <span>• ⛽ <strong>{unpaidLiters} Litri</strong> consumați</span>
+              </div>
+            </div>
+
+            {/* 2. TOTAL ISTORIC CĂLĂTORII */}
+            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-purple-200">
+                    {lang === 'en' ? "Total All Personal Trips:" : "Total Istoric Călătorii:"}
+                  </span>
+                  <span className="text-[10.5px] font-mono font-bold text-purple-300">
+                    {vehicleFilteredTrips.length} curse
+                  </span>
+                </div>
+
+                <div className="text-xl sm:text-2xl font-black text-white font-mono tracking-tight my-1">
+                  {totalPersonalCost.toLocaleString('ro-RO')} <span className="text-xs font-bold text-purple-200">RON</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-purple-200 font-medium pt-1 border-t border-white/10">
+                <span>🛣️ Total: <strong>{totalPersonalKm.toLocaleString('ro-RO')} km</strong></span>
+                <span className="text-emerald-300">✓ Achitat: <strong>{paidCost.toLocaleString('ro-RO')} RON</strong></span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Filter Tabs & Trips List Section */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xs space-y-3">
+        
+        {/* Header & Status Filter Pills */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2">
+            <Navigation className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+              {lang === 'en' ? "Personal Trips Log" : "Jurnal Curse Personale"}
+            </h3>
+            <span className="text-xs font-bold text-slate-400">({displayedTrips.length})</span>
+          </div>
+
+          {/* Status Filter Buttons */}
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs self-start sm:self-auto">
+            <button
+              onClick={() => setStatusFilter('all')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+                statusFilter === 'all'
+                  ? 'bg-purple-600 text-white shadow-xs font-black'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              {lang === 'en' ? "All" : "Toate"} ({vehicleFilteredTrips.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('unpaid')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+                statusFilter === 'unpaid'
+                  ? 'bg-amber-500 text-slate-950 shadow-xs font-black'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              ⏳ {lang === 'en' ? "Unpaid" : "De Achitat"} ({unpaidTrips.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('paid')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+                statusFilter === 'paid'
+                  ? 'bg-emerald-600 text-white shadow-xs font-black'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              ✓ {lang === 'en' ? "Paid" : "Achitate"} ({paidTrips.length})
+            </button>
+          </div>
+        </div>
+
+        {displayedTrips.length === 0 ? (
+          <div className="py-10 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto mb-3">
+              <Navigation className="w-6 h-6" />
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-3">
+              {statusFilter === 'unpaid' 
+                ? (lang === 'en' ? "All personal trips are settled and paid! 🎉" : "Toate cursele personale sunt achitate! 🎉")
+                : (statusFilter === 'paid'
+                    ? (lang === 'en' ? "No paid trips in this filter." : "Nu există curse achitate în acest filtru.")
+                    : (lang === 'en' ? "No personal trips recorded yet." : "Nicio cursă personală înregistrată încă."))}
+            </p>
+            {onOpenAddTrip && statusFilter === 'all' && (
+              <button
+                onClick={onOpenAddTrip}
+                className="inline-flex items-center gap-1 text-xs font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? "Add Trip" : "Adaugă Cursă"}</span>
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {displayedTrips.map((trip) => {
+              const veh = vehicles.find(v => v.id === trip.vehicleId);
+              const isPaid = Boolean(trip.isPaid);
+              const isOngoing = !trip.endKm || trip.isOngoing;
+
+              return (
+                <div
+                  key={trip.id}
+                  className={`border rounded-2xl p-3 sm:p-3.5 transition-all shadow-xs space-y-2 ${
+                    isOngoing
+                      ? 'bg-amber-50/90 dark:bg-amber-950/30 border-amber-400 dark:border-amber-600/60 ring-1 ring-amber-400/20 shadow-md shadow-amber-500/5'
+                      : isPaid
+                      ? 'bg-slate-50 dark:bg-slate-950/40 border-slate-200 dark:border-slate-800'
+                      : 'bg-amber-50/70 dark:bg-amber-950/25 border-amber-300/80 dark:border-amber-900/50'
+                  }`}
+                >
+                  {/* RÂNDUL 1: Plăcuță + Titlu în stânga | Edit + Delete în dreapta */}
+                  <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-black/5 dark:border-white/5">
+                    <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                      {veh && (
+                        <span className="whitespace-nowrap shrink-0 inline-flex items-center bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-1.5 py-0.5 text-[11px] font-mono font-black text-slate-800 dark:text-slate-100 shadow-2xs">
+                          <span className="text-[9px] text-blue-500 font-bold mr-1">RO</span>
+                          {veh.plate}
+                        </span>
+                      )}
+                      {trip.title && (
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                          {trip.title}
+                        </span>
+                      )}
+                      {isOngoing && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-slate-950 shadow-2xs">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping" />
+                          <span>În Desfășurare</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Dreapta: Edit + Delete */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      {onEditTrip && (
+                        <button
+                          onClick={() => onEditTrip(trip)}
+                          className="p-1 text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          title="Editează"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                      {onDeleteTrip && (
+                        <button
+                          onClick={() => {
+                            if (window.confirm(lang === 'en' ? "Delete this personal trip?" : "Ștergi această cursă personală?")) {
+                              onDeleteTrip(trip.id);
+                            }
+                          }}
+                          className="p-1 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          title="Șterge"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {isOngoing ? (
+                    /* SPECIAL CARD BODY FOR ONGOING TRIP */
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between gap-2 flex-wrap bg-white/70 dark:bg-slate-900/70 p-2.5 rounded-xl border border-amber-300/50 dark:border-amber-800/50">
+                        <div className="text-xs font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                          <Gauge className="w-4 h-4 text-amber-500 shrink-0" />
+                          <span>Km Început: <strong className="font-mono font-black text-slate-900 dark:text-white">{Number(trip.startKm).toLocaleString('ro-RO')} km</strong></span>
+                        </div>
+                        <button
+                          onClick={() => onEditTrip && onEditTrip(trip)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md shadow-purple-500/20 transition-all active:scale-95 cursor-pointer"
+                        >
+                          <span>🏁 Finalizează Cursa</span>
+                        </button>
+                      </div>
+
+                      <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>Începută la: <strong>{formatTripDateRange(trip.startDate, trip.startDate)}</strong></span>
+                      </div>
+                    </div>
+                  ) : (
+                    /* NORMAL COMPLETED TRIP CARD */
+                    <>
+                      {/* RÂNDUL 2: +38 km pe stânga ÎN LINIE CU 18,53 RON pe dreapta */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="whitespace-nowrap font-black text-xs sm:text-sm bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-lg shadow-2xs inline-flex items-center gap-1">
+                          <span>🛣️</span>
+                          <span>+{Number(trip.kmDriven).toLocaleString('ro-RO')} km</span>
+                        </div>
+
+                        <div className="whitespace-nowrap font-mono font-black text-sm sm:text-base text-purple-700 dark:text-purple-300 bg-white dark:bg-slate-900 px-2.5 py-0.5 rounded-xl border border-purple-200 dark:border-purple-900/50 shadow-2xs">
+                          {Number(trip.tripCost).toLocaleString('ro-RO')} RON
+                        </div>
+                      </div>
+
+                      {/* RÂNDUL 3: Interval kilometraj (135.957 → 135.995 km) */}
+                      <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1">
+                        <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
+                        <span className="whitespace-nowrap font-medium">
+                          {Number(trip.startKm).toLocaleString('ro-RO')} km → {Number(trip.endKm).toLocaleString('ro-RO')} km
+                        </span>
+                      </div>
+
+                      {/* RÂNDUL 4: Consum Litri */}
+                      <div className="text-[11px] text-slate-600 dark:text-slate-300 flex items-center gap-1 pt-1.5 border-t border-slate-200/50 dark:border-slate-800/50">
+                        <Fuel className="w-3 h-3 text-blue-500 shrink-0" />
+                        <span className="font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">
+                          {Number(trip.litersUsed).toFixed(2)} Litri
+                        </span>
+                        <span className="text-slate-400 text-[10px] whitespace-nowrap">
+                          ({trip.avgL100} L/100 • {trip.fuelPrice} RON/L)
+                        </span>
+                      </div>
+
+                      {/* RÂNDUL 5: Data pe stânga ÎN LINIE CU Butonul De Achitat / Achitat pe dreapta */}
+                      <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/40 dark:border-slate-800/40">
+                        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span className="whitespace-nowrap font-semibold">{formatTripDateRange(trip.startDate, trip.endDate)}</span>
+                        </div>
+
+                        {/* Buton De Achitat / Achitat aliniat cu data */}
+                        <button
+                          onClick={() => onToggleTripPaid && onToggleTripPaid(trip.id)}
+                          className={`whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer shadow-2xs active:scale-95 ${
+                            isPaid
+                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25'
+                              : 'bg-amber-500 text-slate-950 border-amber-500 hover:bg-amber-400 font-black shadow-amber-500/20'
+                          }`}
+                          title={isPaid ? "Apasă pentru a marca ca Neachitată" : "Apasă pentru a marca ca Achitată"}
+                        >
+                          {isPaid ? (
+                            <>
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                              <span>✓ Achitat</span>
+                            </>
+                          ) : (
+                            <>
+                              <Clock className="w-3.5 h-3.5" />
+                              <span>⏳ De Achitat</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Observații opționale dacă există */}
+                  {trip.notes && (
+                    <p className="mt-1 text-[10.5px] text-slate-500 dark:text-slate-400 italic bg-white dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200/60 dark:border-slate-800/60 truncate">
+                      „{trip.notes}”
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+    </div>
+  );
+};

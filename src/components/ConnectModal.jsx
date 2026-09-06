@@ -1,0 +1,247 @@
+﻿import React, { useEffect, useRef, useState } from 'react';
+import { 
+  X, 
+  QrCode, 
+  Download, 
+  Copy, 
+  Check, 
+  Share2, 
+  Smartphone, 
+  ExternalLink, 
+  Globe, 
+  Sparkles,
+  Camera
+} from 'lucide-react';
+import QRCode from 'qrcode';
+import { translations } from '../i18n';
+import { Capacitor } from '@capacitor/core';
+import { Share } from '@capacitor/share';
+
+export const ConnectModal = ({
+  isOpen,
+  onClose,
+  lang = 'ro'
+}) => {
+  const t = translations[lang] || translations.ro;
+  const canvasRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const appUrl = "https://valydd.github.io/CarsApp/";
+  const apkDownloadUrl = "https://valydd.github.io/CarsApp/CarsApp.apk";
+  const apkGithubUrl = "https://github.com/valydd/CarsApp/raw/main/CarsApp.apk";
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      QRCode.toCanvas(
+        canvasRef.current,
+        appUrl,
+        {
+          width: 220,
+          margin: 2,
+          color: {
+            dark: '#090d16',
+            light: '#ffffff'
+          }
+        },
+        (error) => {
+          if (error) console.error("Error generating QR code:", error);
+        }
+      );
+    }
+  }, [isOpen, appUrl]);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage('');
+    }, 2800);
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(appUrl);
+        setCopied(true);
+        showToast(t.linkCopied || "Link copiat în clipboard!");
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch (e) {
+      showToast("Selectează și copiază linkul manual.");
+    }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: "CarsApp - Gestiune Flotă Auto",
+      text: lang === 'ro' 
+        ? "Deschide aplicația CarsApp sau descarcă APK-ul:" 
+        : "Open CarsApp or download the APK:",
+      url: appUrl
+    };
+
+    if (Capacitor.isNativePlatform()) {
+      try {
+        await Share.share(shareData);
+      } catch (err) {
+        handleCopyLink();
+      }
+    } else if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // user cancelled
+      }
+    } else {
+      // WhatsApp direct share fallback
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareData.text} ${appUrl}`)}`;
+      window.open(waUrl, '_blank');
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[94vh] flex flex-col">
+        
+        {/* Header */}
+        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/80 dark:bg-slate-900/90 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <QrCode className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-1.5">
+                <span>{t.connectAndInstall || "Conectare & Instalare CarsApp"}</span>
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {t.connectSubtitle || "Scanează codul QR sau descarcă fișierul APK"}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-5">
+          
+          {/* Toast feedback */}
+          {toastMessage && (
+            <div className="p-2.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs text-center shadow-lg animate-in slide-in-from-top duration-200 flex items-center justify-center gap-1.5">
+              <Check className="w-4 h-4" />
+              <span>{toastMessage}</span>
+            </div>
+          )}
+
+          {/* QR Code Card */}
+          <div className="bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 text-center shadow-inner flex flex-col items-center">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs mb-3 border border-emerald-500/20">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{t.scanQrCode || "Cod QR Conectare Directă"}</span>
+            </div>
+
+            {/* QR Canvas */}
+            <div className="p-3 bg-white rounded-2xl shadow-md border border-slate-200/80 inline-block mb-3">
+              <canvas ref={canvasRef} className="rounded-lg max-w-[200px] max-h-[200px] sm:max-w-[220px] sm:max-h-[220px]" />
+            </div>
+
+            {/* URL Box + Copy Button */}
+            <div className="w-full max-w-sm flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-1.5 px-2.5">
+              <Globe className="w-4 h-4 text-slate-400 shrink-0" />
+              <input
+                type="text"
+                readOnly
+                value={appUrl}
+                className="bg-transparent text-xs font-mono font-bold text-slate-700 dark:text-slate-300 w-full outline-hidden truncate"
+              />
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 flex items-center gap-1 ${
+                  copied 
+                    ? 'bg-emerald-500 text-slate-950 shadow-xs' 
+                    : 'bg-white dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700'
+                }`}
+                title={t.copyLink || "Copiază Link"}
+              >
+                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copied ? (lang === 'en' ? "Copied!" : "Copiat!") : (t.copyLink || "Copiază")}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Direct APK Download Button (Big & Prominent) */}
+          <div className="space-y-2">
+            <a
+              href={apkDownloadUrl}
+              download="CarsApp.apk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-500/25 transition-all transform active:scale-[0.98] cursor-pointer"
+            >
+              <Download className="w-5 h-5 stroke-[2.5]" />
+              <span>{t.downloadApk || "Descarcă Aplicația (CarsApp.apk)"}</span>
+            </a>
+
+            <div className="flex items-center justify-between gap-2 px-1">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500">
+                {t.downloadApkDesc || "Instalează direct pe telefonul sau tableta Android"}
+              </span>
+              <button
+                type="button"
+                onClick={handleShare}
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? "Share via WhatsApp" : "Trimite pe WhatsApp"}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 3-Step Guide */}
+          <div className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-3.5 sm:p-4 space-y-2.5">
+            <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+              <Camera className="w-4 h-4 text-emerald-500" />
+              <span>{t.qrStepsTitle || "Cum te conectezi în 3 pași simpli:"}</span>
+            </h4>
+            
+            <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">1</span>
+                <span>{t.qrStep1 || "Deschide camera foto pe celălalt telefon, tabletă sau laptop."}</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">2</span>
+                <span>{t.qrStep2 || "Îndreaptă camera spre codul QR afișat mai sus."}</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">3</span>
+                <span>{t.qrStep3 || "Atinge linkul apărut pentru a deschide ultima versiune în browser."}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Footer */}
+        <div className="p-3 sm:p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-end shrink-0">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
+          >
+            {t.cancel || "Închide"}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+};

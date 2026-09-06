@@ -1,0 +1,5 @@
+{
+  "appId": "ro.carsapp.fleet",
+  "appName": "CarsApp",
+  "webDir": "dist"
+}
