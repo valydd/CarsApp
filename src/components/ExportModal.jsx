@@ -33,19 +33,26 @@ export const ExportModal = ({
   const [pastedText, setPastedText] = useState('');
 
   const getBackupJSONString = () => {
+    const currentVehicles = (vehicles && vehicles.length > 0) ? vehicles : getStoredVehicles();
+    const currentRecords = (records && records.length >= 0) ? records : getStoredRecords();
+    const currentTrips = (personalTrips && personalTrips.length >= 0) ? personalTrips : getStoredPersonalTrips();
+
     const data = {
       appName: "CarsApp",
       version: "1.0",
       exportDate: new Date().toISOString(),
-      vehicles,
-      records,
-      personalTrips
+      vehicles: currentVehicles,
+      records: currentRecords,
+      personalTrips: currentTrips
     };
     return JSON.stringify(data, null, 2);
   };
 
   const handleExportJSON = async () => {
-    await exportAllDataJSON(vehicles, records, personalTrips);
+    const currentVehicles = (vehicles && vehicles.length > 0) ? vehicles : getStoredVehicles();
+    const currentRecords = (records && records.length >= 0) ? records : getStoredRecords();
+    const currentTrips = (personalTrips && personalTrips.length >= 0) ? personalTrips : getStoredPersonalTrips();
+    await exportAllDataJSON(currentVehicles, currentRecords, currentTrips);
   };
 
   const handleCopyJSON = async () => {
