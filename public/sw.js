@@ -1,11 +1,9 @@
-﻿const CACHE_NAME = 'carsapp-v1.3.8';
+const CACHE_NAME = 'carsapp-v1.3.8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './qrcode.min.js',
   './manifest.json',
-  './favicon.svg',
-  './CarsApp.apk'
+  './favicon.svg'
 ];
 
 self.addEventListener('install', (event) => {

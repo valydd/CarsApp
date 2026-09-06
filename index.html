@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="CarsApp" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
     <meta name="description" content="CarsApp - Gestiune Flotă Auto, Revizii, ITP, Asigurări, Consum și Clasament Costuri" />
     <title>CarsApp | Gestiune Flotă Auto</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,12 +23,11 @@
   </head>
   <body class="bg-[#090d16] text-slate-100 antialiased">
     <div id="root"></div>
-    <script src="/qrcode.min.js"></script>
     <script type="module" src="/src/main.jsx"></script>
     <script>
       if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
         });
       }
     </script>
