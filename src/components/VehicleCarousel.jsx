@@ -123,10 +123,12 @@ export const VehicleCarousel = ({
             <button
               type="button"
               onClick={onOpenExport}
-              className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-emerald-500/50 text-emerald-600 dark:text-emerald-400 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
+              className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-400 text-slate-900 dark:text-slate-100 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
               title="Export & Import Date (Backup)"
             >
-              <FileSpreadsheet className="w-4 h-4 stroke-[2.2]" />
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-slate-900 dark:fill-slate-100" fill="currentColor">
+                <path fillRule="evenodd" clipRule="evenodd" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM13 13v3.5h-2V13H8.5L12 9.5l3.5 3.5H13z" />
+              </svg>
             </button>
           )}
         </div>
