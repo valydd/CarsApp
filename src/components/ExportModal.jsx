@@ -202,36 +202,8 @@ export const ExportModal = ({
           {/* SECTION: EXPORT DATA */}
           <div className="space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block px-1">
-              Conectare, Web & Transfer
+              Deschidere Directă & Transfer
             </span>
-
-            {/* QR Code & APK Install Modal Launcher */}
-            {onOpenConnect && (
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenConnect();
-                }}
-                className="w-full p-3 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-blue-500/10 border-2 border-emerald-500/50 hover:border-emerald-500 text-left flex items-center justify-between group transition-all shadow-sm cursor-pointer active:scale-[0.99]"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 font-black shadow-md shadow-emerald-500/25 shrink-0">
-                    <QrCode className="w-4 h-4 stroke-[2.5]" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white">📲 Conectare Cod QR & Descarcă APK</h4>
-                      <span className="text-[9px] uppercase font-black bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded-md">
-                        GitHub
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 dark:text-slate-400">Scanează codul QR cu camera telefonului sau descarcă direct pachetul APK</p>
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
-              </button>
-            )}
 
             {/* 0. Send Browser Link directly to WhatsApp */}
             <button

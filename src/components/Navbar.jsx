@@ -41,7 +41,7 @@ export const Navbar = ({
             <h1 className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight shrink-0 flex items-center gap-1.5">
               <span>{t.appName}</span>
               <span className="text-[9.5px] font-mono font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/60">
-                v1.3.8
+                v1.3.9
               </span>
             </h1>
           </div>
