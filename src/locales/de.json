@@ -272,5 +272,7 @@
   "recordsListTitle": "Rechnungs- & Wartungsverlauf",
   "totalRepairs": "Reparaturen gesamt",
   "totalServices": "Wartungen gesamt",
-  "noRecordsFound": "Keine Rechnungen oder Wartungen für die ausgewählten Fahrzeuge erfasst."
+  "noRecordsFound": "Keine Rechnungen oder Wartungen für die ausgewählten Fahrzeuge erfasst.",
+  "paidBadge": "Bezahlt",
+  "unpaidBadge": "Offen"
 }

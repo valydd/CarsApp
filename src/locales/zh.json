@@ -272,5 +272,7 @@
   "recordsListTitle": "发票与维保历史记录",
   "totalRepairs": "维修总额",
   "totalServices": "保养总额",
-  "noRecordsFound": "所选车辆暂无发票或维保记录。"
+  "noRecordsFound": "所选车辆暂无发票或维保记录。",
+  "paidBadge": "已结清",
+  "unpaidBadge": "未结清"
 }

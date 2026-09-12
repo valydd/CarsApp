@@ -272,5 +272,7 @@
   "recordsListTitle": "Számla- és szerviztörténet",
   "totalRepairs": "Javítások összesen",
   "totalServices": "Szervizek összesen",
-  "noRecordsFound": "Nincsenek rögzített számlák vagy szervizek a kiválasztott járművekhez."
+  "noRecordsFound": "Nincsenek rögzített számlák vagy szervizek a kiválasztott járművekhez.",
+  "paidBadge": "Kifizetve",
+  "unpaidBadge": "Fizetendő"
 }

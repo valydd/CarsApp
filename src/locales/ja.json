@@ -272,5 +272,7 @@
   "recordsListTitle": "請求書・作業履歴",
   "totalRepairs": "修理総額",
   "totalServices": "点検総額",
-  "noRecordsFound": "選択された車両の請求書または作業記録はありません。"
+  "noRecordsFound": "選択された車両の請求書または作業記録はありません。",
+  "paidBadge": "精算済",
+  "unpaidBadge": "未精算"
 }

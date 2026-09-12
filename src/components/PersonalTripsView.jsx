@@ -210,7 +210,7 @@ export const PersonalTripsView = ({
 
               <div className="flex items-center justify-between text-xs text-purple-200 font-medium pt-1 border-t border-white/10">
                 <span>🛣️ Total: <strong>{totalPersonalKm.toLocaleString('ro-RO')} km</strong></span>
-                <span className="text-emerald-300">✓ {t.settledTrip || "Achitat"}: <strong>{paidCost.toLocaleString('ro-RO')} RON</strong></span>
+                <span className="text-emerald-300">✓ {t.paidBadge || "Achitat"}: <strong>{paidCost.toLocaleString('ro-RO')} RON</strong></span>
               </div>
             </div>
 
@@ -251,7 +251,7 @@ export const PersonalTripsView = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              ⏳ {t.unpaidTrips || "De Achitat"} ({unpaidTrips.length})
+              ⏳ {t.unpaidBadge || "De Achitat"} ({unpaidTrips.length})
             </button>
             <button
               onClick={() => setStatusFilter('paid')}
@@ -261,7 +261,7 @@ export const PersonalTripsView = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              ✓ {t.settledTrip || "Achitate"} ({paidTrips.length})
+              ✓ {t.paidBadge || "Achitat"} ({paidTrips.length})
             </button>
           </div>
         </div>
@@ -435,22 +435,22 @@ export const PersonalTripsView = ({
                         {/* Buton De Achitat / Achitat aliniat cu data */}
                         <button
                           onClick={() => handleToggleTripPaidClick(trip)}
-                          className={`whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer shadow-2xs active:scale-95 ${
+                          className={`whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0 ${
                             isPaid
                               ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25'
                               : 'bg-amber-500 text-slate-950 border-amber-500 hover:bg-amber-400 font-black shadow-amber-500/20'
                           }`}
-                          title={isPaid ? (t.unpaidTrips || "Neachitată") : (t.settledTrip || "Achitată")}
+                          title={isPaid ? (t.unpaidBadge || "De Achitat") : (t.paidBadge || "Achitat")}
                         >
                           {isPaid ? (
                             <>
                               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                              <span>✓ {t.settledTrip || "Achitat"}</span>
+                              <span>✓ {t.paidBadge || "Achitat"}</span>
                             </>
                           ) : (
                             <>
                               <Clock className="w-3.5 h-3.5" />
-                              <span>⏳ {t.unpaidTrips || "De Achitat"}</span>
+                              <span>⏳ {t.unpaidBadge || "De Achitat"}</span>
                             </>
                           )}
                         </button>

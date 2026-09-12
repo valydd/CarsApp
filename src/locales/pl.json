@@ -272,5 +272,7 @@
   "recordsListTitle": "Historia faktur i napraw",
   "totalRepairs": "Łącznie naprawy",
   "totalServices": "Łącznie przeglądy",
-  "noRecordsFound": "Brak zarejestrowanych faktur lub napraw dla wybranych pojazdów."
+  "noRecordsFound": "Brak zarejestrowanych faktur lub napraw dla wybranych pojazdów.",
+  "paidBadge": "Opłacone",
+  "unpaidBadge": "Do Zapłaty"
 }

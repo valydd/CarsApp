@@ -272,5 +272,7 @@
   "recordsListTitle": "Factuur- & Onderhoudsgeschiedenis",
   "totalRepairs": "Totale reparaties",
   "totalServices": "Totale onderhoudsbeurten",
-  "noRecordsFound": "Geen facturen of onderhoud geregistreerd voor de geselecteerde voertuigen."
+  "noRecordsFound": "Geen facturen of onderhoud geregistreerd voor de geselecteerde voertuigen.",
+  "paidBadge": "Betaald",
+  "unpaidBadge": "Openstaand"
 }

@@ -272,5 +272,7 @@
   "recordsListTitle": "Fatura ve Müdahale Geçmişi",
   "totalRepairs": "Toplam onarımlar",
   "totalServices": "Toplam bakımlar",
-  "noRecordsFound": "Seçilen araçlar için kayıtlı fatura veya müdahale yok."
+  "noRecordsFound": "Seçilen araçlar için kayıtlı fatura veya müdahale yok.",
+  "paidBadge": "Ödendi",
+  "unpaidBadge": "Ödenmedi"
 }

@@ -272,5 +272,7 @@
   "recordsListTitle": "영수증 및 정비 이력",
   "totalRepairs": "총 수리비",
   "totalServices": "총 점검비",
-  "noRecordsFound": "선택된 차량에 대한 영수증 또는 정비 기록이 없습니다."
+  "noRecordsFound": "선택된 차량에 대한 영수증 또는 정비 기록이 없습니다.",
+  "paidBadge": "정산완료",
+  "unpaidBadge": "미정산"
 }

@@ -272,5 +272,7 @@
   "recordsListTitle": "Istoric Facturi & Intervenții",
   "totalRepairs": "Total reparații",
   "totalServices": "Total revizii",
-  "noRecordsFound": "Nu există facturi sau intervenții înregistrate pentru mașinile selectate."
+  "noRecordsFound": "Nu există facturi sau intervenții înregistrate pentru mașinile selectate.",
+  "paidBadge": "Achitat",
+  "unpaidBadge": "De Achitat"
 }

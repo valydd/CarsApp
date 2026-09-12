@@ -272,5 +272,7 @@
   "recordsListTitle": "Invoice & Service History",
   "totalRepairs": "Total repairs",
   "totalServices": "Total services",
-  "noRecordsFound": "No invoices or services recorded for the selected vehicles."
+  "noRecordsFound": "No invoices or services recorded for the selected vehicles.",
+  "paidBadge": "Paid",
+  "unpaidBadge": "Unpaid"
 }

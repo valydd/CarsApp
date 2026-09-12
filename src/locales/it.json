@@ -272,5 +272,7 @@
   "recordsListTitle": "Storico Fatture & Interventi",
   "totalRepairs": "Totale riparazioni",
   "totalServices": "Totale tagliandi",
-  "noRecordsFound": "Nessuna fattura o intervento registrato per i veicoli selezionati."
+  "noRecordsFound": "Nessuna fattura o intervento registrato per i veicoli selezionati.",
+  "paidBadge": "Saldato",
+  "unpaidBadge": "Da Saldare"
 }

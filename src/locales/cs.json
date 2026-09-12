@@ -272,5 +272,7 @@
   "recordsListTitle": "Historie faktur a servisů",
   "totalRepairs": "Opravy celkem",
   "totalServices": "Servisy celkem",
-  "noRecordsFound": "Pro vybraná vozidla nejsou evidovány žádné faktury ani servisní záznamy."
+  "noRecordsFound": "Pro vybraná vozidla nejsou evidovány žádné faktury ani servisní záznamy.",
+  "paidBadge": "Uhrazeno",
+  "unpaidBadge": "K Úhradě"
 }

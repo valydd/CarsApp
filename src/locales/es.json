@@ -272,5 +272,7 @@
   "recordsListTitle": "Historial de Facturas e Intervenciones",
   "totalRepairs": "Total reparaciones",
   "totalServices": "Total revisiones",
-  "noRecordsFound": "No hay facturas o intervenciones registradas para los vehículos seleccionados."
+  "noRecordsFound": "No hay facturas o intervenciones registradas para los vehículos seleccionados.",
+  "paidBadge": "Pagado",
+  "unpaidBadge": "Pendiente"
 }
