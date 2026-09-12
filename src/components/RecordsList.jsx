@@ -134,37 +134,37 @@ export const RecordsList = ({
                 key={rec.id}
                 className="p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col gap-2 group"
               >
-                {/* Main Header Block: Title & Icon on Left, Amount on Right */}
-                <div className="flex items-center justify-between gap-3">
-                  {/* Left: Category Icon + Title + Plate */}
-                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                    <div className={`p-2 rounded-xl border shrink-0 ${meta.color}`}>
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate leading-snug">
-                        {rec.title}
-                      </h4>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 shadow-2xs">
-                          <span className="text-[8px] text-blue-500 font-bold mr-1 leading-none">RO</span>
-                          <span className="leading-none">{veh?.plate || '—'}</span>
+                {/* Top Section: Category Icon + Full Title spanning over the amount */}
+                <div className="flex items-start gap-2.5 min-w-0">
+                  <div className={`p-2 rounded-xl border shrink-0 mt-0.5 ${meta.color}`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    {/* Full Title without truncation */}
+                    <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-snug break-words">
+                      {rec.title}
+                    </h4>
+
+                    {/* Sub-row under Title: Plate on Left, Evidentiated Amount on Right */}
+                    <div className="flex items-center justify-between gap-2 mt-1.5">
+                      <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 shadow-2xs">
+                        <span className="text-[8px] text-blue-500 font-bold mr-1 leading-none">RO</span>
+                        <span className="leading-none">{veh?.plate || '—'}</span>
+                      </span>
+
+                      {/* Highlighted Amount Badge */}
+                      <div className="text-right whitespace-nowrap shrink-0 inline-flex items-baseline gap-1 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-xl shadow-2xs">
+                        <span className="font-mono font-black text-base sm:text-lg text-emerald-700 dark:text-emerald-300 tracking-tight">
+                          {rec.amount?.toLocaleString('ro-RO')}
                         </span>
+                        <span className="text-[10px] sm:text-xs font-black text-emerald-600 dark:text-emerald-400">RON</span>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Right: Amount */}
-                  <div className="text-right whitespace-nowrap shrink-0">
-                    <span className="font-mono font-black text-sm sm:text-base text-slate-900 dark:text-white">
-                      {rec.amount?.toLocaleString('ro-RO')}
-                    </span>
-                    <span className="text-[10px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 ml-1">RON</span>
                   </div>
                 </div>
 
                 {/* Middle Row: Date, Time (without 'ora'), and KM on same line */}
-                <div className="flex items-center gap-2 flex-wrap pl-0.5">
+                <div className="flex items-center gap-2 flex-wrap pl-11">
                   <div className="inline-flex items-center gap-2 bg-slate-100/90 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 px-2 py-0.5 rounded-lg text-[11px] font-mono text-slate-600 dark:text-slate-400 shadow-2xs">
                     <span className="inline-flex items-center gap-1">
                       <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
