@@ -110,9 +110,13 @@ export const Navbar = ({
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'alerts' 
-                ? (urgentAlertsCount > 0 ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20 font-bold' : (totalAlertsCount > 0 ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20 font-bold' : 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold'))
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50'
+              totalAlertsCount > 0
+                ? (urgentAlertsCount > 0
+                    ? `bg-rose-500 text-white shadow-md shadow-rose-500/20 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
+                    : `bg-amber-500 text-white shadow-md shadow-amber-500/20 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
+                : (activeTab === 'alerts' 
+                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50')
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />

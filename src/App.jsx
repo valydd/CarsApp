@@ -41,6 +41,7 @@ import {
   Car, 
   BarChart3, 
   History, 
+  Shield,
   ShieldAlert, 
   Plus, 
   PlusCircle, 
@@ -609,15 +610,15 @@ export function App() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span>{lang === 'en' ? "Pulsing Alert Dot" : "Pulsare Bulină Atenționare"}</span>
+                    <span>{lang === 'en' ? "Pulsing Alert Button" : "Pulsare Buton Alerte"}</span>
                     <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${pulseAlerts ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
                       {pulseAlerts ? (lang === 'en' ? "ACTIVE" : "ACTIV") : (lang === 'en' ? "STOPPED" : "OPRIT")}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                     {pulseAlerts 
-                      ? (lang === 'en' ? "Alert dot pulses on bottom icon" : "Bulina pulsează la iconița din bara de jos") 
-                      : (lang === 'en' ? "Alert dot is static (pulsing disabled)" : "Pulsarea este oprită, bulina rămâne statică")}
+                      ? (lang === 'en' ? "Entire alert button pulses when active alerts exist" : "Tot butonul alerte pulsează când există atenționări") 
+                      : (lang === 'en' ? "Button is static (pulsing disabled)" : "Pulsarea este oprită, butonul rămâne static")}
                   </p>
                 </div>
               </div>
@@ -898,34 +899,29 @@ export function App() {
             setActiveTab('alerts');
             window.scrollTo({ top: 0, behavior: 'instant' });
           }}
-          className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'alerts' 
-              ? (urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400 font-bold' : (warningAlertsCount > 0 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-emerald-600 dark:text-emerald-400 font-bold'))
-              : 'text-slate-500 dark:text-slate-400'
+          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer select-none ${
+            totalAlertsCount > 0
+              ? (urgentAlertsCount > 0
+                  ? `bg-rose-600 text-white shadow-md shadow-rose-600/30 ${pulseAlerts ? 'animate-pulse' : ''}`
+                  : `bg-amber-500 text-white shadow-md shadow-amber-500/30 ${pulseAlerts ? 'animate-pulse' : ''}`)
+              : (activeTab === 'alerts' 
+                  ? 'text-emerald-600 dark:text-emerald-400 font-bold' 
+                  : 'text-slate-500 dark:text-slate-400')
           }`}
         >
           <div className="relative inline-flex items-center justify-center">
-            <ShieldAlert className="w-5 h-5" />
-            {totalAlertsCount > 0 && (
-              <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
-                {/* Bulină pulsantă efect radar/ping */}
-                {pulseAlerts && (
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
-                  }`} />
-                )}
-                {/* Bulină vizibilă cu numărul de alerte */}
-                <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
-                  pulseAlerts ? 'animate-pulse' : ''
-                } ${
-                  urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
-                }`}>
+            {totalAlertsCount > 0 ? (
+              <div className="relative w-6 h-6 flex items-center justify-center">
+                <Shield className="w-6 h-6 stroke-[2.4]" />
+                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-black leading-none pt-0.5">
                   {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                 </span>
-              </span>
+              </div>
+            ) : (
+              <ShieldAlert className="w-5 h-5" />
             )}
           </div>
-          <span className="text-[10px] mt-1">{lang === 'en' ? "Alerts" : "Alerte"}</span>
+          <span className="text-[10px] mt-0.5 font-bold leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>
         </button>
       </div>
 
