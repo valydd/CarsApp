@@ -115,6 +115,19 @@ export const ReceiptScanModal = ({
     try {
       await stopLiveScanner();
 
+      // Check if navigator.mediaDevices exists
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera API not available');
+      }
+
+      // Pre-warm camera / trigger permission prompt in WebView
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop());
+      } catch (streamErr) {
+        console.warn('Initial camera prompt check:', streamErr);
+      }
+
       const qrScanner = new Html5Qrcode(cameraContainerId, {
         formatsToSupport: [
           Html5QrcodeSupportedFormats.QR_CODE,
@@ -137,17 +150,28 @@ export const ReceiptScanModal = ({
         aspectRatio: 1.0
       };
 
+      let cameraTarget = { facingMode: 'environment' };
+      try {
+        const cameras = await Html5Qrcode.getCameras();
+        if (cameras && cameras.length > 0) {
+          const backCam = cameras.find(c => {
+            const lbl = (c.label || '').toLowerCase();
+            return lbl.includes('back') || lbl.includes('rear') || lbl.includes('spate') || lbl.includes('environment');
+          });
+          cameraTarget = backCam ? backCam.id : cameras[cameras.length - 1].id;
+        }
+      } catch (camListErr) {
+        console.warn('Could not enumerate cameras, falling back to facingMode: environment', camListErr);
+      }
+
       await qrScanner.start(
-        { facingMode: 'environment' },
+        cameraTarget,
         config,
         (decodedText) => {
-          // Success callback
           const parsed = parseReceiptPayload(decodedText);
           handleExtractedResult(parsed);
         },
-        (errorMessage) => {
-          // scanning frames
-        }
+        () => {}
       );
 
       setIsScanningLive(true);
@@ -156,8 +180,8 @@ export const ReceiptScanModal = ({
       setIsScanningLive(false);
       setCameraError(
         lang === 'en'
-          ? 'Camera could not be started. You can upload an image or photo below.'
-          : 'Nu s-a putut porni camera live. Poți încărca o imagine sau fotografie mai jos.'
+          ? 'Live camera could not be started. Check camera permissions or take a photo below.'
+          : 'Camera live nu a putut porni. Verifică permisiunea camerei sau fă o poză directă mai jos.'
       );
     }
   };
@@ -556,23 +580,44 @@ export const ReceiptScanModal = ({
                       : 'Îndreaptă camera spre codul QR fiscal sau codul de bare de pe bon'}
                   </p>
 
-                  {/* Fallback File Upload for QR */}
-                  <div>
-                    <input
-                      type="file"
-                      ref={fileInputQrRef}
-                      accept="image/*"
-                      onChange={handleQrImageUpload}
-                      className="hidden"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => fileInputQrRef.current?.click()}
-                      className="w-full py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                    >
-                      <Upload className="w-3.5 h-3.5 text-blue-500" />
-                      <span>{lang === 'en' ? 'Upload image with QR / Barcode' : 'Alege poză cu cod QR sau bare din galerie'}</span>
-                    </button>
+                  {/* Photo & Upload Buttons for QR / Barcode */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <input
+                        type="file"
+                        id="qr-camera-snap"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={handleQrImageUpload}
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => document.getElementById('qr-camera-snap')?.click()}
+                        className="w-full py-2.5 px-2 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 hover:bg-blue-100 text-xs font-bold text-blue-700 dark:text-blue-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Camera className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        <span>{lang === 'en' ? 'Take Photo' : 'Fă Poză Cod'}</span>
+                      </button>
+                    </div>
+
+                    <div>
+                      <input
+                        type="file"
+                        ref={fileInputQrRef}
+                        accept="image/*"
+                        onChange={handleQrImageUpload}
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputQrRef.current?.click()}
+                        className="w-full py-2.5 px-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Upload className="w-3.5 h-3.5 text-blue-500" />
+                        <span>{lang === 'en' ? 'From Gallery' : 'Din Galerie'}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
