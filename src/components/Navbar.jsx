@@ -55,17 +55,15 @@ export const Navbar = ({
             </h1>
           </div>
 
-          {/* Centered Fleet count card - Only shown if more than 1 vehicle */}
-          {vehiclesCount > 1 && (
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 rounded-xl text-center shadow-2xs shrink-0">
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-                FLOTĂ
-              </span>
-              <span className="text-xs font-black text-emerald-600 dark:text-emerald-300 font-mono">
-                {vehiclesCount}
-              </span>
-            </div>
-          )}
+          {/* Language Switcher in top right (in place of FLOTĂ) */}
+          <button
+            type="button"
+            onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
+            className="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
+            title="Schimbă limba / Switch language"
+          >
+            <span>{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
+          </button>
         </div>
 
         {/* Center Nav Tabs (Desktop / Tablet) */}
@@ -192,29 +190,23 @@ export const Navbar = ({
               </button>
             )}
 
-            {/* Compact Language Switcher */}
-            <button
-              type="button"
-              onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
-              className="h-8 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
-              title="Schimbă limba / Switch language"
-            >
-              <span>{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
-            </button>
           </div>
 
-          {/* Vehicule Button (Moved here in place of Vehicul Nou) */}
+          {/* Vehicule Button with vehicle count in circle, longer to comfortably fit icon, name and count */}
           <button
             type="button"
             onClick={onOpenVehicles}
-            className="h-8 flex items-center justify-center gap-1.5 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-md shadow-emerald-500/25 transition-all transform active:scale-95 shrink-0 cursor-pointer"
+            className="h-8 sm:h-8.5 flex items-center justify-center gap-2 px-3.5 sm:px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-md shadow-emerald-500/25 transition-all transform active:scale-95 shrink-0 cursor-pointer"
             title={t.vehicles || "Vehicule"}
           >
             <Car className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span className="text-[11.5px] font-black tracking-tight whitespace-nowrap">
+            <span className="text-xs font-black tracking-tight whitespace-nowrap">
               {t.vehicles || (lang === 'en' ? 'Vehicles' : 'Vehicule')}
             </span>
-            <ChevronDown className="w-3 h-3 stroke-[2.5]" />
+            <span className="w-5 h-5 rounded-full bg-slate-950 text-emerald-300 font-mono font-black text-[10.5px] flex items-center justify-center shadow-xs ml-0.5">
+              {vehiclesCount || 0}
+            </span>
+            <ChevronDown className="w-3 h-3 stroke-[2.5] opacity-80" />
           </button>
         </div>
       </div>
