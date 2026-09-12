@@ -150,16 +150,11 @@ export const Navbar = ({
                   {totalAlertsCount > 0 && (
                     <span className="absolute -top-1.5 -right-2.5 flex items-center justify-center pointer-events-none">
                       {pulseAlerts && (
-                        <span className={`alert-wave-1 absolute inline-flex h-full w-full rounded-full ${
+                        <span className={`alert-wave-1 absolute inline-flex h-full w-full rounded-full opacity-60 ${
                           urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
                         }`} />
                       )}
-                      {pulseAlerts && (
-                        <span className={`alert-wave-2 absolute inline-flex h-full w-full rounded-full ${
-                          urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
-                        }`} />
-                      )}
-                      <span className={`relative inline-flex items-center justify-center min-w-[17px] h-[17px] px-1 rounded-full text-[9.5px] font-black text-white shadow-xs leading-none select-none ${
+                      <span className={`relative inline-flex items-center justify-center min-w-[16px] h-[16px] px-1 rounded-full text-[9px] font-black text-white shadow-xs leading-none select-none ${
                         pulseAlerts 
                           ? (urgentAlertsCount > 0 ? 'alert-pulse-rose bg-rose-600' : 'alert-pulse-amber bg-amber-500')
                           : (urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500')
