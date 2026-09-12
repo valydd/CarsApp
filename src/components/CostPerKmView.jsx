@@ -360,10 +360,10 @@ export const CostPerKmView = ({
                         <span>{t.fuel || "Carburant"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-blue-600 dark:text-blue-400 block mt-0.5">
-                        {stat.fuelPerKm ? `${stat.fuelPerKm} lei/km` : '—'}
+                        {stat.fuelPerKm ? `${stat.fuelPerKm} RON/km` : '—'}
                       </span>
                       <span className="text-[9px] text-slate-400 block">
-                        Total: {stat.fuelCost.toLocaleString('ro-RO')} lei
+                        {t.total || "Total"}: {stat.fuelCost.toLocaleString('ro-RO')} RON
                       </span>
                     </div>
 
@@ -374,10 +374,10 @@ export const CostPerKmView = ({
                         <span>{t.repairs || "Reparații"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-rose-600 dark:text-rose-400 block mt-0.5">
-                        {stat.repairPerKm ? `${stat.repairPerKm} lei/km` : '0 lei/km'}
+                        {stat.repairPerKm ? `${stat.repairPerKm} RON/km` : '0 RON/km'}
                       </span>
                       <span className="text-[9px] text-slate-400 block">
-                        Total: {stat.repairCost.toLocaleString('ro-RO')} lei
+                        {t.total || "Total"}: {stat.repairCost.toLocaleString('ro-RO')} RON
                       </span>
                     </div>
 
@@ -388,10 +388,10 @@ export const CostPerKmView = ({
                         <span>{t.services || "Revizii"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-amber-600 dark:text-amber-400 block mt-0.5">
-                        {stat.servicePerKm ? `${stat.servicePerKm} lei/km` : '0 lei/km'}
+                        {stat.servicePerKm ? `${stat.servicePerKm} RON/km` : '0 RON/km'}
                       </span>
                       <span className="text-[9px] text-slate-400 block">
-                        Total: {stat.serviceCost.toLocaleString('ro-RO')} lei
+                        {t.total || "Total"}: {stat.serviceCost.toLocaleString('ro-RO')} RON
                       </span>
                     </div>
 
@@ -402,10 +402,10 @@ export const CostPerKmView = ({
                         <span>{t.taxes || "Taxe"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-emerald-600 dark:text-emerald-400 block mt-0.5">
-                        {stat.fixedPerKm ? `${stat.fixedPerKm} lei/km` : '0 lei/km'}
+                        {stat.fixedPerKm ? `${stat.fixedPerKm} RON/km` : '0 RON/km'}
                       </span>
                       <span className="text-[9px] text-slate-400 block">
-                        Total: {stat.fixedCost.toLocaleString('ro-RO')} lei
+                        {t.total || "Total"}: {stat.fixedCost.toLocaleString('ro-RO')} RON
                       </span>
                     </div>
                   </div>
