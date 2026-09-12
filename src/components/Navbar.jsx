@@ -16,12 +16,13 @@ import {
   Maximize2,
   Minimize2
 } from 'lucide-react';
-import { translations } from '../i18n';
+import { translations, getLanguageConfig } from '../i18n';
 import { APP_VERSION } from '../version';
 
 export const Navbar = ({ 
   lang, 
   setLang, 
+  onOpenLanguageModal,
   theme,
   setTheme,
   activeTab, 
@@ -38,7 +39,8 @@ export const Navbar = ({
   isImmersive = false,
   onToggleImmersive
 }) => {
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
+  const currentLangConfig = getLanguageConfig(lang);
 
   return (
     <>
@@ -75,14 +77,16 @@ export const Navbar = ({
                 </h1>
               </div>
 
-              {/* Language Switcher in top right (in place of FLOTĂ) */}
+              {/* Language Switcher in top right (opens LanguageModal) */}
               <button
                 type="button"
-                onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
-                className="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
-                title="Schimbă limba / Switch language"
+                onClick={onOpenLanguageModal}
+                className="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center gap-1.5 justify-center shrink-0 cursor-pointer active:scale-95"
+                title={t.selectLanguage || "Schimbă limba / Select language"}
               >
-                <span>{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
+                <span>{currentLangConfig.flag}</span>
+                <span className="uppercase">{currentLangConfig.code}</span>
+                <ChevronDown className="w-3 h-3 text-slate-400 opacity-80" />
               </button>
             </div>
 

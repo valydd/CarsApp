@@ -1,339 +1,47 @@
+import ro from './locales/ro.json';
+import en from './locales/en.json';
+import de from './locales/de.json';
+import fr from './locales/fr.json';
+import it from './locales/it.json';
+import es from './locales/es.json';
+import pt from './locales/pt.json';
+import nl from './locales/nl.json';
+import pl from './locales/pl.json';
+import tr from './locales/tr.json';
+import hu from './locales/hu.json';
+import cs from './locales/cs.json';
+import zh from './locales/zh.json';
+import ja from './locales/ja.json';
+import ko from './locales/ko.json';
+import languages from './locales/languages.json';
+
+export const AVAILABLE_LANGUAGES = languages;
+
 export const translations = {
-  ro: {
-    appName: "CarsApp",
-    appSubtitle: "Gestiune Flotă Auto",
-    allVehicles: "Toate Mașinile",
-    vehicles: "Vehicule",
-    analytics: "Clasament & Costuri",
-    records: "Jurnal Activități",
-    alerts: "Alerte & Scadențe",
-    addRecord: "Adăugare",
-    addVehicle: "Mașină Nouă",
-    newVehicle: "Vehicul Nou",
-    exportData: "Export / Backup",
-    fleet: "Flotă",
-    costs: "Costuri",
-    log: "Jurnal",
-    dashboard: "Panou Principal",
-    open: "Deschide",
-    fuelConsumption: "Carburant & Consum",
-    fuelStats: "Statistici Carburant",
-    fuelHistory: "Istoric Alimentări",
-    repairsAndParts: "Reparații & Piese",
-    servicesAndOil: "Revizii & Service",
-    mandatoryInsurance: "Asigurare RCA",
-    itpInspection: "Inspecție ITP",
-    tiresAndWheels: "Anvelope & Roți",
-    vignetteAndTaxes: "Rovinietă & Taxe",
-    nextService: "Următoarea Revizie",
-    addFueling: "+ Alimentare",
-    addRepair: "+ Reparație",
-    addService: "+ Revizie",
-    personalUse: "Uz Personal",
-    personalConsumption: "Consum Personal",
-    personalTrips: "Curse Personale / Weekend",
-    addPersonalTrip: "+ Cursă Personală",
-    startKm: "Km Început",
-    endKm: "Km Sfârșit",
-    kmDriven: "Km Parcurși",
-    litersConsumed: "Litri Consumați",
-    costCalculated: "Cost Calculat",
-    tripPeriod: "Perioadă / Detalii (ex: Weekend)",
-    personalTripSaved: "Cursă personală salvată cu succes!",
-    
-    // Stats
-    totalFleetCost: "Total Cheltuieli Flotă",
-    avgFleetConsumption: "Consum Mediu Flotă",
-    totalKm: "Kilometri Rulați",
-    activeVehiclesCount: "Mașini în Flotă",
-    costPerKm: "Cost / Kilometru",
-    urgentAlertsCount: "Atenționări Urgente",
-    
-    // Categories
-    categories: {
-      all: "Toate Categoriile",
-      fuel: "Alimentare Combustibil",
-      repair: "Reparație & Piese",
-      service: "Revizie & Schimb Ulei",
-      insurance: "Asigurare (RCA/CASCO)",
-      itp: "ITP & Rovinietă",
-      tires: "Anvelope",
-      fine: "Amendă / Taxă Pod"
-    },
-    
-    // Alerts
-    alertsTitle: "Atenționări la Scadență",
-    noAlerts: "Toate verificările, reviziile și asigurările sunt la zi! Nicio alertă.",
-    alertCritical: "Critic (Urgent)",
-    alertWarning: "Scadență Apropiată",
-    alertInfo: "În Regulă",
-    daysRemaining: "zile rămase",
-    kmRemaining: "km rămași",
-    expiredByDays: "Expirat de",
-    exceededByKm: "Depășit cu",
-    dueToday: "Expiră astăzi!",
-    
-    // Fueling
-    fuelDetails: "Detalii Alimentare",
-    liters: "Litri",
-    pricePerLiter: "Preț / Litru",
-    totalAmount: "Sumă Totală",
-    fullTank: "Plin complet (pentru calcul consum)",
-    partialTank: "Alimentare parțială",
-    autoConsumptionCalculated: "Consum calculat automat",
-    
-    // Oil & Service
-    oilDetails: "Revizie & Schimb Ulei",
-    oilType: "Tip Ulei (Vâscozitate & Specificație)",
-    oilTypePlaceholder: "ex: 5W-30 Castrol Edge LL, 0W-20 Mobil 1",
-    oilBrand: "Marcă Ulei",
-    oilLiters: "Cantitate Ulei (Litri)",
-    filtersReplaced: "Filtre Înlocuite",
-    filterOil: "Filtru Ulei",
-    filterAir: "Filtru Aer",
-    filterFuel: "Filtru Combustibil",
-    filterCabin: "Filtru Habitaclu / Polen",
-    nextServiceAtKm: "Următoarea Revizie la (Km)",
-    nextServiceAtDate: "Următoarea Revizie la (Dată)",
-    
-    // Repairs & Ranking
-    repairDetails: "Detalii Reparație",
-    repairDescription: "Descriere defecțiune / lucrare",
-    partsReplaced: "Piese înlocuite",
-    serviceWorkshop: "Service / Atelier",
-    laborCost: "Manoperă",
-    partsCost: "Cost Piese",
-    rankingsTitle: "Clasament Costuri per Vehicul",
-    rankingsSubtitle: "Topul mașinilor din flotă ordonate după costuri și impactul procentual în buget",
-    percentageOfTotal: "din total cheltuieli",
-    topSpender: "Cel mai mare consumator",
-    repairsBreakdown: "Defalcare Costuri",
-    
-    // Forms & Fields
-    plateNumber: "Număr Înmatriculare",
-    platePlaceholder: "ex: B 101 ABC",
-    makeModel: "Marcă & Model",
-    makeModelPlaceholder: "ex: Dacia Duster 1.5 dCi",
-    vin: "Serie Șasiu (VIN)",
-    year: "An Fabricație",
-    currentKm: "Kilometraj Curent",
-    driver: "Șofer Alocat",
-    fuelType: "Tip Combustibil",
-    date: "Data",
-    notes: "Observații / Mențiuni",
-    save: "Salvează",
-    cancel: "Anulează",
-    delete: "Șterge",
-    edit: "Editează",
-    search: "Caută mașină, șofer, piesă...",
-    allTime: "Toate perioadele",
-    thisMonth: "Luna aceasta",
-    last3Months: "Ultimele 3 luni",
-    thisYear: "Anul curent",
-    
-    // Quick Add Modal
-    selectVehicle: "Selectează Mașina",
-    selectCategory: "Alege Tipul Înregistrării",
-    
-    // Expiration details
-    itpExpiry: "Data Expirare ITP",
-    rcaExpiry: "Data Expirare RCA",
-    cascoExpiry: "Data Expirare CASCO",
-    rovinietaExpiry: "Data Expirare Rovinietă",
-    fineReason: "Motiv Amendă / Serie PV",
-    fineDeadline50: "Dată Limită Plată 50%",
-    finePaid: "Amendă Achitată",
-    
-    // Tires
-    tireSeason: "Sezon Anvelope",
-    tireSummer: "Vară",
-    tireWinter: "Iarnă",
-    tireAllSeason: "All-Season",
-    tireSize: "Dimensiune Anvelope (ex: 205/55 R16)",
-    tireDot: "DOT Anvelope (ex: 1524)",
-    
-    // Messages
-    recordSaved: "Înregistrare salvată cu succes!",
-    vehicleAdded: "Vehicul adăugat cu succes!",
-    confirmDelete: "Ești sigur că vrei să ștergi această înregistrare?",
-    confirmDeleteVehicle: "Ești sigur că vrei să ștergi acest vehicul și toate înregistrările asociate?",
-
-    // Connect & QR Code
-    connectAndInstall: "Conectare & Instalare CarsApp",
-    connectSubtitle: "Scanează codul QR pentru a deschide aplicația pe laptop/telefon sau descarcă fișierul APK",
-    scanQrCode: "Cod QR Conectare Directă",
-    directWebLink: "Link Direct Web (GitHub Pages)",
-    copyLink: "Copiază Link",
-    linkCopied: "Link copiat în clipboard!",
-    downloadApk: "Descarcă Aplicația (CarsApp.apk)",
-    downloadApkDesc: "Instalează direct pe telefonul sau tableta ta Android",
-    qrStepsTitle: "Cum te conectezi în 3 pași simpli:",
-    qrStep1: "1. Deschide camera foto pe celălalt telefon, tabletă sau laptop.",
-    qrStep2: "2. Îndreaptă camera spre codul QR de pe ecran.",
-    qrStep3: "3. Atinge linkul apărut pentru a deschide ultima versiune în browser.",
-    shareLink: "Trimite Link prin WhatsApp / Mesaj"
-  },
-  en: {
-    appName: "CarsApp",
-    appSubtitle: "Fleet Management",
-    allVehicles: "All Vehicles",
-    vehicles: "Vehicles",
-    analytics: "Rankings & Costs",
-    records: "Activity Log",
-    alerts: "Alerts & Deadlines",
-    addRecord: "Add",
-    addVehicle: "Add Vehicle",
-    newVehicle: "New Vehicle",
-    exportData: "Export / Backup",
-    fleet: "Fleet",
-    costs: "Costs",
-    log: "Log",
-    dashboard: "Main Dashboard",
-    open: "Open",
-    fuelConsumption: "Fuel & Consumption",
-    fuelStats: "Fuel Statistics",
-    fuelHistory: "Fueling History",
-    repairsAndParts: "Repairs & Parts",
-    servicesAndOil: "Service & Oil Change",
-    mandatoryInsurance: "Insurance (RCA)",
-    itpInspection: "ITP Inspection",
-    tiresAndWheels: "Tires & Wheels",
-    vignetteAndTaxes: "Vignette & Tolls",
-    nextService: "Next Service",
-    addFueling: "+ Fueling",
-    addRepair: "+ Repair",
-    addService: "+ Service",
-    personalUse: "Personal Use",
-    personalConsumption: "Personal Consumption",
-    personalTrips: "Personal / Weekend Trips",
-    addPersonalTrip: "+ Personal Trip",
-    startKm: "Start Odometer",
-    endKm: "End Odometer",
-    kmDriven: "Distance Driven",
-    litersConsumed: "Liters Consumed",
-    costCalculated: "Calculated Cost",
-    tripPeriod: "Period / Details (e.g. Weekend)",
-    personalTripSaved: "Personal trip saved successfully!",
-    
-    totalFleetCost: "Total Fleet Expenses",
-    avgFleetConsumption: "Avg Fleet Consumption",
-    totalKm: "Total Mileage",
-    activeVehiclesCount: "Vehicles in Fleet",
-    costPerKm: "Cost / Kilometer",
-    urgentAlertsCount: "Urgent Alerts",
-    
-    categories: {
-      all: "All Categories",
-      fuel: "Fueling",
-      repair: "Repairs & Parts",
-      service: "Service & Oil Change",
-      insurance: "Insurance (RCA/CASCO)",
-      itp: "MOT / Technical Inspection",
-      tires: "Tires",
-      fine: "Traffic Fine / Toll"
-    },
-    
-    alertsTitle: "Deadlines & Expiration Alerts",
-    noAlerts: "All inspections, services, and insurances are up to date! No alerts.",
-    alertCritical: "Critical (Urgent)",
-    alertWarning: "Upcoming Due Date",
-    alertInfo: "Good Standing",
-    daysRemaining: "days left",
-    kmRemaining: "km left",
-    expiredByDays: "Expired by",
-    exceededByKm: "Overdue by",
-    dueToday: "Expires today!",
-    
-    fuelDetails: "Fueling Details",
-    liters: "Liters",
-    pricePerLiter: "Price / Liter",
-    totalAmount: "Total Amount",
-    fullTank: "Full tank (for consumption calculation)",
-    partialTank: "Partial fuel tank",
-    autoConsumptionCalculated: "Automatically calculated consumption",
-    
-    oilDetails: "Service & Oil Change",
-    oilType: "Oil Type (Viscosity & Spec)",
-    oilTypePlaceholder: "e.g.: 5W-30 Castrol Edge LL, 0W-20 Mobil 1",
-    oilBrand: "Oil Brand",
-    oilLiters: "Oil Quantity (Liters)",
-    filtersReplaced: "Replaced Filters",
-    filterOil: "Oil Filter",
-    filterAir: "Air Filter",
-    filterFuel: "Fuel Filter",
-    filterCabin: "Cabin / Pollen Filter",
-    nextServiceAtKm: "Next Service at (Km)",
-    nextServiceAtDate: "Next Service at (Date)",
-    
-    repairDetails: "Repair Details",
-    repairDescription: "Issue / work description",
-    partsReplaced: "Replaced parts",
-    serviceWorkshop: "Workshop / Garage",
-    laborCost: "Labor",
-    partsCost: "Parts Cost",
-    rankingsTitle: "Cost Rankings by Vehicle",
-    rankingsSubtitle: "Fleet vehicles ranked by total cost and percentage impact on overall budget",
-    percentageOfTotal: "of total expenses",
-    topSpender: "Top budget spender",
-    repairsBreakdown: "Cost Breakdown",
-    
-    plateNumber: "License Plate",
-    platePlaceholder: "e.g.: B 101 ABC",
-    makeModel: "Make & Model",
-    makeModelPlaceholder: "e.g.: Dacia Duster 1.5 dCi",
-    vin: "VIN / Chassis Number",
-    year: "Year of Manufacture",
-    currentKm: "Current Odometer (km)",
-    driver: "Assigned Driver",
-    fuelType: "Fuel Type",
-    date: "Date",
-    notes: "Notes / Comments",
-    save: "Save",
-    cancel: "Cancel",
-    delete: "Delete",
-    edit: "Edit",
-    search: "Search vehicle, driver, part...",
-    allTime: "All time",
-    thisMonth: "This month",
-    last3Months: "Last 3 months",
-    thisYear: "This year",
-    
-    selectVehicle: "Select Vehicle",
-    selectCategory: "Select Record Type",
-    
-    itpExpiry: "MOT Expiry Date",
-    rcaExpiry: "RCA Expiry Date",
-    cascoExpiry: "CASCO Expiry Date",
-    rovinietaExpiry: "Vignette Expiry Date",
-    fineReason: "Fine Reason / Ticket #",
-    fineDeadline50: "50% Discount Deadline Date",
-    finePaid: "Fine Settled",
-    
-    tireSeason: "Tire Season",
-    tireSummer: "Summer",
-    tireWinter: "Winter",
-    tireAllSeason: "All-Season",
-    tireSize: "Tire Dimensions (e.g.: 205/55 R16)",
-    tireDot: "Tire DOT (e.g.: 1524)",
-    
-    recordSaved: "Record saved successfully!",
-    vehicleAdded: "Vehicle added successfully!",
-    confirmDelete: "Are you sure you want to delete this record?",
-    confirmDeleteVehicle: "Are you sure you want to delete this vehicle and all associated records?",
-
-    // Connect & QR Code
-    connectAndInstall: "Connect & Install CarsApp",
-    connectSubtitle: "Scan the QR code to open the app on your laptop/phone or download the APK file",
-    scanQrCode: "Direct Connect QR Code",
-    directWebLink: "Direct Web Link (GitHub Pages)",
-    copyLink: "Copy Link",
-    linkCopied: "Link copied to clipboard!",
-    downloadApk: "Download App (CarsApp.apk)",
-    downloadApkDesc: "Install directly on your Android phone or tablet",
-    qrStepsTitle: "How to connect in 3 simple steps:",
-    qrStep1: "1. Open the camera on your other phone, tablet or laptop.",
-    qrStep2: "2. Point the camera at the QR code on screen.",
-    qrStep3: "3. Tap the link that appears to open the latest version in browser.",
-    shareLink: "Share Link via WhatsApp / Message"
-  }
+  ro,
+  en,
+  de,
+  fr,
+  it,
+  es,
+  pt,
+  nl,
+  pl,
+  tr,
+  hu,
+  cs,
+  zh,
+  ja,
+  ko
 };
+
+export const getLanguageConfig = (code = 'ro') => {
+  return AVAILABLE_LANGUAGES.find(l => l.code === code) || AVAILABLE_LANGUAGES[0];
+};
+
+export const getTranslation = (lang = 'ro', key, fallback = '') => {
+  const dict = translations[lang] || translations.ro || translations.en;
+  if (!dict) return fallback || key;
+  return dict[key] || (translations.ro && translations.ro[key]) || (translations.en && translations.en[key]) || fallback || key;
+};
+

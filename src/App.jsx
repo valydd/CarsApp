@@ -16,6 +16,7 @@ import { AddPersonalTripModal } from './components/AddPersonalTripModal';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { CostPerKmView } from './components/CostPerKmView';
 import { ConnectModal } from './components/ConnectModal';
+import { LanguageModal } from './components/LanguageModal';
 
 import { 
   getStoredVehicles, 
@@ -93,6 +94,7 @@ export function App() {
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isConnectOpen, setIsConnectOpen] = useState(false);
   const [isVehiclesModalOpen, setIsVehiclesModalOpen] = useState(false);
+  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
 
   // Personal Trips State
   const [personalTrips, setPersonalTrips] = useState(getStoredPersonalTrips);
@@ -313,6 +315,10 @@ export function App() {
       setIsConnectOpen(false);
       return;
     }
+    if (isLanguageModalOpen) {
+      setIsLanguageModalOpen(false);
+      return;
+    }
 
     if (activeTab !== 'dashboard') {
       setActiveTab('dashboard');
@@ -449,6 +455,7 @@ export function App() {
       <Navbar
         lang={lang}
         setLang={setLang}
+        onOpenLanguageModal={() => setIsLanguageModalOpen(true)}
         theme={theme}
         setTheme={setTheme}
         activeTab={activeTab}
@@ -1017,6 +1024,15 @@ export function App() {
           records={records}
           defaultVehicleId={activeVehicle ? activeVehicle.id : (activeVehicles[0]?.id || (vehicles[0]?.id || ''))}
           lang={lang}
+        />
+      )}
+
+      {isLanguageModalOpen && (
+        <LanguageModal
+          isOpen={isLanguageModalOpen}
+          onClose={() => setIsLanguageModalOpen(false)}
+          currentLang={lang}
+          onSelectLang={setLang}
         />
       )}
 
