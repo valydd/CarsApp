@@ -142,11 +142,11 @@
   "copyLink": "Copia Link",
   "linkCopied": "Link copiato negli appunti!",
   "downloadApk": "Scarica Applicazione (CarsApp.apk)",
-  "downloadApkDesc": "Installa direttamente sul tuo dispositivo Android",
+  "downloadApkDesc": "Installa direttamente su smartphone o tablet Android",
   "qrStepsTitle": "Come connettersi in 3 semplici passaggi:",
-  "qrStep1": "1. Apri la fotocamera sull'altro dispositivo.",
-  "qrStep2": "2. Inquadra il codice QR sullo schermo.",
-  "qrStep3": "3. Tocca il link per aprire l'ultima versione nel browser.",
+  "qrStep1": "Apri la fotocamera sull'altro smartphone, tablet o laptop.",
+  "qrStep2": "Inquadra il codice QR mostrato sopra con la fotocamera.",
+  "qrStep3": "Tocca il link visualizzato per aprire l'ultima versione nel browser.",
   "shareLink": "Condividi via WhatsApp / Messaggio",
   "selectLanguage": "Seleziona Lingua",
   "selectLanguageDesc": "Scegli la lingua preferita per l'interfaccia",
@@ -313,5 +313,11 @@
   "taxes": "Tasse & Spese",
   "fleetEfficiency": "Efficienza flotta & Costo / km",
   "weekendTrip": "Viaggio Weekend",
-  "personalTrip": "Viaggio Personale"
+  "personalTrip": "Viaggio Personale",
+  "connectDevicesTitle": "Connetti Dispositivi",
+  "connectDevicesDesc": "Sincronizzazione su qualsiasi smartphone, tablet o PC",
+  "scanWithCamera": "Scansiona con la fotocamera del telefono",
+  "appLinkDirect": "Link Diretto Applicazione:",
+  "downloadApkBtn": "Scarica l'applicazione",
+  "shareWhatsApp": "Condividi su WhatsApp"
 }

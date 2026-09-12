@@ -142,11 +142,11 @@
   "copyLink": "Copiază Link",
   "linkCopied": "Link copiat în clipboard!",
   "downloadApk": "Descarcă Aplicația (CarsApp.apk)",
-  "downloadApkDesc": "Instalează direct pe telefonul sau tableta ta Android",
+  "downloadApkDesc": "Instalează direct pe telefonul sau tableta Android",
   "qrStepsTitle": "Cum te conectezi în 3 pași simpli:",
-  "qrStep1": "1. Deschide camera foto pe celălalt telefon, tabletă sau laptop.",
-  "qrStep2": "2. Îndreaptă camera spre codul QR de pe ecran.",
-  "qrStep3": "3. Atinge linkul apărut pentru a deschide ultima versiune în browser.",
+  "qrStep1": "Deschide camera foto pe celălalt telefon, tabletă sau laptop.",
+  "qrStep2": "Îndreaptă camera spre codul QR afișat mai sus.",
+  "qrStep3": "Atinge linkul apărut pentru a deschide ultima versiune în browser.",
   "shareLink": "Trimite Link prin WhatsApp / Mesaj",
   "selectLanguage": "Selectează Limba",
   "selectLanguageDesc": "Alege limba preferată pentru interfața aplicației",
@@ -313,5 +313,11 @@
   "taxes": "Taxe",
   "fleetEfficiency": "Eficiență Flotă & Cost / Km",
   "weekendTrip": "Cursă Weekend",
-  "personalTrip": "Cursă Personală"
+  "personalTrip": "Cursă Personală",
+  "connectDevicesTitle": "Conectează Dispozitive",
+  "connectDevicesDesc": "Sincronizare pe orice telefon, tabletă sau PC",
+  "scanWithCamera": "Scanează cu camera telefonului",
+  "appLinkDirect": "Link Direct Aplicație:",
+  "downloadApkBtn": "Descarcă Aplicația",
+  "shareWhatsApp": "Trimite pe WhatsApp"
 }
