@@ -866,86 +866,96 @@ export function App() {
 
       {/* Floating Bottom Navigation Bar for Mobile (Hidden in Immersive Mode) */}
       {!isImmersive && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-3 py-2 flex items-center justify-around shadow-lg animate-in fade-in slide-in-from-bottom duration-200">
-          <button
-            onClick={() => {
-              setActiveTab('dashboard');
-              window.scrollTo({ top: 0, behavior: 'instant' });
-            }}
-            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            <Car className="w-5 h-5" />
-            <span className="text-[10px] mt-1">{t.fleet || "Flotă"}</span>
-          </button>
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 shadow-lg animate-in fade-in slide-in-from-bottom duration-200">
+          <div className="grid grid-cols-5 items-center justify-items-center max-w-md mx-auto px-2 py-1.5 h-16">
+            
+            {/* Button 1: Flotă */}
+            <button
+              onClick={() => {
+                setActiveTab('dashboard');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`w-full flex flex-col items-center justify-center py-1 rounded-xl transition-all cursor-pointer ${
+                activeTab === 'dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <Car className="w-5 h-5" />
+              <span className="text-[10px] mt-1 truncate">{t.fleet || "Flotă"}</span>
+            </button>
 
-          <button
-            onClick={() => {
-              setActiveTab('rankings');
-              window.scrollTo({ top: 0, behavior: 'instant' });
-            }}
-            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'rankings' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            <BarChart3 className="w-5 h-5" />
-            <span className="text-[10px] mt-1">{t.costs || "Costuri"}</span>
-          </button>
+            {/* Button 2: Costuri */}
+            <button
+              onClick={() => {
+                setActiveTab('rankings');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`w-full flex flex-col items-center justify-center py-1 rounded-xl transition-all cursor-pointer ${
+                activeTab === 'rankings' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <BarChart3 className="w-5 h-5" />
+              <span className="text-[10px] mt-1 truncate">{t.costs || "Costuri"}</span>
+            </button>
 
-          {/* Big Central Floating Add Button */}
-          <button
-            onClick={() => setIsQuickAddOpen(true)}
-            className="relative -top-4 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/40 transform active:scale-95 transition-transform cursor-pointer"
-          >
-            <Plus className="w-6 h-6 stroke-[3]" />
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab('records');
-              window.scrollTo({ top: 0, behavior: 'instant' });
-            }}
-            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'records' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            <History className="w-5 h-5" />
-            <span className="text-[10px] mt-1">{t.log || "Jurnal"}</span>
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab('alerts');
-              window.scrollTo({ top: 0, behavior: 'instant' });
-            }}
-            className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'alerts' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            <div className="relative inline-flex items-center justify-center">
-              <ShieldAlert className="w-5 h-5 transition-colors" />
-              {totalAlertsCount > 0 && (
-                <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
-                  {/* Unda compacta de pulsare radar (nu acopera iconita) */}
-                  {pulseAlerts && (
-                    <span className={`alert-wave-1 absolute inline-flex h-full w-full rounded-full opacity-60 ${
-                      urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
-                    }`} />
-                  )}
-                  {/* Bulină vizibilă cu numărul de alerte */}
-                  <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
-                    pulseAlerts 
-                      ? (urgentAlertsCount > 0 ? 'alert-pulse-rose bg-rose-600' : 'alert-pulse-amber bg-amber-500')
-                      : (urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500')
-                  }`}>
-                    {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
-                  </span>
-                </span>
-              )}
+            {/* Button 3: Center Green Plus Button */}
+            <div className="flex items-center justify-center w-full">
+              <button
+                onClick={() => setIsQuickAddOpen(true)}
+                className="relative -top-3.5 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/40 transform active:scale-95 transition-transform cursor-pointer shrink-0"
+              >
+                <Plus className="w-6 h-6 stroke-[3]" />
+              </button>
             </div>
-            <span className="text-[10px] mt-1 leading-tight">{t.alerts || "Alerte"}</span>
-          </button>
+
+            {/* Button 4: Jurnal */}
+            <button
+              onClick={() => {
+                setActiveTab('records');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`w-full flex flex-col items-center justify-center py-1 rounded-xl transition-all cursor-pointer ${
+                activeTab === 'records' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <History className="w-5 h-5" />
+              <span className="text-[10px] mt-1 truncate">{t.log || "Jurnal"}</span>
+            </button>
+
+            {/* Button 5: Alerte */}
+            <button
+              onClick={() => {
+                setActiveTab('alerts');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`w-full relative flex flex-col items-center justify-center py-1 rounded-xl transition-all cursor-pointer ${
+                activeTab === 'alerts' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <div className="relative inline-flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5 transition-colors" />
+                {totalAlertsCount > 0 && (
+                  <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
+                    {/* Unda compacta de pulsare radar */}
+                    {pulseAlerts && (
+                      <span className={`alert-wave-1 absolute inline-flex h-full w-full rounded-full opacity-60 ${
+                        urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                      }`} />
+                    )}
+                    {/* Bulină vizibilă cu numărul de alerte */}
+                    <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
+                      pulseAlerts 
+                        ? (urgentAlertsCount > 0 ? 'alert-pulse-rose bg-rose-600' : 'alert-pulse-amber bg-amber-500')
+                        : (urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500')
+                    }`}>
+                      {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
+                    </span>
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] mt-1 leading-tight truncate">{t.alerts || "Alerte"}</span>
+            </button>
+
+          </div>
         </div>
       )}
 

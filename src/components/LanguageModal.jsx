@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Globe, X, Check, Search } from 'lucide-react';
 import { AVAILABLE_LANGUAGES, translations } from '../i18n';
 
@@ -60,7 +60,6 @@ export const LanguageModal = ({ isOpen, onClose, currentLang = 'ro', onSelectLan
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t.searchLanguage || "Caută limbă / Search language..."}
               className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-hidden focus:border-emerald-500 transition-all"
-              autoFocus
             />
           </div>
         </div>
