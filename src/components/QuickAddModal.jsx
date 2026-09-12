@@ -410,31 +410,6 @@ export const QuickAddModal = ({
             </select>
           </div>
 
-          {/* Quick Scan Receipt Option */}
-          <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/20 dark:border-emerald-500/30 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                <ScanLine className="w-4 h-4" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
-                  {lang === 'en' ? "Scan Fuel Receipt" : "Scanare Bon Carburant"}
-                </h4>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                  {lang === 'en' ? "QR Code, Barcode or OCR Photo" : "Cod QR, Cod de bare sau Foto Bon"}
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsReceiptScanOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-sm transition-all shrink-0 cursor-pointer"
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>{lang === 'en' ? "Scan" : "Scanează"}</span>
-            </button>
-          </div>
-
           {/* 2. Category Selector Buttons */}
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
@@ -524,7 +499,7 @@ export const QuickAddModal = ({
                 <button
                   type="button"
                   onClick={() => setIsReceiptScanOpen(true)}
-                  className="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
                 >
                   <ScanLine className="w-3.5 h-3.5" />
                   <span>{lang === 'en' ? "Scan Receipt" : "Scanează Bon"}</span>
