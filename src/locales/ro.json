@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Cost Total Personal:",
   "settledTrip": "Cursă Achitată / Decontată",
   "settledTripDesc": "Bifează dacă această cursă a fost deja plătită / decontată",
-  "notesPlaceholder": "Mențiuni opționale...",
+  "notesPlaceholder": "ex: Factură nr. 1024, service autorizat...",
   "saveTripInProgress": "Salvează Cursa (În Desfășurare)",
   "updateTrip": "Actualizează Cursa",
   "finishAndSave": "🏁 Finalizează & Salvează Cursa",
@@ -371,5 +371,14 @@
   "gpl": "GPL",
   "hybrid": "Hibrid",
   "electric": "Electric",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Înregistrează rapid alimentări, revizii sau reparații",
+  "editRecordSubtitle": "Corectează kilometrajul, suma, lucrările sau piesele",
+  "time": "Ora",
+  "fuelingDetailsAndCalc": "Detalii Alimentare & Calcul Automat Consum",
+  "fuelPumpType": "Carburant Alimentat la Pompă",
+  "rankingImpact": "Impact în Clasament",
+  "validityAndExpiry": "Valabilitate & Scadență Alertă",
+  "itpStation": "Stație ITP",
+  "insuranceCompany": "Companie Asigurare"
 }

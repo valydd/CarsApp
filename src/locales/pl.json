@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Całkowity Koszt Prywatny:",
   "settledTrip": "Przejazd Rozliczony / Zwrócony",
   "settledTripDesc": "Zaznacz, jeśli ten przejazd został już rozliczony",
-  "notesPlaceholder": "Opcjonalne notatki...",
+  "notesPlaceholder": "np. Faktura nr 1024, autoryzowany serwis...",
   "saveTripInProgress": "Zapisz Przejazd (W Trakcie)",
   "updateTrip": "Zaktualizuj Przejazd",
   "finishAndSave": "🏁 Zakończ & Zapisz",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "Hybryda",
   "electric": "Elektryczny",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Szybko rejestruj tankowania, przeglądy lub naprawy",
+  "editRecordSubtitle": "Skoryguj przebieg, kwotę, prace lub części",
+  "time": "Godzina",
+  "fuelingDetailsAndCalc": "Szczegóły tankowania i automatyczne obliczanie zużycia",
+  "fuelPumpType": "Paliwo zatankowane przy dystrybutorze",
+  "rankingImpact": "Wpływ na ranking",
+  "validityAndExpiry": "Ważność i termin alertu",
+  "itpStation": "Stacja kontroli pojazdów",
+  "insuranceCompany": "Firma ubezpieczeniowa"
 }

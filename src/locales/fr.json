@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Coût Total Personnel :",
   "settledTrip": "Trajet Réglé / Remboursé",
   "settledTripDesc": "Cocher si ce trajet a déjà été réglé",
-  "notesPlaceholder": "Notes optionnelles...",
+  "notesPlaceholder": "ex : Facture n° 1024, garage agréé...",
   "saveTripInProgress": "Enregistrer le Trajet (En Cours)",
   "updateTrip": "Mettre à jour le Trajet",
   "finishAndSave": "🏁 Clôturer & Enregistrer",
@@ -371,5 +371,14 @@
   "gpl": "GPL",
   "hybrid": "Hybride",
   "electric": "Électrique",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Enregistrez rapidement les pleins, entretiens ou réparations",
+  "editRecordSubtitle": "Corrigez le kilométrage, le montant, les travaux ou les pièces",
+  "time": "Heure",
+  "fuelingDetailsAndCalc": "Détails du plein & Calcul automatique de la consommation",
+  "fuelPumpType": "Carburant ravitaillé à la pompe",
+  "rankingImpact": "Impact sur le classement",
+  "validityAndExpiry": "Validité & Échéance d'alerte",
+  "itpStation": "Centre de contrôle technique",
+  "insuranceCompany": "Compagnie d'assurance"
 }

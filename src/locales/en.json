@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Calculated Personal Cost:",
   "settledTrip": "Settled / Paid Trip",
   "settledTripDesc": "Mark as paid to deduct from remaining balance",
-  "notesPlaceholder": "Optional details...",
+  "notesPlaceholder": "e.g. Invoice #1024, authorized service...",
   "saveTripInProgress": "Save Trip (In Progress)",
   "updateTrip": "Update Personal Trip",
   "finishAndSave": "🏁 Complete & Save Trip",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "Hybrid",
   "electric": "Electric",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Quickly record fuelings, services, or repairs",
+  "editRecordSubtitle": "Correct mileage, amount, works, or parts",
+  "time": "Time",
+  "fuelingDetailsAndCalc": "Fueling Details & Auto Consumption Calc",
+  "fuelPumpType": "Fuel Filled at Pump",
+  "rankingImpact": "Ranking Impact",
+  "validityAndExpiry": "Validity & Alert Deadline",
+  "itpStation": "MOT Station",
+  "insuranceCompany": "Insurance Company"
 }

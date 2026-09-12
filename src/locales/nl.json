@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Totale Privékosten:",
   "settledTrip": "Verrekende / Betaalde Rit",
   "settledTripDesc": "Vink aan als deze rit al is verrekend",
-  "notesPlaceholder": "Optionele notities...",
+  "notesPlaceholder": "bijv. Factuur nr. 1024, erkende garage...",
   "saveTripInProgress": "Rit Opslaan (Lopend)",
   "updateTrip": "Rit Bijwerken",
   "finishAndSave": "🏁 Voltooien & Opslaan",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "Hybride",
   "electric": "Elektrisch",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Snel tankbeurten, onderhoud of reparaties vastleggen",
+  "editRecordSubtitle": "Corrigeer kilometerstand, bedrag, werkzaamheden of onderdelen",
+  "time": "Tijd",
+  "fuelingDetailsAndCalc": "Tankdetails & Automatische verbruiksberekening",
+  "fuelPumpType": "Getankte brandstof aan de pomp",
+  "rankingImpact": "Impact op ranglijst",
+  "validityAndExpiry": "Geldigheid & Vervaldatum waarschuwing",
+  "itpStation": "APK-keuringsstation",
+  "insuranceCompany": "Verzekeringsmaatschappij"
 }

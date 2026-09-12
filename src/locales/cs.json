@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Celkové Soukromé Náklady:",
   "settledTrip": "Vyrovnaná / Uhrazená Jízda",
   "settledTripDesc": "Zaškrtněte, pokud již byla tato jízda vyrovnána",
-  "notesPlaceholder": "Volitelné poznámky...",
+  "notesPlaceholder": "např. Faktura č. 1024, autorizovaný servis...",
   "saveTripInProgress": "Uložit Jízdu (Probíhající)",
   "updateTrip": "Aktualizovat Jízdu",
   "finishAndSave": "🏁 Dokončit & Uložit",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "Hybrid",
   "electric": "Elektrický",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Rychle zaznamenávejte tankování, servis nebo opravy",
+  "editRecordSubtitle": "Opravte počet kilometrů, částku, práce nebo díly",
+  "time": "Čas",
+  "fuelingDetailsAndCalc": "Podrobnosti o tankování a automatický výpočet spotřeby",
+  "fuelPumpType": "Palivo načerpané na stojanu",
+  "rankingImpact": "Dopad na žebříček",
+  "validityAndExpiry": "Platnost a termín upozornění",
+  "itpStation": "Stanice STK",
+  "insuranceCompany": "Pojišťovna"
 }

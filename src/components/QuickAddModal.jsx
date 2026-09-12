@@ -30,9 +30,9 @@ export const QuickAddModal = ({
   onSaveRecord,
   recordToEdit = null,
   defaultCategory = 'fuel',
-  lang
+  lang = 'ro'
 }) => {
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
 
   // Selected vehicle & category
   const [vehicleId, setVehicleId] = useState(selectedVehicleId || (vehicles[0]?.id || ''));
@@ -416,7 +416,7 @@ export const QuickAddModal = ({
             >
               {vehicles.map(v => (
                 <option key={v.id} value={v.id}>
-                  {v.plate} — {v.makeModel} ({v.driver || "Fără șofer"})
+                  {v.plate} — {v.makeModel} ({v.driver ? `${t.driver || "Șofer"}: ${v.driver}` : (t.unassigned || "Fără șofer")})
                 </option>
               ))}
             </select>
@@ -489,7 +489,7 @@ export const QuickAddModal = ({
             <div className="col-span-5 sm:col-span-2">
               <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate flex items-center gap-1">
                 <Clock className="w-3 h-3 text-blue-500 shrink-0" />
-                <span>Ora</span>
+                <span>{t.time || "Ora"}</span>
               </label>
               <input
                 type="time"
@@ -520,7 +520,7 @@ export const QuickAddModal = ({
               <div className="flex items-center justify-between gap-2">
                 <div className="text-xs font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
                   <Fuel className="w-4 h-4" />
-                  <span>{t.fuelDetails} & Calcul Automat Consum</span>
+                  <span>{t.fuelingDetailsAndCalc || `${t.fuelDetails} & Calcul Automat Consum`}</span>
                 </div>
                 <button
                   type="button"
@@ -535,7 +535,7 @@ export const QuickAddModal = ({
               {/* Selector Tip Carburant Alimentat */}
               <div>
                 <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1.5">
-                  Carburant Alimentat la Pompă
+                  {t.fuelPumpType || "Carburant Alimentat la Pompă"}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   <button
@@ -547,7 +547,7 @@ export const QuickAddModal = ({
                         : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400'
                     }`}
                   >
-                    <span>🟢 GPL</span>
+                    <span>🟢 {t.gpl || "GPL"}</span>
                   </button>
                   <button
                     type="button"
@@ -558,7 +558,7 @@ export const QuickAddModal = ({
                         : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400'
                     }`}
                   >
-                    <span>⛽ Benzină</span>
+                    <span>⛽ {t.petrol || "Benzină"}</span>
                   </button>
                   <button
                     type="button"
@@ -569,7 +569,7 @@ export const QuickAddModal = ({
                         : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400'
                     }`}
                   >
-                    <span>⛽ Motorină</span>
+                    <span>⛽ {t.diesel || "Motorină"}</span>
                   </button>
                 </div>
               </div>
@@ -616,7 +616,7 @@ export const QuickAddModal = ({
             <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-3.5 space-y-3">
               <div className="text-xs font-bold text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
                 <Wrench className="w-4 h-4" />
-                <span>{t.repairDetails} (Impact în Clasament)</span>
+                <span>{t.repairDetails} ({t.rankingImpact || "Impact în Clasament"})</span>
               </div>
               <div>
                 <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">{t.repairDescription}</label>
@@ -624,28 +624,28 @@ export const QuickAddModal = ({
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="ex: Înlocuire kit ambreiaj și plăcuțe frână"
+                  placeholder="ex: Clutch replacement / Brake pads"
                   className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-rose-500"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">{t.partsCost} (lei)</label>
+                  <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">{t.partsCost} (RON)</label>
                   <input
                     type="number"
                     value={partsCost}
                     onChange={(e) => handlePartsLaborChange(e.target.value, laborCost)}
-                    placeholder="ex: 1800"
+                    placeholder="1800"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-rose-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">{t.laborCost} (lei)</label>
+                  <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">{t.laborCost} (RON)</label>
                   <input
                     type="number"
                     value={laborCost}
                     onChange={(e) => handlePartsLaborChange(partsCost, e.target.value)}
-                    placeholder="ex: 600"
+                    placeholder="600"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-rose-500"
                   />
                 </div>
@@ -657,7 +657,7 @@ export const QuickAddModal = ({
                     type="text"
                     value={partsReplaced}
                     onChange={(e) => setPartsReplaced(e.target.value)}
-                    placeholder="ex: Ambreiaj Sachs, Rulment SKF"
+                    placeholder="Sachs, SKF, Bosch..."
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-rose-500"
                   />
                 </div>
@@ -667,7 +667,7 @@ export const QuickAddModal = ({
                     type="text"
                     value={repairWorkshop}
                     onChange={(e) => setRepairWorkshop(e.target.value)}
-                    placeholder="ex: Service Auto Cobălcescu"
+                    placeholder="Service Auto"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-rose-500"
                   />
                 </div>
@@ -698,7 +698,7 @@ export const QuickAddModal = ({
                     type="text"
                     value={oilBrand}
                     onChange={(e) => setOilBrand(e.target.value)}
-                    placeholder="ex: Castrol / Motul / Mobil 1"
+                    placeholder="Castrol / Motul / Mobil 1"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-amber-500"
                   />
                 </div>
@@ -754,7 +754,7 @@ export const QuickAddModal = ({
             <div className="bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40 rounded-2xl p-3.5 space-y-3">
               <div className="text-xs font-bold text-purple-700 dark:text-purple-400 flex items-center gap-1.5">
                 <FileCheck2 className="w-4 h-4" />
-                <span>Valabilitate & Scadență Alertă</span>
+                <span>{t.validityAndExpiry || "Valabilitate & Scadență Alertă"}</span>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -771,13 +771,13 @@ export const QuickAddModal = ({
                 </div>
                 <div>
                   <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">
-                    {category === 'itp' ? 'Stație ITP' : 'Companie Asigurare'}
+                    {category === 'itp' ? (t.itpStation || 'Stație ITP') : (t.insuranceCompany || 'Companie Asigurare')}
                   </label>
                   <input
                     type="text"
                     value={policyOrStation}
                     onChange={(e) => setPolicyOrStation(e.target.value)}
-                    placeholder="ex: Omniasig / Stație ITP Militari"
+                    placeholder={category === 'itp' ? (t.itpStation || "Stație ITP") : (t.insuranceCompany || "Omniasig / Allianz")}
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
                   />
                 </div>
@@ -793,7 +793,7 @@ export const QuickAddModal = ({
               </div>
               <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
-                  <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">Marcă & Model Anvelope</label>
+                  <label className="block text-[11px] text-slate-600 dark:text-slate-400 mb-1">{t.tireBrandModel || t.brandAndModel || "Marcă & Model Anvelope"}</label>
                   <input
                     type="text"
                     value={tireBrand}
@@ -853,7 +853,7 @@ export const QuickAddModal = ({
                     type="text"
                     value={fineTicket}
                     onChange={(e) => setFineTicket(e.target.value)}
-                    placeholder="ex: Viteză / Serie PV-8123"
+                    placeholder="Serie PV"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-900 dark:text-white outline-none"
                   />
                 </div>
@@ -891,7 +891,7 @@ export const QuickAddModal = ({
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="ex: Factură nr. 1024, service autorizat..."
+              placeholder={t.notesPlaceholder || "ex: Factură nr. 1024, service autorizat..."}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white outline-none focus:border-emerald-500"
             />
           </div>

@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Custo Total Pessoal:",
   "settledTrip": "Viagem Liquidada / Paga",
   "settledTripDesc": "Marque se esta viagem já foi liquidada",
-  "notesPlaceholder": "Notas opcionais...",
+  "notesPlaceholder": "ex: Fatura nº 1024, oficina autorizada...",
   "saveTripInProgress": "Guardar Viagem (Em Curso)",
   "updateTrip": "Atualizar Viagem",
   "finishAndSave": "🏁 Concluir & Guardar",
@@ -371,5 +371,14 @@
   "gpl": "GPL",
   "hybrid": "Híbrido",
   "electric": "Elétrico",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Registe rapidamente abastecimentos, revisões ou reparações",
+  "editRecordSubtitle": "Corrija a quilometragem, o valor, os trabalhos ou as peças",
+  "time": "Hora",
+  "fuelingDetailsAndCalc": "Detalhes do abastecimento e cálculo automático de consumo",
+  "fuelPumpType": "Combustível abastecido na bomba",
+  "rankingImpact": "Impacto na classificação",
+  "validityAndExpiry": "Validade e prazo de alerta",
+  "itpStation": "Centro IPO",
+  "insuranceCompany": "Companhia de Seguros"
 }

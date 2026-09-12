@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Teljes Magánköltség:",
   "settledTrip": "Kifizetett / Elszámolt Út",
   "settledTripDesc": "Jelölje be, ha ez az út már el lett számolva",
-  "notesPlaceholder": "Opcionális megjegyzések...",
+  "notesPlaceholder": "pl. 1024. sz. számla, márkaszerviz...",
   "saveTripInProgress": "Út Mentése (Folyamatban)",
   "updateTrip": "Út Frissítése",
   "finishAndSave": "🏁 Befejezés & Mentés",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "Hibrid",
   "electric": "Elektromos",
-  "diesel": "Dízel"
+  "diesel": "Dízel",
+  "addRecordSubtitle": "Gyorsan rögzítse a tankolásokat, szervizeket vagy javításokat",
+  "editRecordSubtitle": "Módosítsa a kilométerállást, összeget, munkákat vagy alkatrészeket",
+  "time": "Időpont",
+  "fuelingDetailsAndCalc": "Tankolási részletek és automatikus fogyasztásszámítás",
+  "fuelPumpType": "Kútnál tankolt üzemanyag",
+  "rankingImpact": "Rangsorra gyakorolt hatás",
+  "validityAndExpiry": "Érvényesség és értesítési határidő",
+  "itpStation": "Műszaki vizsgaállomás",
+  "insuranceCompany": "Biztosítótársaság"
 }

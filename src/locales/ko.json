@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "총 개인 비용:",
   "settledTrip": "정산 완료된 운행",
   "settledTripDesc": "이 운행이 이미 정산되었으면 체크하세요",
-  "notesPlaceholder": "선택 메모...",
+  "notesPlaceholder": "예: 영수증 번호 1024, 공식 서비스센터...",
   "saveTripInProgress": "운행 저장 (진행 중)",
   "updateTrip": "운행 정보 업데이트",
   "finishAndSave": "🏁 완료 및 저장",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "하이브리드",
   "electric": "전기",
-  "diesel": "디젤"
+  "diesel": "디젤",
+  "addRecordSubtitle": "주유, 정비 또는 수리 내역을 빠르게 기록하세요",
+  "editRecordSubtitle": "주행거리, 금액, 작업 또는 부품 수정",
+  "time": "시간",
+  "fuelingDetailsAndCalc": "주유 상세 정보 및 자동 연비 계산",
+  "fuelPumpType": "주유소에서 주유한 연료",
+  "rankingImpact": "순위 반영",
+  "validityAndExpiry": "유효 기간 및 알림 마감일",
+  "itpStation": "정기검사소",
+  "insuranceCompany": "보험사"
 }

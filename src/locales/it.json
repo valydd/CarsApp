@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Costo Totale Personale:",
   "settledTrip": "Viaggio Rimborsato / Saldato",
   "settledTripDesc": "Spunta se questo viaggio è già stato saldato",
-  "notesPlaceholder": "Note opzionali...",
+  "notesPlaceholder": "es: Fattura n. 1024, officina autorizzata...",
   "saveTripInProgress": "Salva Viaggio (In Corso)",
   "updateTrip": "Aggiorna Viaggio",
   "finishAndSave": "🏁 Completa & Salva Viaggio",
@@ -371,5 +371,14 @@
   "gpl": "GPL",
   "hybrid": "Ibrida",
   "electric": "Elettrica",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Registra rapidamente rifornimenti, tagliandi o riparazioni",
+  "editRecordSubtitle": "Correggi chilometraggio, importo, interventi o ricambi",
+  "time": "Ora",
+  "fuelingDetailsAndCalc": "Dettagli Rifornimento & Calcolo Automatico Consumo",
+  "fuelPumpType": "Carburante erogato alla pompa",
+  "rankingImpact": "Impatto sulla classifica",
+  "validityAndExpiry": "Validità & Scadenza Avviso",
+  "itpStation": "Centro Revisioni",
+  "insuranceCompany": "Compagnia Assicurativa"
 }

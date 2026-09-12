@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "个人自付总金额:",
   "settledTrip": "已报销 / 已结清行程",
   "settledTripDesc": "若此行程已自付或报销结清请勾选",
-  "notesPlaceholder": "选填备注...",
+  "notesPlaceholder": "例如：发票号 1024，授权维修站...",
   "saveTripInProgress": "保存行程 (进行中)",
   "updateTrip": "更新行程信息",
   "finishAndSave": "🏁 完成并保存行程",
@@ -371,5 +371,14 @@
   "gpl": "液化气",
   "hybrid": "混动",
   "electric": "纯电",
-  "diesel": "柴油"
+  "diesel": "柴油",
+  "addRecordSubtitle": "快速记录加油、保养或维修",
+  "editRecordSubtitle": "校正里程、金额、作业或配件",
+  "time": "时间",
+  "fuelingDetailsAndCalc": "加油详情与自动油耗计算",
+  "fuelPumpType": "加油机加注的燃油",
+  "rankingImpact": "计入排行榜",
+  "validityAndExpiry": "有效期与提醒截止日",
+  "itpStation": "年检站",
+  "insuranceCompany": "保险公司"
 }

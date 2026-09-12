@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Toplam Kişisel Maliyet:",
   "settledTrip": "Ödenmiş / Masrafı Karşılanmış Sürüş",
   "settledTripDesc": "Bu sürüşün ödemesi tamamlandıysa işaretleyin",
-  "notesPlaceholder": "İsteğe bağlı notlar...",
+  "notesPlaceholder": "örn: Fatura No 1024, yetkili servis...",
   "saveTripInProgress": "Sürüşü Kaydet (Devam Ediyor)",
   "updateTrip": "Sürüşü Güncelle",
   "finishAndSave": "🏁 Tamamla & Kaydet",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "Hibrit",
   "electric": "Elektrikli",
-  "diesel": "Dizel"
+  "diesel": "Dizel",
+  "addRecordSubtitle": "Yakıt alımı, bakım veya onarımları hızla kaydedin",
+  "editRecordSubtitle": "Kilometreyi, tutarı, işleri veya parçaları düzeltin",
+  "time": "Saat",
+  "fuelingDetailsAndCalc": "Yakıt Ayrıntıları ve Otomatik Tüketim Hesaplama",
+  "fuelPumpType": "Pompada Doldurulan Yakıt",
+  "rankingImpact": "Sıralama Etkisi",
+  "validityAndExpiry": "Geçerlilik ve Uyarı Son Tarihi",
+  "itpStation": "Muayene İstasyonu",
+  "insuranceCompany": "Sigorta Şirketi"
 }

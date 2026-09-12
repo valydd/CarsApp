@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Berechnete Kosten:",
   "settledTrip": "Beglichene / Erstattete Fahrt",
   "settledTripDesc": "Als beglichen markieren",
-  "notesPlaceholder": "Optionale Notizen...",
+  "notesPlaceholder": "z.B. Rechnung Nr. 1024, Vertragswerkstatt...",
   "saveTripInProgress": "Fahrt speichern (laufend)",
   "updateTrip": "Fahrt aktualisieren",
   "finishAndSave": "🏁 Abschließen & Speichern",
@@ -371,5 +371,14 @@
   "gpl": "Autogas (LPG)",
   "hybrid": "Hybrid",
   "electric": "Elektro",
-  "diesel": "Diesel"
+  "diesel": "Diesel",
+  "addRecordSubtitle": "Schnell Tankungen, Wartungen oder Reparaturen erfassen",
+  "editRecordSubtitle": "Kilometerstand, Betrag, Arbeiten oder Teile korrigieren",
+  "time": "Uhrzeit",
+  "fuelingDetailsAndCalc": "Tankdetails & Automatische Verbrauchsberechnung",
+  "fuelPumpType": "Getankter Kraftstoff an der Zapfsäule",
+  "rankingImpact": "Auswirkung auf Rangliste",
+  "validityAndExpiry": "Gültigkeit & Warnungsfrist",
+  "itpStation": "TÜV / Prüfstelle",
+  "insuranceCompany": "Versicherungsgesellschaft"
 }

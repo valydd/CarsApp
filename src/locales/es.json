@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "Coste Total Personal:",
   "settledTrip": "Viaje Liquidado / Pagado",
   "settledTripDesc": "Marca si este viaje ya ha sido liquidado",
-  "notesPlaceholder": "Notas opcionales...",
+  "notesPlaceholder": "ej: Factura nº 1024, taller oficial...",
   "saveTripInProgress": "Guardar Viaje (En Curso)",
   "updateTrip": "Actualizar Viaje",
   "finishAndSave": "🏁 Completar & Guardar",
@@ -371,5 +371,14 @@
   "gpl": "GLP",
   "hybrid": "Híbrido",
   "electric": "Eléctrico",
-  "diesel": "Diésel"
+  "diesel": "Diésel",
+  "addRecordSubtitle": "Registra rápidamente repostajes, revisiones o reparaciones",
+  "editRecordSubtitle": "Corrige el kilometraje, importe, trabajos o piezas",
+  "time": "Hora",
+  "fuelingDetailsAndCalc": "Detalles del repostaje y cálculo automático de consumo",
+  "fuelPumpType": "Combustible repostado en surtidor",
+  "rankingImpact": "Impacto en la clasificación",
+  "validityAndExpiry": "Validez y vencimiento de alerta",
+  "itpStation": "Estación ITV",
+  "insuranceCompany": "Compañía de seguros"
 }

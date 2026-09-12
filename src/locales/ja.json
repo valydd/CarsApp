@@ -241,7 +241,7 @@
   "calculatedPersonalCost": "個人負担合計:",
   "settledTrip": "精算済み走行",
   "settledTripDesc": "精算済みの場合はチェックを入れてください",
-  "notesPlaceholder": "任意のメモ...",
+  "notesPlaceholder": "例: 請求書番号 1024、正規ディーラー...",
   "saveTripInProgress": "走行を保存 (進行中)",
   "updateTrip": "走行情報の更新",
   "finishAndSave": "🏁 完了して保存",
@@ -371,5 +371,14 @@
   "gpl": "LPG",
   "hybrid": "ハイブリッド",
   "electric": "電気",
-  "diesel": "ディーゼル"
+  "diesel": "ディーゼル",
+  "addRecordSubtitle": "給油、点検、修理を素早く記録",
+  "editRecordSubtitle": "走行距離、金額、作業内容、交換部品を修正",
+  "time": "時刻",
+  "fuelingDetailsAndCalc": "給油詳細＆自動燃費計算",
+  "fuelPumpType": "給油した燃料の種類",
+  "rankingImpact": "ランキングに反映",
+  "validityAndExpiry": "有効期限＆アラート期限",
+  "itpStation": "車検場",
+  "insuranceCompany": "保険会社"
 }
