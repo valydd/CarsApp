@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Navigation, Calendar, Gauge, Fuel, DollarSign, Check, AlertCircle } from 'lucide-react';
+import { X, Navigation, Calendar, Gauge, Fuel, DollarSign, Check, AlertCircle, ScanLine, Camera } from 'lucide-react';
 import { translations } from '../i18n';
 import { calculateVehicleConsumption } from '../utils/calculations';
+import { ReceiptScanModal } from './ReceiptScanModal';
 
 export const AddPersonalTripModal = ({
   isOpen,
@@ -25,6 +26,28 @@ export const AddPersonalTripModal = ({
   const [customFuelPrice, setCustomFuelPrice] = useState('');
   const [notes, setNotes] = useState('');
   const [isPaid, setIsPaid] = useState(false);
+  const [isReceiptScanOpen, setIsReceiptScanOpen] = useState(false);
+  const [scannedReceipt, setScannedReceipt] = useState(null);
+
+  const handleApplyReceiptData = (data) => {
+    if (!data) return;
+    setScannedReceipt(data);
+    if (data.date) {
+      setStartDate(data.date);
+      if (!endDate || endDate < data.date) {
+        setEndDate(data.date);
+      }
+    }
+    if (data.pricePerLiter) {
+      setCustomFuelPrice(data.pricePerLiter.toString());
+    } else if (data.amount && data.liters && Number(data.liters) > 0) {
+      setCustomFuelPrice((Number(data.amount) / Number(data.liters)).toFixed(2));
+    }
+    const fuelName = data.fuelType === 'diesel' ? 'Motorină' : data.fuelType === 'gpl' ? 'GPL' : 'Benzină';
+    const stationText = data.station ? `Bon ${data.station}` : 'Bon Carburant';
+    const detailsText = `${stationText}: ${data.amount ? data.amount + ' RON' : ''} ${data.liters ? `(${data.liters} L ${fuelName})` : ''}`.trim();
+    setNotes(prev => prev ? `${prev} | ${detailsText}` : detailsText);
+  };
 
   // Selected vehicle object
   const currentVeh = vehicles.find(v => v.id === vehicleId) || vehicles[0];
@@ -179,6 +202,81 @@ export const AddPersonalTripModal = ({
               ))}
             </select>
           </div>
+
+          {/* Quick Scan Receipt Option */}
+          <div className="p-3 rounded-2xl bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-blue-500/10 border border-purple-500/20 dark:border-purple-500/30 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                <ScanLine className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
+                  {lang === 'en' ? "Scan Fuel Receipt" : "Scanare Bon Carburant"}
+                </h4>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                  {lang === 'en' ? "QR Code, Barcode or OCR Photo" : "Cod QR, Cod de bare sau Foto Bon"}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsReceiptScanOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all shrink-0 cursor-pointer"
+            >
+              <Camera className="w-3.5 h-3.5" />
+              <span>{lang === 'en' ? "Scan" : "Scanează"}</span>
+            </button>
+          </div>
+
+          {(scannedReceipt || customFuelPrice) && (
+            <div className="p-3 bg-purple-50/50 dark:bg-purple-950/20 rounded-2xl border border-purple-500/20 dark:border-purple-500/30 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-purple-700 dark:text-purple-400">
+                <span className="flex items-center gap-1.5">
+                  <Fuel className="w-3.5 h-3.5" />
+                  {lang === 'en' ? "Receipt & Fuel Price" : "Date Bon & Preț Carburant"}
+                </span>
+                {scannedReceipt && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-bold">
+                    {scannedReceipt.fuelType === 'diesel' ? '⛽ Motorină' : scannedReceipt.fuelType === 'gpl' ? '🟢 GPL' : '⛽ Benzină'}
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label className="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
+                    {lang === 'en' ? "Price per Liter (RON)" : "Preț per litru (RON)"}
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={customFuelPrice}
+                    onChange={(e) => setCustomFuelPrice(e.target.value)}
+                    placeholder={detectedFuelPrice.toString()}
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
+                    {lang === 'en' ? "Avg. Consumption (L/100km)" : "Consum mediu (L/100km)"}
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={customAvgL100}
+                    onChange={(e) => setCustomAvgL100(e.target.value)}
+                    placeholder={detectedAvgL100.toString()}
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
+                  />
+                </div>
+              </div>
+              {scannedReceipt?.amount && (
+                <div className="text-[10.5px] text-slate-500 dark:text-slate-400 flex items-center justify-between pt-1 border-t border-purple-200/40 dark:border-purple-800/40">
+                  <span>Valoare bon: <strong className="text-slate-800 dark:text-slate-200">{scannedReceipt.amount} RON</strong> ({scannedReceipt.liters || 0} L)</span>
+                  {scannedReceipt.station && <span>Stație: <strong className="text-slate-800 dark:text-slate-200">{scannedReceipt.station}</strong></span>}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* 2. Trip Title / Period */}
           <div>
@@ -365,6 +463,14 @@ export const AddPersonalTripModal = ({
           </div>
 
         </form>
+
+        <ReceiptScanModal
+          isOpen={isReceiptScanOpen}
+          onClose={() => setIsReceiptScanOpen(false)}
+          onApplyData={handleApplyReceiptData}
+          initialFuelType={currentVeh?.fuelType || 'petrol'}
+          lang={lang}
+        />
 
       </div>
     </div>

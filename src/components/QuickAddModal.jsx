@@ -13,10 +13,13 @@ import {
   DollarSign, 
   Check, 
   Sparkles,
-  Info
+  Info,
+  ScanLine,
+  Camera
 } from 'lucide-react';
 import { translations } from '../i18n';
 import confetti from 'canvas-confetti';
+import { ReceiptScanModal } from './ReceiptScanModal';
 
 export const QuickAddModal = ({
   isOpen,
@@ -46,6 +49,23 @@ export const QuickAddModal = ({
   const [pricePerLiter, setPricePerLiter] = useState('');
   const [fullTank, setFullTank] = useState(true);
   const [fuelSubType, setFuelSubType] = useState('gpl');
+  const [isReceiptScanOpen, setIsReceiptScanOpen] = useState(false);
+
+  const handleApplyReceiptData = (scanned) => {
+    if (!scanned) return;
+    setCategory('fuel');
+    if (scanned.amount) setAmount(scanned.amount.toString());
+    if (scanned.liters) setLiters(scanned.liters.toString());
+    if (scanned.pricePerLiter) setPricePerLiter(scanned.pricePerLiter.toString());
+    if (scanned.date) setDate(scanned.date);
+    if (scanned.fuelType) setFuelSubType(scanned.fuelType);
+    if (scanned.station) {
+      if (!title) {
+        setTitle(`Alimentare ${scanned.station}`);
+      }
+      setNotes(prev => prev ? `${prev} | Bon ${scanned.station}` : `Bon ${scanned.station}`);
+    }
+  };
 
   // Repair specific
   const [repairWorkshop, setRepairWorkshop] = useState('');
@@ -390,6 +410,31 @@ export const QuickAddModal = ({
             </select>
           </div>
 
+          {/* Quick Scan Receipt Option */}
+          <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/20 dark:border-emerald-500/30 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <ScanLine className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
+                  {lang === 'en' ? "Scan Fuel Receipt" : "Scanare Bon Carburant"}
+                </h4>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                  {lang === 'en' ? "QR Code, Barcode or OCR Photo" : "Cod QR, Cod de bare sau Foto Bon"}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsReceiptScanOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-sm transition-all shrink-0 cursor-pointer"
+            >
+              <Camera className="w-3.5 h-3.5" />
+              <span>{lang === 'en' ? "Scan" : "Scanează"}</span>
+            </button>
+          </div>
+
           {/* 2. Category Selector Buttons */}
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
@@ -471,9 +516,19 @@ export const QuickAddModal = ({
           {/* 4. DYNAMIC SECTION */}
           {category === 'fuel' && (
             <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40 rounded-2xl p-3.5 space-y-3">
-              <div className="text-xs font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
-                <Fuel className="w-4 h-4" />
-                <span>{t.fuelDetails} & Calcul Automat Consum</span>
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-xs font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
+                  <Fuel className="w-4 h-4" />
+                  <span>{t.fuelDetails} & Calcul Automat Consum</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsReceiptScanOpen(true)}
+                  className="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer"
+                >
+                  <ScanLine className="w-3.5 h-3.5" />
+                  <span>{lang === 'en' ? "Scan Receipt" : "Scanează Bon"}</span>
+                </button>
               </div>
 
               {/* Selector Tip Carburant Alimentat */}
@@ -857,8 +912,15 @@ export const QuickAddModal = ({
               <span>{recordToEdit ? (lang === 'ro' ? "Salvează Modificările" : "Save Changes") : t.save}</span>
             </button>
           </div>
-
         </form>
+
+        <ReceiptScanModal
+          isOpen={isReceiptScanOpen}
+          onClose={() => setIsReceiptScanOpen(false)}
+          onApplyData={handleApplyReceiptData}
+          initialFuelType={fuelSubType}
+          lang={lang}
+        />
 
       </div>
     </div>
