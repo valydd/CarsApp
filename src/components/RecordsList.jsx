@@ -27,10 +27,45 @@ export const RecordsList = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
 
   const vehMap = {};
   vehicles.forEach(v => { vehMap[v.id] = v; });
+
+  const getLocalizedRecordTitle = (rec) => {
+    if (!rec || !rec.title) return '';
+    if (rec.category === 'fuel') {
+      if (rec.title.startsWith('Alimentare') || rec.title.startsWith('Fuel') || rec.title === 'Alimentare' || rec.title.startsWith('加油') || rec.title.startsWith('주유') || rec.title.startsWith('給油') || rec.title.startsWith('Betankung') || rec.title.startsWith('Ravitaillement') || rec.title.startsWith('Rifornimento') || rec.title.startsWith('Repostaje') || rec.title.startsWith('Abastecimento') || rec.title.startsWith('Tankbeurt') || rec.title.startsWith('Tankowanie') || rec.title.startsWith('Yakıt') || rec.title.startsWith('Tankolás') || rec.title.startsWith('Tankování')) {
+        const fuelType = rec.details?.fuelType || (rec.title.includes('GPL') || rec.title.includes('LPG') ? 'gpl' : rec.title.includes('Diesel') || rec.title.includes('Motorină') || rec.title.includes('Nafta') || rec.title.includes('Dizel') || rec.title.includes('디젤') || rec.title.includes('柴油') ? 'diesel' : 'petrol');
+        const fuelLabel = fuelType === 'gpl' ? (t.fuelGPL || 'GPL') : fuelType === 'diesel' ? (t.fuelDiesel || 'Diesel') : (t.fuelPetrol || 'Benzină');
+        const liters = rec.details?.liters ? `${rec.details.liters}L` : '';
+        return `${t.fueling || 'Alimentare'} ${fuelLabel} ${liters}`.trim();
+      }
+    } else if (rec.category === 'repair') {
+      if (rec.title.startsWith('Reparație') || rec.title.startsWith('Repair')) {
+        const parts = rec.details?.parts?.length ? rec.details.parts.join(', ') : (rec.title.includes(':') ? rec.title.split(':')[1]?.trim() : '');
+        return `${t.repairs || t.categories?.repair || 'Reparație'}${parts ? `: ${parts}` : ''}`;
+      }
+    } else if (rec.category === 'service') {
+      if (rec.title.startsWith('Revizie') || rec.title.startsWith('Service')) {
+        const oil = rec.details?.oilType ? ` & ${rec.details.oilType}` : '';
+        return `${t.services || t.categories?.service || 'Revizie'}${oil}`;
+      }
+    } else if (rec.category === 'insurance') {
+      if (rec.title.startsWith('Asigurare') || rec.title.startsWith('Insurance')) {
+        return t.mandatoryInsurance || t.categories?.insurance || "Asigurare RCA / CASCO";
+      }
+    } else if (rec.category === 'itp') {
+      if (rec.title.startsWith('Inspecție') || rec.title.startsWith('ITP') || rec.title.startsWith('Inspection')) {
+        return t.categories?.itp || "ITP";
+      }
+    } else if (rec.category === 'fine') {
+      if (rec.title.startsWith('Amendă') || rec.title.startsWith('Fine')) {
+        return t.fine || t.categories?.fine || "Amendă / Taxă";
+      }
+    }
+    return rec.title;
+  };
 
   const filtered = records
     .filter(r => {
@@ -40,7 +75,7 @@ export const RecordsList = ({
         const query = searchTerm.toLowerCase();
         const v = vehMap[r.vehicleId];
         const matchPlate = v?.plate.toLowerCase().includes(query);
-        const matchTitle = r.title?.toLowerCase().includes(query);
+        const matchTitle = r.title?.toLowerCase().includes(query) || getLocalizedRecordTitle(r).toLowerCase().includes(query);
         const matchNotes = r.notes?.toLowerCase().includes(query);
         const matchWorkshop = r.details?.workshop?.toLowerCase().includes(query);
         return matchPlate || matchTitle || matchNotes || matchWorkshop;
@@ -52,19 +87,19 @@ export const RecordsList = ({
   const getCategoryMeta = (cat) => {
     switch (cat) {
       case 'fuel':
-        return { icon: Fuel, color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20', label: t.categories.fuel };
+        return { icon: Fuel, color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20', label: t.categories?.fuel || t.fuel || 'Alimentare' };
       case 'repair':
-        return { icon: Wrench, color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/20', label: t.categories.repair };
+        return { icon: Wrench, color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/20', label: t.categories?.repair || t.repairs || 'Reparații' };
       case 'service':
-        return { icon: Droplet, color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20', label: t.categories.service };
+        return { icon: Droplet, color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20', label: t.categories?.service || t.services || 'Revizii' };
       case 'insurance':
-        return { icon: ShieldCheck, color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20', label: t.categories.insurance };
+        return { icon: ShieldCheck, color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20', label: t.categories?.insurance || t.mandatoryInsurance || 'Asigurări' };
       case 'itp':
-        return { icon: FileCheck2, color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20', label: t.categories.itp };
+        return { icon: FileCheck2, color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20', label: t.categories?.itp || 'ITP' };
       case 'tires':
-        return { icon: Disc, color: 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-500/10 border-cyan-200 dark:border-cyan-500/20', label: t.categories.tires };
+        return { icon: Disc, color: 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-500/10 border-cyan-200 dark:border-cyan-500/20', label: t.categories?.tires || t.tires || 'Anvelope' };
       case 'fine':
-        return { icon: AlertOctagon, color: 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-500/10 border-orange-200 dark:border-orange-500/20', label: t.categories.fine };
+        return { icon: AlertOctagon, color: 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-500/10 border-orange-200 dark:border-orange-500/20', label: t.categories?.fine || t.fine || 'Amenzi' };
       default:
         return { icon: Wrench, color: 'text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-500/10 border-slate-200 dark:border-slate-500/20', label: cat };
     }
@@ -81,7 +116,7 @@ export const RecordsList = ({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder={t.search}
+            placeholder={t.search || "Caută mașină, șofer, piese..."}
             className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-emerald-500 transition-colors"
           />
         </div>
@@ -93,12 +128,12 @@ export const RecordsList = ({
           className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar text-xs overscroll-x-contain"
         >
           {[
-            { id: 'all', label: t.categories.all },
-            { id: 'repair', label: '🔧 Reparații' },
-            { id: 'fuel', label: '⛽ Alimentări' },
-            { id: 'service', label: '🛢️ Revizii' },
-            { id: 'insurance', label: '🛡️ Asigurări' },
-            { id: 'itp', label: '📄 ITP' }
+            { id: 'all', label: t.categories?.all || t.allCategories || 'Toate' },
+            { id: 'repair', label: `🔧 ${t.repairs || t.categories?.repair || 'Reparații'}` },
+            { id: 'fuel', label: `⛽ ${t.fuel || t.categories?.fuel || 'Alimentări'}` },
+            { id: 'service', label: `🛢️ ${t.services || t.categories?.service || 'Revizii'}` },
+            { id: 'insurance', label: `🛡️ ${t.mandatoryInsurance || t.categories?.insurance || 'Asigurări'}` },
+            { id: 'itp', label: `📄 ${t.categories?.itp || 'ITP'}` }
           ].map(c => (
             <button
               key={c.id}
@@ -119,7 +154,7 @@ export const RecordsList = ({
       <div className="space-y-2.5">
         {filtered.length === 0 ? (
           <div className="py-12 text-center text-slate-400 text-xs">
-            Nicio înregistrare găsită conform filtrelor aplicate.
+            {t.noRecordsFound || "Nicio înregistrare găsită conform filtrelor aplicate."}
           </div>
         ) : (
           filtered.map(rec => {
@@ -148,7 +183,7 @@ export const RecordsList = ({
                   <div className="min-w-0 flex-1">
                     {/* Full Title without truncation */}
                     <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-snug break-words">
-                      {rec.title}
+                      {getLocalizedRecordTitle(rec)}
                     </h4>
 
                     {/* Sub-row under Title: Plate on Left, Compact Evidentiated Amount on Right */}
@@ -205,7 +240,7 @@ export const RecordsList = ({
                   <div className="flex flex-wrap items-center gap-1.5 min-w-0 flex-1 text-[11px] text-slate-500 dark:text-slate-400">
                     {rec.category === 'fuel' && rec.details?.liters && (
                       <span className="text-blue-600 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-200 dark:border-blue-500/20">
-                        ⛽ {rec.details.liters} L {rec.details.fullTank ? '(Plin)' : ''}
+                        ⛽ {rec.details.liters} L {rec.details.fullTank ? `(${t.fullTankShort || 'Plin'})` : ''}
                       </span>
                     )}
                     {rec.category === 'service' && rec.details?.oilType && (

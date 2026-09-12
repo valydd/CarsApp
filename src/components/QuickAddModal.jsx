@@ -262,8 +262,8 @@ export const QuickAddModal = ({
     let details = {};
 
     if (category === 'fuel') {
-      const fuelLabel = fuelSubType === 'gpl' ? 'GPL' : fuelSubType === 'diesel' ? 'Motorină' : 'Benzină';
-      defaultTitle = title || `Alimentare ${fuelLabel} ${liters ? `${liters}L` : ''}`;
+      const fuelLabel = fuelSubType === 'gpl' ? (t.fuelGPL || 'GPL') : fuelSubType === 'diesel' ? (t.fuelDiesel || 'Diesel') : (t.fuelPetrol || 'Benzină');
+      defaultTitle = title || `${t.fueling || 'Alimentare'} ${fuelLabel} ${liters ? `${liters}L` : ''}`.trim();
       details = {
         liters: parseFloat(liters) || 0,
         pricePerLiter: parseFloat(pricePerLiter) || 0,
@@ -271,7 +271,7 @@ export const QuickAddModal = ({
         fuelType: fuelSubType
       };
     } else if (category === 'repair') {
-      defaultTitle = title || `Reparație: ${partsReplaced || 'Mentenanță'}`;
+      defaultTitle = title || `${t.categories?.repair || t.repairs || 'Reparație'}: ${partsReplaced || 'Mentenanță'}`;
       details = {
         workshop: repairWorkshop,
         partsCost: parseFloat(partsCost) || 0,
@@ -279,7 +279,7 @@ export const QuickAddModal = ({
         parts: partsReplaced ? partsReplaced.split(',').map(s => s.trim()) : []
       };
     } else if (category === 'service') {
-      defaultTitle = title || `Revizie & Schimb Ulei ${oilType}`;
+      defaultTitle = title || `${t.categories?.service || t.services || 'Revizie'} & ${oilType}`;
       details = {
         oilType,
         oilBrand,
@@ -289,19 +289,19 @@ export const QuickAddModal = ({
         nextServiceDate: nextServiceDate || null
       };
     } else if (category === 'insurance') {
-      defaultTitle = title || `Asigurare RCA / CASCO`;
+      defaultTitle = title || (t.mandatoryInsurance || `Asigurare RCA / CASCO`);
       details = {
         expiresAt: expiryDate,
         company: policyOrStation
       };
     } else if (category === 'itp') {
-      defaultTitle = title || `Inspecție Tehnică Periodică (ITP)`;
+      defaultTitle = title || (t.categories?.itp || `Inspecție Tehnică Periodică (ITP)`);
       details = {
         expiresAt: expiryDate,
         station: policyOrStation
       };
     } else if (category === 'tires') {
-      defaultTitle = title || (tireBrand ? `Anvelope ${tireBrand} (${tireSeason})` : `Schimb / Achiziție Anvelope (${tireSeason})`);
+      defaultTitle = title || (tireBrand ? `${t.categories?.tires || 'Anvelope'} ${tireBrand} (${tireSeason})` : `${t.categories?.tires || 'Anvelope'} (${tireSeason})`);
       details = {
         season: tireSeason,
         size: tireSize,
@@ -309,7 +309,7 @@ export const QuickAddModal = ({
         brand: tireBrand
       };
     } else if (category === 'fine') {
-      defaultTitle = title || `Amendă / Taxă Pod`;
+      defaultTitle = title || (t.fine || `Amendă / Taxă`);
       details = {
         ticketNumber: fineTicket,
         deadline50: fineDeadline,
