@@ -911,38 +911,29 @@ export function App() {
               setActiveTab('alerts');
               window.scrollTo({ top: 0, behavior: 'instant' });
             }}
-            className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none ${
-              totalAlertsCount > 0
-                ? (urgentAlertsCount > 0
-                    ? `text-rose-600 dark:text-rose-400 bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
-                    : `text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
-                : (activeTab === 'alerts' 
-                    ? 'text-emerald-600 dark:text-emerald-400 font-bold border border-transparent' 
-                    : 'text-slate-500 dark:text-slate-400 border border-transparent')
+            className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'alerts' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
             }`}
           >
-            {/* Button-shaped Ripple Rings (exact rounded-xl outline of the button) */}
-            {totalAlertsCount > 0 && pulseAlerts && (
-              <div className="absolute inset-0 pointer-events-none overflow-visible">
-                <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-1 ${
-                  urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
-                }`} />
-                <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-2 ${
-                  urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
-                }`} />
-              </div>
-            )}
-
-            <div className="relative w-5 h-5 flex items-center justify-center">
-              {totalAlertsCount > 0 ? (
-                <div className="relative w-5 h-5 flex items-center justify-center">
-                  <Shield className="w-5 h-5 stroke-[2.2] fill-current/15" />
-                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black leading-none pt-0.5 text-current">
+            <div className="relative inline-flex items-center justify-center">
+              <ShieldAlert className="w-5 h-5" />
+              {totalAlertsCount > 0 && (
+                <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
+                  {/* Bulină pulsantă efect radar/ping */}
+                  {pulseAlerts && (
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                      urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                    }`} />
+                  )}
+                  {/* Bulină vizibilă cu numărul de alerte */}
+                  <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
+                    pulseAlerts ? 'animate-pulse' : ''
+                  } ${
+                    urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
+                  }`}>
                     {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                   </span>
-                </div>
-              ) : (
-                <ShieldAlert className="w-5 h-5" />
+                </span>
               )}
             </div>
             <span className="text-[10px] mt-1 leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>

@@ -137,31 +137,27 @@ export const Navbar = ({
                 }}
                 className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeTab === 'alerts' 
-                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold border border-transparent'
-                    : (totalAlertsCount > 0
-                        ? (urgentAlertsCount > 0
-                            ? `text-rose-600 dark:text-rose-400 bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/50 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
-                            : `text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/50 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
-                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50 border border-transparent')
+                    ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold' 
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50'
                 }`}
               >
-                {totalAlertsCount > 0 && pulseAlerts && (
-                  <div className="absolute inset-0 pointer-events-none overflow-visible">
-                    <span className={`absolute inset-0 rounded-lg border-2 btn-ripple-1 ${
-                      urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
-                    }`} />
-                  </div>
-                )}
-                <div className="relative w-4 h-4 flex items-center justify-center">
-                  {totalAlertsCount > 0 ? (
-                    <div className="relative w-4 h-4 flex items-center justify-center">
-                      <Shield className="w-4 h-4 stroke-[2.2] fill-current/15" />
-                      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none pt-0.5 text-current">
+                <div className="relative inline-flex items-center justify-center">
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  {totalAlertsCount > 0 && (
+                    <span className="absolute -top-1.5 -right-2.5 flex items-center justify-center pointer-events-none">
+                      {pulseAlerts && (
+                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                          urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                        }`} />
+                      )}
+                      <span className={`relative inline-flex items-center justify-center min-w-[16px] h-[16px] px-1 rounded-full text-[9px] font-black text-white shadow-xs leading-none ${
+                        pulseAlerts ? 'animate-pulse' : ''
+                      } ${
+                        urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
+                      }`}>
                         {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                       </span>
-                    </div>
-                  ) : (
-                    <ShieldAlert className="w-3.5 h-3.5" />
+                    </span>
                   )}
                 </div>
                 <span>{t.alerts}</span>
