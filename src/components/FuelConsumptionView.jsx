@@ -222,20 +222,8 @@ export const FuelConsumptionView = ({
                     </div>
                   </div>
 
-                  {/* RÂNDUL 2: Litri și Preț/L */}
-                  <div className="flex items-center gap-2 pt-0.5">
-                    <span className="whitespace-nowrap inline-flex items-center text-xs font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 px-2 py-0.5 rounded-md">
-                      ⛽ {liters > 0 ? `${liters} Litri` : "Alimentare"}
-                    </span>
-                    {pricePerL && (
-                      <span className="text-slate-600 dark:text-slate-400 text-[11px] whitespace-nowrap">
-                        • {pricePerL} RON/L
-                      </span>
-                    )}
-                  </div>
-
-                  {/* RÂNDUL 3: Km în rând cu GPL și Plin */}
-                  <div className="flex items-center justify-between gap-2">
+                  {/* RÂNDUL 2: Km în rând cu GPL și Plin */}
+                  <div className="flex items-center justify-between gap-2 pt-0.5">
                     <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                       {rec.details?.fuelType === 'gpl' ? (
                         <span className="whitespace-nowrap shrink-0 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
@@ -267,6 +255,18 @@ export const FuelConsumptionView = ({
                     {rec.km && (
                       <span className="whitespace-nowrap font-mono text-[11px] text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded-md border border-slate-200/60 dark:border-slate-800/60 inline-flex items-center gap-1 shrink-0">
                         🛣️ {Number(rec.km).toLocaleString('ro-RO')} km
+                      </span>
+                    )}
+                  </div>
+
+                  {/* RÂNDUL 3: Litri și Preț/L */}
+                  <div className="flex items-center gap-2">
+                    <span className="whitespace-nowrap inline-flex items-center text-xs font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 px-2 py-0.5 rounded-md">
+                      ⛽ {liters > 0 ? `${liters} Litri` : "Alimentare"}
+                    </span>
+                    {pricePerL && (
+                      <span className="text-slate-600 dark:text-slate-400 text-[11px] whitespace-nowrap">
+                        • {pricePerL} RON/L
                       </span>
                     )}
                   </div>
