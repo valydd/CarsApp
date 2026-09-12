@@ -299,10 +299,10 @@ export const DashboardStats = ({
                   e.stopPropagation();
                   onOpenAddPersonalTrip();
                 }}
-                className="w-6 h-6 sm:w-6.5 sm:h-6.5 rounded-full bg-fuchsia-100/90 hover:bg-fuchsia-200/90 text-fuchsia-700 dark:bg-fuchsia-950/60 dark:hover:bg-fuchsia-900/70 dark:text-fuchsia-300 border border-fuchsia-200/80 dark:border-fuchsia-800/60 shadow-2xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-fuchsia-100 hover:bg-fuchsia-200 text-fuchsia-700 dark:bg-fuchsia-950/80 dark:hover:bg-fuchsia-900 dark:text-fuchsia-300 border border-fuchsia-300/80 dark:border-fuchsia-700/80 shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0 translate-y-1.5 sm:translate-y-2"
                 title="Adaugă rapid cursă personală"
               >
-                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Plus className="w-4.5 h-4.5 stroke-[2.6]" />
               </button>
             )}
           </div>
