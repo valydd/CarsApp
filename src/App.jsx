@@ -916,20 +916,30 @@ export function App() {
             }`}
           >
             <div className="relative inline-flex items-center justify-center">
-              <ShieldAlert className="w-5 h-5" />
+              <ShieldAlert className={`w-5 h-5 transition-colors ${
+                totalAlertsCount > 0 
+                  ? (urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400')
+                  : ''
+              }`} />
               {totalAlertsCount > 0 && (
                 <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
-                  {/* Bulină pulsantă efect radar/ping */}
+                  {/* Unda 1 de pulsare radar */}
                   {pulseAlerts && (
-                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    <span className={`alert-wave-1 absolute inline-flex h-full w-full rounded-full ${
                       urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
                     }`} />
                   )}
-                  {/* Bulină vizibilă cu numărul de alerte */}
-                  <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
-                    pulseAlerts ? 'animate-pulse' : ''
-                  } ${
-                    urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
+                  {/* Unda 2 de pulsare radar (defazată) */}
+                  {pulseAlerts && (
+                    <span className={`alert-wave-2 absolute inline-flex h-full w-full rounded-full ${
+                      urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                    }`} />
+                  )}
+                  {/* Bulină vizibilă cu numărul de alerte și efect de strălucire */}
+                  <span className={`relative inline-flex items-center justify-center min-w-[20px] h-[20px] px-1 rounded-full text-[10.5px] font-black text-white ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
+                    pulseAlerts 
+                      ? (urgentAlertsCount > 0 ? 'alert-pulse-rose bg-rose-600' : 'alert-pulse-amber bg-amber-500')
+                      : (urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500')
                   }`}>
                     {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                   </span>

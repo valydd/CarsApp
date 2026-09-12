@@ -92,3 +92,57 @@
   animation-delay: 1.3s;
 }
 
+/* Highly visible radar waves and glow pulsation for alert badge */
+@keyframes alert-badge-glow-rose {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.8);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 16px 5px rgba(225, 29, 72, 0.95);
+  }
+}
+
+@keyframes alert-badge-glow-amber {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 16px 5px rgba(245, 158, 11, 0.95);
+  }
+}
+
+@keyframes alert-radar-wave {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+.alert-pulse-rose {
+  animation: alert-badge-glow-rose 1.4s ease-in-out infinite;
+}
+
+.alert-pulse-amber {
+  animation: alert-badge-glow-amber 1.4s ease-in-out infinite;
+}
+
+.alert-wave-1 {
+  animation: alert-radar-wave 1.6s cubic-bezier(0.1, 0.45, 0.65, 1) infinite;
+}
+
+.alert-wave-2 {
+  animation: alert-radar-wave 1.6s cubic-bezier(0.1, 0.45, 0.65, 1) infinite;
+  animation-delay: 0.8s;
+}
+
