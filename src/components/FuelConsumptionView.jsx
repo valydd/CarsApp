@@ -194,39 +194,44 @@ export const FuelConsumptionView = ({
                   key={rec.id}
                   className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-3 hover:border-blue-400/50 transition-colors shadow-2xs space-y-2.5"
                 >
-                  {/* RÂNDUL 1: Numele lângă număr */}
-                  <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                    {veh && (
-                      <span className="whitespace-nowrap shrink-0 inline-flex items-center bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-1.5 py-0.5 text-[11px] font-mono font-black text-slate-800 dark:text-slate-100 shadow-2xs">
-                        <span className="text-[9px] text-blue-500 font-bold mr-1">RO</span>
-                        {veh.plate}
-                      </span>
-                    )}
-                    {veh?.driver && (
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 inline-flex items-center gap-1 truncate">
-                        <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>{veh.driver}</span>
-                      </span>
-                    )}
-                  </div>
-
-                  {/* RÂNDUL 2: Litri și prețul pe același rând */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="whitespace-nowrap inline-flex items-center text-xs font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 px-2 py-0.5 rounded-md">
-                        ⛽ {liters > 0 ? `${liters} Litri` : "Alimentare"}
-                      </span>
-                      {pricePerL && (
-                        <span className="text-slate-600 dark:text-slate-400 text-[11px] whitespace-nowrap">
-                          • {pricePerL} RON/L
-                        </span>
+                  {/* RÂNDUL 1: Număr mașină și Șofer sub număr (Stânga) | Prețul evidențiat în dreapta sus */}
+                  <div className="flex items-start justify-between gap-2 pb-1 border-b border-slate-200/50 dark:border-slate-800/50">
+                    <div className="space-y-1 min-w-0">
+                      {veh && (
+                        <div>
+                          <span className="whitespace-nowrap inline-flex items-center bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-1.5 py-0.5 text-[11px] font-mono font-black text-slate-800 dark:text-slate-100 shadow-2xs">
+                            <span className="text-[9px] text-blue-500 font-bold mr-1 leading-none">RO</span>
+                            <span className="leading-none">{veh.plate}</span>
+                          </span>
+                        </div>
+                      )}
+                      {veh?.driver && (
+                        <div className="text-[11.5px] font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1 truncate">
+                          <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>{veh.driver}</span>
+                        </div>
                       )}
                     </div>
 
-                    {/* Prețul total */}
-                    <span className="font-mono font-black text-xs sm:text-sm text-slate-900 dark:text-white whitespace-nowrap bg-white dark:bg-slate-900 px-2.5 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs shrink-0">
-                      {Number(rec.amount).toLocaleString('ro-RO')} RON
+                    {/* Prețul în dreapta sus mai evidențiat */}
+                    <div className="shrink-0 text-right pt-0.5">
+                      <div className="inline-flex items-baseline font-mono font-black text-sm sm:text-base text-slate-900 dark:text-white whitespace-nowrap bg-white dark:bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-300 dark:border-slate-700 shadow-xs">
+                        <span className="text-emerald-600 dark:text-emerald-400">{Number(rec.amount).toLocaleString('ro-RO')}</span>
+                        <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 ml-1">RON</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RÂNDUL 2: Litri și Preț/L */}
+                  <div className="flex items-center gap-2 pt-0.5">
+                    <span className="whitespace-nowrap inline-flex items-center text-xs font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 px-2 py-0.5 rounded-md">
+                      ⛽ {liters > 0 ? `${liters} Litri` : "Alimentare"}
                     </span>
+                    {pricePerL && (
+                      <span className="text-slate-600 dark:text-slate-400 text-[11px] whitespace-nowrap">
+                        • {pricePerL} RON/L
+                      </span>
+                    )}
                   </div>
 
                   {/* RÂNDUL 3: Km în rând cu GPL și Plin */}
@@ -266,10 +271,10 @@ export const FuelConsumptionView = ({
                     )}
                   </div>
 
-                  {/* RÂNDUL 4: Data și ora în același chenar (Stânga) | Butonul editare și ștergere jos în dreapta */}
+                  {/* RÂNDUL 4: Data și ora în același chenar (doar icon ceas, fără textul 'ora') | Butonul editare și ștergere jos în dreapta */}
                   <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/50 dark:border-slate-800/50">
                     {/* Chenar comun Data & Ora */}
-                    <div className="inline-flex items-center gap-2 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 px-2 py-1 rounded-xl text-[11px] text-slate-600 dark:text-slate-300 font-medium shadow-2xs">
+                    <div className="inline-flex items-center gap-2 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 px-2.5 py-1 rounded-xl text-[11px] text-slate-600 dark:text-slate-300 font-medium shadow-2xs">
                       <span className="inline-flex items-center gap-1 whitespace-nowrap">
                         <Calendar className="w-3 h-3 text-slate-400" />
                         <span>{rec.date}</span>
@@ -279,7 +284,7 @@ export const FuelConsumptionView = ({
                           <span className="text-slate-300 dark:text-slate-700">•</span>
                           <span className="inline-flex items-center gap-1 font-mono font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">
                             <Clock className="w-3 h-3 text-blue-500 shrink-0" />
-                            <span>ora {recTime}</span>
+                            <span>{recTime}</span>
                           </span>
                         </>
                       )}
