@@ -129,6 +129,12 @@ export const RecordsList = ({
 
             const recTime = rec.time || rec.details?.time || (rec.id && rec.id.startsWith('rec-') && !isNaN(Number(rec.id.replace('rec-', ''))) ? new Date(Number(rec.id.replace('rec-', ''))).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : null);
 
+            const recAmount = Number(rec.amount) || 0;
+            const formattedAmount = recAmount.toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            const amountParts = formattedAmount.split(',');
+            const intPart = amountParts[0];
+            const decPart = amountParts.length > 1 ? `,${amountParts[1]}` : '';
+
             return (
               <div
                 key={rec.id}
@@ -145,19 +151,24 @@ export const RecordsList = ({
                       {rec.title}
                     </h4>
 
-                    {/* Sub-row under Title: Plate on Left, Evidentiated Amount on Right */}
+                    {/* Sub-row under Title: Plate on Left, Compact Evidentiated Amount on Right */}
                     <div className="flex items-center justify-between gap-2 mt-1.5">
                       <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 shadow-2xs">
                         <span className="text-[8px] text-blue-500 font-bold mr-1 leading-none">RO</span>
                         <span className="leading-none">{veh?.plate || '—'}</span>
                       </span>
 
-                      {/* Highlighted Amount Badge */}
-                      <div className="text-right whitespace-nowrap shrink-0 inline-flex items-baseline gap-1 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-xl shadow-2xs">
-                        <span className="font-mono font-black text-base sm:text-lg text-emerald-700 dark:text-emerald-300 tracking-tight">
-                          {rec.amount?.toLocaleString('ro-RO')}
+                      {/* Compact Evidentiated Amount Badge with smaller decimals */}
+                      <div className="text-right whitespace-nowrap shrink-0 inline-flex items-baseline bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-lg shadow-2xs">
+                        <span className="font-mono font-black text-xs sm:text-sm text-emerald-700 dark:text-emerald-300 tracking-tight">
+                          {intPart}
                         </span>
-                        <span className="text-[10px] sm:text-xs font-black text-emerald-600 dark:text-emerald-400">RON</span>
+                        {decPart && (
+                          <span className="font-mono font-bold text-[10px] sm:text-[11px] text-emerald-600/90 dark:text-emerald-400/90">
+                            {decPart}
+                          </span>
+                        )}
+                        <span className="text-[9px] sm:text-[10px] font-black text-emerald-600 dark:text-emerald-400 ml-1">RON</span>
                       </div>
                     </div>
                   </div>
@@ -189,8 +200,8 @@ export const RecordsList = ({
                   )}
                 </div>
 
-                {/* Bottom Row: Metadata details chips on Left, Edit & Delete buttons on Right */}
-                <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/60 mt-0.5">
+                {/* Bottom Row: Metadata details chips on Left, Edit & Delete buttons on Right - Aligned with pl-11 */}
+                <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/60 mt-0.5 pl-11">
                   <div className="flex flex-wrap items-center gap-1.5 min-w-0 flex-1 text-[11px] text-slate-500 dark:text-slate-400">
                     {rec.category === 'fuel' && rec.details?.liters && (
                       <span className="text-blue-600 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-200 dark:border-blue-500/20">
