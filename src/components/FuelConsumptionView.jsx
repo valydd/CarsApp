@@ -119,29 +119,29 @@ export const FuelConsumptionView = ({
             <div className="mt-3 bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/20 text-xs">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-extrabold uppercase text-[10px] tracking-wider text-emerald-300 flex items-center gap-1">
-                  <span>🟢 GPL + ⛽ Benzină (Sistem Mixt)</span>
+                  <span>🟢 {t.fuelGPL || 'GPL'} + ⛽ {t.fuelPetrol || 'Benzină'} ({t.mixedSystem || 'Sistem Mixt'})</span>
                 </span>
                 <span className="font-mono font-bold text-white text-[11px]">
-                  Cost Total: {consumptionStats.costPerKm ? `${consumptionStats.costPerKm} lei/km` : '—'}
+                  {t.totalCost || "Cost Total"}: {consumptionStats.costPerKm ? `${consumptionStats.costPerKm} RON/km` : '—'}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-center">
                 <div className="bg-white/10 rounded-xl p-2">
-                  <span className="text-[10px] text-blue-100 block">🟢 Consum GPL</span>
+                  <span className="text-[10px] text-blue-100 block">🟢 {t.gplConsumption || "Consum GPL"}</span>
                   <span className="font-black text-sm text-white">
                     {consumptionStats.gplAvgL100 ? `${consumptionStats.gplAvgL100} L/100` : `${consumptionStats.gplLiters} L`}
                   </span>
                   <span className="text-[10px] text-emerald-300 block font-mono">
-                    {consumptionStats.gplCostPerKm ? `${consumptionStats.gplCostPerKm} lei/km` : `${consumptionStats.gplCost} lei`}
+                    {consumptionStats.gplCostPerKm ? `${consumptionStats.gplCostPerKm} RON/km` : `${consumptionStats.gplCost} RON`}
                   </span>
                 </div>
                 <div className="bg-white/10 rounded-xl p-2">
-                  <span className="text-[10px] text-amber-200 block">⛽ Benzină (Rulaj + Porniri)</span>
+                  <span className="text-[10px] text-amber-200 block">⛽ {t.petrolAndStarts || "Benzină (Rulaj + Porniri)"}</span>
                   <span className="font-black text-sm text-white">
                     {consumptionStats.petrolAvgL100 ? `${consumptionStats.petrolAvgL100} L/100` : `${consumptionStats.petrolLiters} L`}
                   </span>
                   <span className="text-[10px] text-amber-300 block font-mono">
-                    {consumptionStats.petrolCostPerKm ? `${consumptionStats.petrolCostPerKm} lei/km` : `${consumptionStats.petrolCost} lei`}
+                    {consumptionStats.petrolCostPerKm ? `${consumptionStats.petrolCostPerKm} RON/km` : `${consumptionStats.petrolCost} RON`}
                   </span>
                 </div>
               </div>
@@ -223,22 +223,22 @@ export const FuelConsumptionView = ({
                     <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                       {rec.details?.fuelType === 'gpl' ? (
                         <span className="whitespace-nowrap shrink-0 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
-                          🟢 GPL
+                          🟢 {t.fuelGPL || "GPL"}
                         </span>
                       ) : rec.details?.fuelType === 'petrol' ? (
                         <span className="whitespace-nowrap shrink-0 bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
-                          ⛽ Benzină
+                          ⛽ {t.fuelPetrol || "Benzină"}
                         </span>
                       ) : rec.details?.fuelType === 'diesel' ? (
                         <span className="whitespace-nowrap shrink-0 bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
-                          ⛽ Diesel
+                          ⛽ {t.fuelDiesel || "Diesel"}
                         </span>
                       ) : null}
 
                       {isFull ? (
                         <span className="whitespace-nowrap shrink-0 inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold">
                           <CheckCircle2 className="w-2.5 h-2.5" />
-                          {t.fullTank || "Plin"}
+                          {t.fullTankShort || t.fullTankBadge || "Plin"}
                         </span>
                       ) : (
                         <span className="whitespace-nowrap shrink-0 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded text-[9.5px] font-medium">
@@ -258,7 +258,7 @@ export const FuelConsumptionView = ({
                   {/* RÂNDUL 3: Litri și Preț/L */}
                   <div className="flex items-center gap-2">
                     <span className="whitespace-nowrap inline-flex items-center text-xs font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 px-2 py-0.5 rounded-md">
-                      ⛽ {liters > 0 ? `${liters} Litri` : "Alimentare"}
+                      ⛽ {liters > 0 ? `${liters} ${t.litersUnit || 'Litri'}` : (t.fueling || "Alimentare")}
                     </span>
                     {pricePerL && (
                       <span className="text-slate-600 dark:text-slate-400 text-[11px] whitespace-nowrap">
@@ -292,7 +292,7 @@ export const FuelConsumptionView = ({
                         <button
                           onClick={() => onEditRecord(rec)}
                           className="p-1.5 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          title="Editează"
+                          title={t.edit || "Editează"}
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
@@ -305,7 +305,7 @@ export const FuelConsumptionView = ({
                             }
                           }}
                           className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          title="Șterge"
+                          title={t.delete || "Șterge"}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
