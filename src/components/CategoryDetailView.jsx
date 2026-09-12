@@ -748,7 +748,11 @@ export const CategoryDetailView = ({
                   </div>
 
                   {/* Rândul 2: Dată & Kilometraj & Detalii atelier */}
-                  <div className="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/60 dark:border-slate-800/60 whitespace-nowrap overflow-x-auto no-scrollbar text-slate-500 dark:text-slate-400">
+                  <div 
+                    data-no-swipe="true"
+                    style={{ overscrollBehaviorX: 'contain' }}
+                    className="flex items-center justify-between gap-2 text-xs pt-1.5 border-t border-slate-200/60 dark:border-slate-800/60 whitespace-nowrap overflow-x-auto no-scrollbar text-slate-500 dark:text-slate-400 overscroll-x-contain"
+                  >
                     <div className="flex items-center gap-2 font-mono text-[11px] shrink-0">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3 text-slate-400" />

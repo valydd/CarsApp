@@ -86,7 +86,11 @@ export const RecordsList = ({
         </div>
 
         {/* Category Pill Filters */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar text-xs">
+        <div 
+          data-no-swipe="true"
+          style={{ overscrollBehaviorX: 'contain' }}
+          className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar text-xs overscroll-x-contain"
+        >
           {[
             { id: 'all', label: t.categories.all },
             { id: 'repair', label: '🔧 Reparații' },

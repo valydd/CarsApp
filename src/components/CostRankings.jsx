@@ -141,7 +141,11 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
         </div>
 
         {/* Category Filter Pills (Horizontal Scrollable) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+        <div 
+          data-no-swipe="true"
+          style={{ overscrollBehaviorX: 'contain' }}
+          className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 overscroll-x-contain"
+        >
           {[
             { key: 'all', label: '📊 Toate', activeClass: 'bg-emerald-500 text-slate-950 font-black' },
             { key: 'repair', label: '🔧 Reparații', activeClass: 'bg-rose-500 text-white font-black' },

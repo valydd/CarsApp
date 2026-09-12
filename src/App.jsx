@@ -298,17 +298,54 @@ export function App() {
   const [touchStartPos, setTouchStartPos] = useState(null);
 
   const handleTouchStart = (e) => {
-    if (e.touches && e.touches.length === 1) {
-      setTouchStartPos({
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-        time: Date.now()
-      });
+    if (!e.touches || e.touches.length !== 1) {
+      setTouchStartPos(null);
+      return;
     }
+
+    const target = e.target;
+    if (target && target.closest) {
+      // Ignore horizontal scrolling containers or explicit no-swipe elements
+      const noSwipeEl = target.closest('.overflow-x-auto, .overflow-x-scroll, [data-no-swipe]');
+      if (noSwipeEl) {
+        setTouchStartPos(null);
+        return;
+      }
+
+      // Check if any ancestor container has horizontal scroll
+      let el = target;
+      while (el && el !== document.body && el !== document.documentElement) {
+        if (el.scrollWidth > el.clientWidth) {
+          try {
+            const style = window.getComputedStyle(el);
+            if (style.overflowX === 'auto' || style.overflowX === 'scroll') {
+              setTouchStartPos(null);
+              return;
+            }
+          } catch (_) {}
+        }
+        el = el.parentElement;
+      }
+    }
+
+    // Edge swipe only: swipe-to-back must start near the left edge of the screen (<= 30px)
+    if (e.touches[0].clientX > 30) {
+      setTouchStartPos(null);
+      return;
+    }
+
+    setTouchStartPos({
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      time: Date.now()
+    });
   };
 
   const handleTouchEnd = (e) => {
-    if (!touchStartPos || !e.changedTouches || e.changedTouches.length === 0) return;
+    if (!touchStartPos || !e.changedTouches || e.changedTouches.length === 0) {
+      setTouchStartPos(null);
+      return;
+    }
     const diffX = e.changedTouches[0].clientX - touchStartPos.x;
     const diffY = e.changedTouches[0].clientY - touchStartPos.y;
     const elapsed = Date.now() - touchStartPos.time;
@@ -317,6 +354,10 @@ export function App() {
     if (diffX > 65 && Math.abs(diffY) < 65 && elapsed < 500) {
       goBack();
     }
+    setTouchStartPos(null);
+  };
+
+  const handleTouchCancel = () => {
     setTouchStartPos(null);
   };
 
@@ -369,6 +410,7 @@ export function App() {
     <div 
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
       className="min-h-screen bg-slate-100 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 pb-20 md:pb-12 selection:bg-emerald-500 selection:text-slate-950 font-sans transition-colors duration-200 overflow-x-hidden w-full max-w-full"
     >
       
