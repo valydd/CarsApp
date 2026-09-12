@@ -24,6 +24,7 @@ export const Navbar = ({
   onOpenAddVehicle, 
   onOpenExport,
   urgentAlertsCount,
+  totalAlertsCount = 0,
   vehiclesCount
 }) => {
   const t = translations[lang];
@@ -109,15 +110,22 @@ export const Navbar = ({
             }}
             className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'alerts' 
-                ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20 font-bold' 
+                ? (urgentAlertsCount > 0 ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20 font-bold' : (totalAlertsCount > 0 ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20 font-bold' : 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold'))
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50'
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
             {t.alerts}
-            {urgentAlertsCount > 0 && (
-              <span className="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full animate-pulse">
-                {urgentAlertsCount}
+            {totalAlertsCount > 0 && (
+              <span className="relative flex items-center justify-center ml-0.5">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                  urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                }`} />
+                <span className={`relative inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black text-white shadow-xs animate-pulse leading-none ${
+                  urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
+                }`}>
+                  {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
+                </span>
               </span>
             )}
           </button>

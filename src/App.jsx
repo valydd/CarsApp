@@ -397,13 +397,16 @@ export function App() {
     ? calculateVehicleConsumption(filteredRecords)
     : calculateFleetConsumption(activeVehicles, filteredRecords);
 
+  const targetAlertVehicles = (activeVehicles && activeVehicles.length > 0) ? activeVehicles : vehicles;
   const allAlerts = [];
-  (activeVehicles || []).forEach(v => {
+  (targetAlertVehicles || []).forEach(v => {
     if (!v) return;
     const alerts = getVehicleAlerts(v);
     (alerts || []).forEach(a => allAlerts.push(a));
   });
   const urgentAlertsCount = allAlerts.filter(a => a && a.severity === 'critical').length;
+  const warningAlertsCount = allAlerts.filter(a => a && a.severity === 'warning').length;
+  const totalAlertsCount = allAlerts.length;
   const totalKmSum = (activeVehicles || []).reduce((sum, v) => sum + (v?.currentKm || 0), 0);
 
   return (
@@ -426,6 +429,7 @@ export function App() {
         onOpenAddVehicle={() => setIsAddVehicleOpen(true)}
         onOpenExport={() => setIsExportOpen(true)}
         urgentAlertsCount={urgentAlertsCount}
+        totalAlertsCount={totalAlertsCount}
         vehiclesCount={vehicles.length}
       />
 
@@ -842,14 +846,29 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'instant' });
           }}
           className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'alerts' ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+            activeTab === 'alerts' 
+              ? (urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400 font-bold' : (warningAlertsCount > 0 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-emerald-600 dark:text-emerald-400 font-bold'))
+              : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          <ShieldAlert className="w-5 h-5" />
+          <div className="relative inline-flex items-center justify-center">
+            <ShieldAlert className="w-5 h-5" />
+            {totalAlertsCount > 0 && (
+              <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
+                {/* Bulină pulsantă efect radar/ping */}
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                  urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                }`} />
+                {/* Bulină vizibilă cu numărul de alerte */}
+                <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900 animate-pulse leading-none select-none ${
+                  urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
+                }`}>
+                  {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
+                </span>
+              </span>
+            )}
+          </div>
           <span className="text-[10px] mt-1">{lang === 'en' ? "Alerts" : "Alerte"}</span>
-          {urgentAlertsCount > 0 && (
-            <span className="absolute top-0 right-2 w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-          )}
         </button>
       </div>
 
