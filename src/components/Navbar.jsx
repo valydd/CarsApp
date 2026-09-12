@@ -9,7 +9,10 @@ import {
   BarChart3,
   History,
   Sun,
-  Moon
+  Moon,
+  QrCode,
+  CloudUpload,
+  ChevronDown
 } from 'lucide-react';
 import { translations } from '../i18n';
 import { APP_VERSION } from '../version';
@@ -24,6 +27,8 @@ export const Navbar = ({
   onOpenQuickAdd, 
   onOpenAddVehicle, 
   onOpenExport,
+  onOpenConnect,
+  onOpenVehicles,
   urgentAlertsCount,
   totalAlertsCount = 0,
   pulseAlerts = true,
@@ -50,15 +55,17 @@ export const Navbar = ({
             </h1>
           </div>
 
-          {/* Centered Fleet count card */}
-          <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 rounded-xl text-center shadow-2xs shrink-0">
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-              FLOTĂ
-            </span>
-            <span className="text-xs font-black text-emerald-600 dark:text-emerald-300 font-mono">
-              {vehiclesCount}
-            </span>
-          </div>
+          {/* Centered Fleet count card - Only shown if more than 1 vehicle */}
+          {vehiclesCount > 1 && (
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 rounded-xl text-center shadow-2xs shrink-0">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                FLOTĂ
+              </span>
+              <span className="text-xs font-black text-emerald-600 dark:text-emerald-300 font-mono">
+                {vehiclesCount}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Center Nav Tabs (Desktop / Tablet) */}
@@ -143,46 +150,71 @@ export const Navbar = ({
           </button>
         </nav>
 
-        {/* Row 2 on Mobile / Right Actions on Desktop: Separated cards */}
-        <div className="flex items-center gap-2 justify-between sm:justify-end">
-          
-          {/* Theme Toggle (Light / Dark) */}
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="flex-1 sm:flex-initial h-8 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition-colors shadow-2xs flex items-center justify-center gap-1.5"
-            title={theme === 'dark' ? "Comută la Modul Luminos (Light)" : "Comută la Modul Întunecat (Dark)"}
-          >
-            {theme === 'dark' ? (
-              <>
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-xs font-bold">Light</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-3.5 h-3.5 text-indigo-500" />
-                <span className="text-xs font-bold">Dark</span>
-              </>
+        {/* Row 2 on Mobile / Right Actions on Desktop: Circle icons + Lang on left, Vehicule button on right */}
+        <div className="flex items-center gap-2 justify-between sm:justify-end w-full">
+          {/* Left Actions Group: Theme (Circle), QR (Circle), Backup (Circle), Lang (Compact) */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Theme Toggle: Circle only, no text */}
+            <button
+              type="button"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-2xs shrink-0 cursor-pointer active:scale-90 transition-all"
+              title={theme === 'dark' ? "Comută la Modul Luminos" : "Comută la Modul Întunecat"}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-indigo-500" />
+              )}
+            </button>
+
+            {/* QR Code Button */}
+            {onOpenConnect && (
+              <button
+                type="button"
+                onClick={onOpenConnect}
+                className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
+                title="📲 Conectare Cod QR & Descarcă APK"
+              >
+                <QrCode className="w-4 h-4 stroke-[2.2]" />
+              </button>
             )}
-          </button>
 
-          {/* Language Switcher */}
-          <button
-            onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
-            className="flex-1 sm:flex-initial h-8 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition-colors shadow-2xs flex items-center justify-center gap-1.5"
-            title="Schimbă limba / Switch language"
-          >
-            <span className="text-xs font-black">{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
-          </button>
+            {/* Export & Backup Button */}
+            {onOpenExport && (
+              <button
+                type="button"
+                onClick={onOpenExport}
+                className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
+                title="Export & Import Date (Backup)"
+              >
+                <CloudUpload className="w-4 h-4 stroke-[2.2]" />
+              </button>
+            )}
 
-          {/* Vehicul Nou / New Vehicle Button */}
+            {/* Compact Language Switcher */}
+            <button
+              type="button"
+              onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
+              className="h-8 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
+              title="Schimbă limba / Switch language"
+            >
+              <span>{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
+            </button>
+          </div>
+
+          {/* Vehicule Button (Moved here in place of Vehicul Nou) */}
           <button
-            onClick={onOpenAddVehicle}
-            className="flex-1 sm:flex-initial h-8 flex items-center justify-center px-3 sm:px-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-md shadow-emerald-500/25 transition-all transform active:scale-95 shrink-0"
-            title={t.addVehicle}
+            type="button"
+            onClick={onOpenVehicles}
+            className="h-8 flex items-center justify-center gap-1.5 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-md shadow-emerald-500/25 transition-all transform active:scale-95 shrink-0 cursor-pointer"
+            title={t.vehicles || "Vehicule"}
           >
-            <span className="text-[11px] sm:text-xs font-black tracking-tight whitespace-nowrap">
-              {t.newVehicle || (lang === 'en' ? 'New Vehicle' : 'Vehicul Nou')}
+            <Car className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="text-[11.5px] font-black tracking-tight whitespace-nowrap">
+              {t.vehicles || (lang === 'en' ? 'Vehicles' : 'Vehicule')}
             </span>
+            <ChevronDown className="w-3 h-3 stroke-[2.5]" />
           </button>
         </div>
       </div>

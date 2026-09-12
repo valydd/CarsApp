@@ -81,6 +81,7 @@ export function App() {
   const [isVehicleDetailsInEdit, setIsVehicleDetailsInEdit] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isConnectOpen, setIsConnectOpen] = useState(false);
+  const [isVehiclesModalOpen, setIsVehiclesModalOpen] = useState(false);
 
   // Personal Trips State
   const [personalTrips, setPersonalTrips] = useState(getStoredPersonalTrips);
@@ -442,6 +443,8 @@ export function App() {
         onOpenQuickAdd={() => setIsQuickAddOpen(true)}
         onOpenAddVehicle={() => setIsAddVehicleOpen(true)}
         onOpenExport={() => setIsExportOpen(true)}
+        onOpenConnect={() => setIsConnectOpen(true)}
+        onOpenVehicles={() => setIsVehiclesModalOpen(true)}
         urgentAlertsCount={urgentAlertsCount}
         totalAlertsCount={totalAlertsCount}
         pulseAlerts={pulseAlerts}
@@ -451,7 +454,7 @@ export function App() {
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-3 py-2.5 sm:px-6 sm:py-4">
         
-        {/* Horizontal Vehicle Carousel with Checkboxes */}
+        {/* Unified Top Row: License plate on left, Alerts banner inline on right + Full Vehicles Modal */}
         <VehicleCarousel
           vehicles={vehicles}
           selectedVehicleIds={selectedVehicleIds}
@@ -462,27 +465,20 @@ export function App() {
             setSelectedVehicleForDetails(veh);
             setIsVehicleDetailsInEdit(startInEdit);
           }}
-          onOpenExport={() => setIsExportOpen(true)}
-          onOpenConnect={() => setIsConnectOpen(true)}
+          onDeleteVehicle={handleDeleteVehicle}
+          isOpen={isVehiclesModalOpen}
+          setIsOpen={setIsVehiclesModalOpen}
+          onOpenAlertsTab={() => {
+            setActiveTab('alerts');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          activeVehicles={activeVehicles}
           lang={lang}
         />
 
         {/* Tab Content */}
         {activeTab === 'dashboard' && (
           <div className="space-y-4 sm:space-y-6">
-            {/* Priority Alerts Banner */}
-            <AlertsBanner
-              vehicles={activeVehicles}
-              onSelectVehicle={(vId) => {
-                setSelectedVehicleIds([vId]);
-                setActiveTab('dashboard');
-              }}
-              onOpenAlertsTab={() => {
-                setActiveTab('alerts');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              lang={lang}
-            />
 
             {/* KPI Dashboard Cards (Clickable) */}
             {/* 8 Compact Organized Cards (Clickable) */}

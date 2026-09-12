@@ -3,7 +3,7 @@ import { AlertCircle, AlertTriangle, ChevronDown, ChevronUp, Clock, Calendar, Ga
 import { translations } from '../i18n';
 import { getVehicleAlerts } from '../utils/calculations';
 
-export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang }) => {
+export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang, inline = false }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const t = translations[lang];
 
@@ -32,8 +32,8 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang 
     let chevronClass = "text-emerald-600 dark:text-emerald-400";
     let IconComp = ShieldAlert;
     let message = lang === 'en' 
-      ? "All inspections, services, and docs are up to date!" 
-      : "Toate verificările, reviziile și actele sunt la zi!";
+      ? "All inspections & docs up to date!" 
+      : "Toate actele și reviziile sunt la zi ✓";
 
     if (criticalCount > 0) {
       containerClass = "bg-rose-50/90 dark:bg-rose-950/30 border-rose-300 dark:border-rose-900/50 hover:border-rose-500";
@@ -53,6 +53,26 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang 
       message = lang === 'en'
         ? `${warningCount} deadline${warningCount === 1 ? '' : 's'} upcoming soon`
         : `${warningCount} ${warningCount === 1 ? 'termen scadent' : 'termene scadente'} în curând`;
+    }
+
+    if (inline) {
+      return (
+        <div 
+          onClick={onOpenAlertsTab}
+          className={`h-8 rounded-xl border px-2 sm:px-2.5 flex items-center justify-between shadow-2xs cursor-pointer transition-all active:scale-[0.98] group w-full min-w-0 ${containerClass}`}
+          title="Apasă pentru detalii scadențe"
+        >
+          <div className="flex items-center gap-1.5 min-w-0 flex-1 truncate">
+            <div className={`p-1 rounded-lg shrink-0 ${iconClass}`}>
+              <IconComp className={`w-3.5 h-3.5 ${criticalCount > 0 ? 'animate-pulse' : ''}`} />
+            </div>
+            <p className={`text-[11px] truncate leading-none ${textClass}`}>
+              {message}
+            </p>
+          </div>
+          <ChevronRight className={`w-3.5 h-3.5 shrink-0 ml-1 group-hover:translate-x-0.5 transition-transform ${chevronClass}`} />
+        </div>
+      );
     }
 
     return (

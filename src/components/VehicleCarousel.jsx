@@ -9,15 +9,14 @@ import {
   Check, 
   X,
   ArrowLeft,
-  Layers,
-  FileSpreadsheet,
   Settings,
-  Pencil,
+  Trash2,
   QrCode,
   CloudUpload
 } from 'lucide-react';
 import { translations } from '../i18n';
 import { getVehicleAlerts } from '../utils/calculations';
+import { AlertsBanner } from './AlertsBanner';
 
 export const VehicleCarousel = ({
   vehicles,
@@ -26,11 +25,19 @@ export const VehicleCarousel = ({
   onSelectAllVehicles,
   onOpenAddVehicle,
   onOpenVehicleDetails,
-  onOpenExport,
-  onOpenConnect,
+  onDeleteVehicle,
+  isOpen: externalIsOpen,
+  setIsOpen: externalSetIsOpen,
+  onOpenAlertsTab,
+  activeVehicles,
   lang
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = externalSetIsOpen !== undefined ? externalSetIsOpen : setInternalIsOpen;
+
+  const [vehicleToDelete, setVehicleToDelete] = useState(null);
+
   const t = translations[lang];
 
   const isAllSelected = !selectedVehicleIds || selectedVehicleIds.length === vehicles.length;
@@ -38,36 +45,14 @@ export const VehicleCarousel = ({
   const singleVehicle = selectedVehicles.length === 1 ? selectedVehicles[0] : null;
 
   return (
-    <section className="mb-3.5">
-      {/* Compact Top Bar: [Vehicule] + [Plate / Badge] on Left, Round [QR] [Backup] on Right */}
-      <div className="flex items-center justify-between gap-1.5 px-0.5 w-full">
-        {/* Left Group: Vehicule button + Selection summary badge */}
-        <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
-          {/* Vehicule button */}
-          <button
-            type="button"
-            onClick={() => setIsOpen(true)}
-            className={`h-8 inline-flex items-center gap-1 px-2.5 rounded-xl border text-[11px] font-black shadow-2xs active:scale-95 transition-all shrink-0 cursor-pointer ${
-              !isAllSelected
-                ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-500/50 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/20'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 hover:border-emerald-500/50'
-            }`}
-          >
-            <Car className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span>{t.vehicles}</span>
-            <ChevronDown className="w-2.5 h-2.5 text-slate-400 shrink-0" />
-          </button>
-
-          {/* If all vehicles are selected */}
-          {isAllSelected && (
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 truncate">
-              {lang === 'en' ? `All (${vehicles.length})` : `Toate (${vehicles.length})`}
-            </span>
-          )}
-
-          {/* If exactly 1 car is selected, show plate badge */}
+    <section className="mb-3">
+      {/* Rând Unificat: Număr Înmatriculare Aliniat la Stânga + Alertă Inline la Dreapta */}
+      <div className="flex items-center gap-2 px-0.5 w-full">
+        {/* Stânga: Plăcuță de înmatriculare sau Indicator Selecție */}
+        <div className="shrink-0 flex items-center">
+          {/* Dacă exact o mașină este selectată: afișează plăcuța de înmatriculare */}
           {singleVehicle && (
-            <div className="h-8 inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2 rounded-xl text-[11px] font-mono font-black text-slate-900 dark:text-slate-100 shadow-2xs whitespace-nowrap shrink-0">
+            <div className="h-8 inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2.5 rounded-xl text-[11px] font-mono font-black text-slate-900 dark:text-slate-100 shadow-2xs whitespace-nowrap">
               <span className="text-[8.5px] text-blue-500 font-bold leading-none">RO</span>
               <span className="leading-none tracking-tight">{singleVehicle.plate}</span>
               <button
@@ -77,16 +62,29 @@ export const VehicleCarousel = ({
                   onSelectAllVehicles && onSelectAllVehicles(true);
                 }}
                 className="text-slate-400 hover:text-rose-500 p-0.5 rounded-md transition-colors ml-0.5 cursor-pointer"
-                title={lang === 'en' ? "Select all" : "Selectează toate"}
+                title={lang === 'en' ? "Select all vehicles" : "Selectează toate vehiculele"}
               >
                 <X className="w-3 h-3" />
               </button>
             </div>
           )}
 
-          {/* If multiple (but not all) are selected */}
+          {/* Dacă toate vehiculele sunt selectate */}
+          {isAllSelected && !singleVehicle && (
+            <button 
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="h-8 inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 px-2.5 rounded-xl text-[11px] font-extrabold text-slate-800 dark:text-slate-200 shadow-2xs cursor-pointer whitespace-nowrap active:scale-95 transition-all"
+              title={lang === 'en' ? "Filter vehicles" : "Filtrează mașinile"}
+            >
+              <Car className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>{lang === 'en' ? `All (${vehicles.length})` : `Toate (${vehicles.length})`}</span>
+            </button>
+          )}
+
+          {/* Dacă mai multe mașini sunt selectate (dar nu toate) */}
           {!isAllSelected && !singleVehicle && (
-            <div className="h-8 inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/40 px-2 rounded-xl text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300 shadow-2xs whitespace-nowrap shrink-0">
+            <div className="h-8 inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/40 px-2.5 rounded-xl text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300 shadow-2xs whitespace-nowrap">
               <span>
                 {lang === 'en' 
                   ? `${selectedVehicleIds.length} of ${vehicles.length}` 
@@ -107,29 +105,17 @@ export const VehicleCarousel = ({
           )}
         </div>
 
-        {/* Right side: Round QR and Backup buttons (No text, icons only, matching height) */}
-        <div className="flex items-center gap-2 ml-auto shrink-0">
-          {onOpenConnect && (
-            <button
-              type="button"
-              onClick={onOpenConnect}
-              className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
-              title="📲 Conectare Cod QR & Descarcă APK"
-            >
-              <QrCode className="w-4 h-4 stroke-[2.2]" />
-            </button>
-          )}
-
-          {onOpenExport && (
-            <button
-              type="button"
-              onClick={onOpenExport}
-              className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
-              title="Export & Import Date (Backup)"
-            >
-              <CloudUpload className="w-4 h-4 stroke-[2.2]" />
-            </button>
-          )}
+        {/* Dreapta: Alertă mutată în linie cu numărul de înmatriculare */}
+        <div className="flex-1 min-w-0">
+          <AlertsBanner
+            vehicles={activeVehicles || selectedVehicles}
+            onSelectVehicle={(vId) => {
+              onToggleVehicle && onToggleVehicle(vId);
+            }}
+            onOpenAlertsTab={onOpenAlertsTab}
+            lang={lang}
+            inline={true}
+          />
         </div>
       </div>
 
@@ -137,64 +123,73 @@ export const VehicleCarousel = ({
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-slate-100 dark:bg-[#090d16] flex flex-col animate-in fade-in duration-200">
           
-          {/* SLIM COMPACT HEADER (Spațiu minim ocupat sus) */}
-          <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 py-2 shadow-2xs">
-            <div className="flex items-center justify-between gap-1.5 max-w-2xl mx-auto">
-              <div className="flex items-center gap-1.5 min-w-0">
+          {/* HEADER CU 2 RÂNDURI (Titlu complet vizibil, fără trunchiere + butoane clare) */}
+          <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3.5 py-2.5 shadow-2xs">
+            <div className="max-w-2xl mx-auto space-y-2">
+              {/* RÂNDUL 1: Buton Înapoi + Titlu pe 2 rânduri + Buton Închidere */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="p-1.5 -ml-1 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    title={lang === 'en' ? "Back" : "Înapoi"}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <div className="min-w-0">
+                    <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-tight">
+                      {lang === 'en' ? "Vehicles Fleet" : "Parc Autovehicule"}
+                    </h2>
+                    <p className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-0.5">
+                      {lang === 'en' 
+                        ? `${selectedVehicleIds.length} of ${vehicles.length} vehicles selected for calculations` 
+                        : `${selectedVehicleIds.length} din ${vehicles.length} mașini selectate în calcule`}
+                    </p>
+                  </div>
+                </div>
+
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
                   title={lang === 'en' ? "Close" : "Închide"}
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  <X className="w-5 h-5" />
                 </button>
-                <div className="flex items-center gap-1 min-w-0">
-                  <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate">
-                    Vehicule
-                  </span>
-                  <span className="text-[11px] font-mono font-black text-emerald-600 dark:text-emerald-400 shrink-0">
-                    ({selectedVehicleIds.length}/{vehicles.length})
-                  </span>
-                </div>
               </div>
 
-              {/* Acțiuni rapide pe o singură linie compactă */}
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => onSelectAllVehicles && onSelectAllVehicles(true)}
-                  className="px-2 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold transition-colors"
-                >
-                  {lang === 'en' ? "All" : "Toate"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSelectAllVehicles && onSelectAllVehicles(false)}
-                  className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[11px] font-medium transition-colors"
-                >
-                  {lang === 'en' ? "None" : "Niciuna"}
-                </button>
+              {/* RÂNDUL 2: Filtre Rapide (Toate / Niciuna) + Butonul „+ Vehicul Nou” */}
+              <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/80">
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => onSelectAllVehicles && onSelectAllVehicles(true)}
+                    className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 text-xs font-bold transition-colors cursor-pointer"
+                  >
+                    {lang === 'en' ? "All" : "Toate"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onSelectAllVehicles && onSelectAllVehicles(false)}
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 text-xs font-medium transition-colors cursor-pointer"
+                  >
+                    {lang === 'en' ? "None" : "Niciuna"}
+                  </button>
+                </div>
 
+                {/* Butonul + Vehicul Nou (Păstrat și redenumit conform cerinței utilizatorului) */}
                 <button
                   type="button"
                   onClick={() => {
                     setIsOpen(false);
                     onOpenAddVehicle();
                   }}
-                  className="flex items-center gap-1 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2 py-1 rounded-lg shadow-xs transition-colors whitespace-nowrap ml-0.5"
-                  title={lang === 'en' ? "Add new car" : "Adaugă mașină nouă"}
+                  className="flex items-center gap-1.5 text-xs font-black bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 px-3 py-1.5 rounded-xl shadow-xs transition-all transform active:scale-95 shrink-0 cursor-pointer"
+                  title={lang === 'en' ? "Add new vehicle" : "Adaugă vehicul nou"}
                 >
-                  <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>{lang === 'en' ? "New" : "Nouă"}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsOpen(false)}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors ml-0.5"
-                >
-                  <X className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>{lang === 'en' ? "New Vehicle" : "Vehicul Nou"}</span>
                 </button>
               </div>
             </div>
@@ -266,6 +261,19 @@ export const VehicleCarousel = ({
                       >
                         <Settings className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       </button>
+
+                      {/* Buton Ștergere Directă Autovehicul (cu confirmare) */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setVehicleToDelete(veh);
+                        }}
+                        className="p-1.5 rounded-xl bg-slate-100 hover:bg-rose-100 text-slate-400 hover:text-rose-600 dark:bg-slate-800 dark:hover:bg-rose-950/50 dark:hover:text-rose-400 transition-colors cursor-pointer"
+                        title={lang === 'en' ? "Delete vehicle" : "Șterge vehicul"}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
 
@@ -328,6 +336,51 @@ export const VehicleCarousel = ({
             </button>
           </div>
 
+        </div>
+      )}
+
+      {/* DIALOG DE CONFIRMARE ȘTERGERE AUTOVEHICUL */}
+      {vehicleToDelete && (
+        <div 
+          className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-sm w-full p-5 shadow-2xl animate-in zoom-in-95 duration-150">
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto mb-3.5">
+              <Trash2 className="w-6 h-6 stroke-[2.2]" />
+            </div>
+            <h3 className="text-base font-black text-slate-900 dark:text-white text-center">
+              {lang === 'en' ? "Delete Vehicle?" : "Ștergeți vehiculul?"}
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 text-center mt-2 leading-relaxed">
+              {lang === 'en' ? (
+                <>Are you sure you want to delete vehicle <strong className="text-slate-900 dark:text-white font-mono">[{vehicleToDelete.plate}]</strong> ({vehicleToDelete.makeModel})? All associated records will be permanently removed.</>
+              ) : (
+                <>Sigur doriți să ștergeți autovehiculul <strong className="text-slate-900 dark:text-white font-mono">[{vehicleToDelete.plate}]</strong> ({vehicleToDelete.makeModel})? Toate alimentările și datele asociate vor fi șterse definitiv.</>
+              )}
+            </p>
+            <div className="grid grid-cols-2 gap-2.5 mt-5">
+              <button
+                type="button"
+                onClick={() => setVehicleToDelete(null)}
+                className="py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                {lang === 'en' ? "Cancel" : "Anulează"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (onDeleteVehicle) {
+                    onDeleteVehicle(vehicleToDelete.id);
+                  }
+                  setVehicleToDelete(null);
+                }}
+                className="py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-md shadow-rose-600/30 transition-all active:scale-95 cursor-pointer"
+              >
+                {lang === 'en' ? "Delete" : "Da, Șterge"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </section>
