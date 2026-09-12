@@ -51,8 +51,9 @@ export const AddPersonalTripModal = ({
     }
     const disp = formatDateToDisplay(val);
     setTitle((prev) => {
+      const prefix = t.weekendTrips || "Cursă Weekend";
       if (!prev) {
-        return lang === 'en' ? `Weekend Trip (${disp})` : `Cursă Weekend (${disp})`;
+        return `${prefix} (${disp})`;
       }
       if (prev.includes('(') && prev.includes(')')) {
         return prev.replace(/\(.*?\)/, `(${disp})`);
@@ -125,7 +126,8 @@ export const AddPersonalTripModal = ({
       setVehicleId(vId);
       const todayStr = new Date().toISOString().slice(0, 10);
       const formattedToday = formatDateToDisplay(todayStr);
-      setTitle(lang === 'en' ? `Weekend Trip (${formattedToday})` : `Cursă Weekend (${formattedToday})`);
+      const prefix = t.weekendTrips || "Cursă Weekend";
+      setTitle(`${prefix} (${formattedToday})`);
       setStartDate(todayStr);
       setEndDate(todayStr);
       setTripTime(getCurrentTimeStr());
@@ -144,11 +146,11 @@ export const AddPersonalTripModal = ({
     e.preventDefault();
 
     if (!vehicleId) {
-      alert("Selectează vehiculul!");
+      alert(t.selectVehicle || "Selectează vehiculul!");
       return;
     }
     if (sKm <= 0) {
-      alert("Introdu kilometrajul de început!");
+      alert(t.startKm || "Introdu kilometrajul de început!");
       return;
     }
     if (eKm !== null && eKm <= sKm) {
@@ -162,7 +164,7 @@ export const AddPersonalTripModal = ({
     const tripData = {
       id: tripToEdit ? tripToEdit.id : `trip_${Date.now()}`,
       vehicleId,
-      title: title.trim() || (lang === 'en' ? "Personal Trip" : "Cursă Personală"),
+      title: title.trim() || (t.personalTrips || "Cursă Personală"),
       startDate,
       endDate: endDate || startDate,
       startKm: sKm,
@@ -197,11 +199,11 @@ export const AddPersonalTripModal = ({
             <div>
               <h2 className="text-base font-black text-slate-900 dark:text-white">
                 {tripToEdit 
-                  ? (lang === 'en' ? "Edit Personal Trip" : "Editează Cursă Personală")
-                  : (lang === 'en' ? "Add Personal / Weekend Trip" : "Cursă Nouă Personală / Weekend")}
+                  ? (t.editPersonalTrip || "Editează Cursă Personală")
+                  : (t.addPersonalTripModalTitle || "Cursă Nouă Personală / Weekend")}
               </h2>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                {lang === 'en' ? "Calculates personal fuel consumption & costs" : "Calculează consumul și costul carburantului"}
+                {t.addPersonalTripSubtitle || "Calculează consumul și costul carburantului"}
               </p>
             </div>
           </div>
@@ -219,7 +221,7 @@ export const AddPersonalTripModal = ({
           {/* 1. Select Vehicle */}
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-              {t.selectVehicle || (lang === 'en' ? "Vehicle" : "Vehicul")}
+              {t.selectVehicle || "Vehicul"}
             </label>
             <select
               value={vehicleId}
@@ -243,10 +245,10 @@ export const AddPersonalTripModal = ({
               </div>
               <div className="min-w-0">
                 <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
-                  {lang === 'en' ? "Scan Fuel Receipt" : "Scanare Bon Carburant"}
+                  {t.scanReceipt || "Scanare Bon Carburant"}
                 </h4>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                  {lang === 'en' ? "QR Code, Barcode or OCR Photo" : "Cod QR, Cod de bare sau Foto Bon"}
+                  {t.scanReceiptDesc || "Cod QR, Cod de bare sau Foto Bon"}
                 </p>
               </div>
             </div>
@@ -256,7 +258,7 @@ export const AddPersonalTripModal = ({
               className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all shrink-0 cursor-pointer"
             >
               <Camera className="w-3.5 h-3.5" />
-              <span>{lang === 'en' ? "Scan" : "Scanează"}</span>
+              <span>{t.scanButton || "Scanează"}</span>
             </button>
           </div>
 
@@ -265,7 +267,7 @@ export const AddPersonalTripModal = ({
               <div className="flex items-center justify-between text-xs font-bold text-purple-700 dark:text-purple-400">
                 <span className="flex items-center gap-1.5">
                   <Fuel className="w-3.5 h-3.5" />
-                  {lang === 'en' ? "Receipt & Fuel Price" : "Date Bon & Preț Carburant"}
+                  {t.receiptAndPrice || "Date Bon & Preț Carburant"}
                 </span>
                 {scannedReceipt && (
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-bold">
@@ -276,7 +278,7 @@ export const AddPersonalTripModal = ({
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div>
                   <label className="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
-                    {lang === 'en' ? "Price per Liter (RON)" : "Preț per litru (RON)"}
+                    {t.pricePerLiter || "Preț per litru (RON)"}
                   </label>
                   <input
                     type="number"
@@ -289,7 +291,7 @@ export const AddPersonalTripModal = ({
                 </div>
                 <div>
                   <label className="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
-                    {lang === 'en' ? "Avg. Consumption (L/100km)" : "Consum mediu (L/100km)"}
+                    {t.avgConsumptionShort || "Consum mediu (L/100km)"}
                   </label>
                   <input
                     type="number"
@@ -313,13 +315,13 @@ export const AddPersonalTripModal = ({
           {/* 2. Trip Title / Period */}
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-              {lang === 'en' ? "Period Description / Title" : "Descriere Perioadă (ex: Weekend, Concediu)"}
+              {t.periodDesc || "Descriere Perioadă (ex: Weekend, Concediu)"}
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder={lang === 'en' ? "e.g. Weekend 29-30 Aug" : "ex: Weekend 29-30 Aug, Deplasare munte"}
+              placeholder={t.periodPlaceholder || "ex: Weekend 29-30 Aug, Deplasare munte"}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
               required
             />
@@ -330,7 +332,7 @@ export const AddPersonalTripModal = ({
             <div className="col-span-7 sm:col-span-5">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
                 <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
-                <span className="truncate">{lang === 'en' ? "Start Date" : "Data Început"}</span>
+                <span className="truncate">{t.startDate || "Data Început"}</span>
               </label>
               <input
                 type="date"
@@ -343,7 +345,7 @@ export const AddPersonalTripModal = ({
             <div className="col-span-5 sm:col-span-3">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
                 <Clock className="w-3 h-3 text-purple-500 shrink-0" />
-                <span className="truncate">{lang === 'en' ? "Time" : "Ora Cursă"}</span>
+                <span className="truncate">{t.time || "Ora Cursă"}</span>
               </label>
               <input
                 type="time"
@@ -355,7 +357,7 @@ export const AddPersonalTripModal = ({
             <div className="col-span-12 sm:col-span-4">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
                 <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
-                <span className="truncate">{lang === 'en' ? "End Date" : "Data Sfârșit"}</span>
+                <span className="truncate">{t.endDate || "Data Sfârșit"}</span>
               </label>
               <input
                 type="date"
@@ -372,7 +374,7 @@ export const AddPersonalTripModal = ({
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1 whitespace-nowrap">
                 <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
-                <span>{lang === 'en' ? "Start Odometer (km)" : "Km Început"}</span>
+                <span>{t.startOdometer || "Km Început"}</span>
               </label>
               <input
                 type="number"
@@ -386,7 +388,7 @@ export const AddPersonalTripModal = ({
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1 whitespace-nowrap">
                 <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
-                <span>{lang === 'en' ? "End Odometer (km)" : "Km Sfârșit"}</span>
+                <span>{t.endOdometer || "Km Sfârșit"}</span>
               </label>
               <input
                 type="number"
@@ -396,7 +398,7 @@ export const AddPersonalTripModal = ({
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
               />
               <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 mt-1 block">
-                {lang === 'en' ? "(Optional now)" : "(Opțional acum)"}
+                {t.optionalNow || "(Opțional acum)"}
               </span>
             </div>
           </div>
@@ -407,17 +409,17 @@ export const AddPersonalTripModal = ({
               <div className="bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 rounded-2xl p-3.5 space-y-1.5 animate-in fade-in">
                 <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-black text-xs">
                   <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-                  <span>Cursă În Desfășurare (Activă)</span>
+                  <span>{t.ongoingTripTitle || "Cursă În Desfășurare (Activă)"}</span>
                 </div>
                 <p className="text-[11px] text-amber-700/90 dark:text-amber-300/90">
-                  Ai completat kilometrajul de început ({sKm.toLocaleString('ro-RO')} km). Poți salva cursa acum, iar când o termini vei introduce kilometrajul de final pentru a calcula distanța și costul.
+                  {t.ongoingTripSubtitle || "Cursă activă fără kilometraj de final"} ({sKm.toLocaleString('ro-RO')} km).
                 </p>
               </div>
             ) : (
               <div className="bg-purple-500/10 dark:bg-purple-950/30 border border-purple-500/30 rounded-2xl p-3.5 space-y-2 animate-in fade-in">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-purple-900 dark:text-purple-300">
-                    {lang === 'en' ? "Distance Driven:" : "Distanță Parcursă:"}
+                    {t.distanceDriven || "Distanță Parcursă:"}
                   </span>
                   <span className="font-mono font-black text-sm text-purple-700 dark:text-purple-300">
                     +{kmDriven.toLocaleString('ro-RO')} km
@@ -426,7 +428,7 @@ export const AddPersonalTripModal = ({
 
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-600 dark:text-slate-400">
-                    {lang === 'en' ? "Estimated Fuel Used:" : "Consum Estimat:"}
+                    {t.estimatedFuelUsed || "Consum Estimat:"}
                   </span>
                   <span className="font-mono font-bold text-slate-900 dark:text-white">
                     {calculatedLiters} L <span className="text-[10px] text-slate-400">({effectiveAvgL100} L/100)</span>
@@ -435,7 +437,7 @@ export const AddPersonalTripModal = ({
 
                 <div className="pt-2 border-t border-purple-500/20 flex items-center justify-between text-xs">
                   <span className="font-black text-slate-900 dark:text-white">
-                    {lang === 'en' ? "Calculated Personal Cost:" : "Cost Total Personal:"}
+                    {t.calculatedPersonalCost || "Cost Total Personal:"}
                   </span>
                   <span className="font-mono font-black text-base text-purple-600 dark:text-purple-400">
                     {calculatedCost.toLocaleString('ro-RO')} RON
@@ -443,9 +445,7 @@ export const AddPersonalTripModal = ({
                 </div>
 
                 <div className="text-[10.5px] text-slate-500 dark:text-slate-400 pt-1">
-                  {lang === 'en' 
-                    ? `Calculated using car's fuel rate (${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`
-                    : `Calculat pe baza consumului mașinii (${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`}
+                  {`(${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`}
                 </div>
               </div>
             )
@@ -456,10 +456,10 @@ export const AddPersonalTripModal = ({
             <div className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex items-center justify-between">
               <div>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
-                  {lang === 'en' ? "Settled / Paid Trip" : "Cursă Achitată / Decontată"}
+                  {t.settledTrip || "Cursă Achitată / Decontată"}
                 </span>
                 <span className="text-[10.5px] text-slate-500 dark:text-slate-400 block">
-                  {lang === 'en' ? "Mark as paid to deduct from remaining balance" : "Bifează dacă această cursă a fost deja plătită / decontată"}
+                  {t.settledTripDesc || "Bifează dacă această cursă a fost deja plătită / decontată"}
                 </span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -477,13 +477,13 @@ export const AddPersonalTripModal = ({
           {/* Notes */}
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-              {t.notes || (lang === 'en' ? "Notes" : "Observații")}
+              {t.notes || "Observații"}
             </label>
             <input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder={lang === 'en' ? "Optional details..." : "Mențiuni opționale..."}
+              placeholder={t.notesPlaceholder || "Mențiuni opționale..."}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
             />
           </div>
@@ -499,10 +499,10 @@ export const AddPersonalTripModal = ({
               }`}
             >
               {isOngoing
-                ? (lang === 'en' ? "Save Trip (In Progress)" : "Salvează Cursa (În Desfășurare)")
+                ? (t.saveTripInProgress || "Salvează Cursa (În Desfășurare)")
                 : (tripToEdit 
-                    ? (lang === 'en' ? "Update Personal Trip" : "Actualizează Cursa")
-                    : (lang === 'en' ? "Save & Calculate Trip" : "Salvează & Finalizează Cursa"))}
+                    ? (t.updateTrip || "Actualizează Cursa")
+                    : (t.finishAndSave || "Salvează & Finalizează Cursa"))}
             </button>
           </div>
 

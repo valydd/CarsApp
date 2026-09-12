@@ -5,7 +5,7 @@ import { getVehicleAlerts } from '../utils/calculations';
 
 export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang, inline = false }) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
 
   const allAlerts = [];
   vehicles.forEach(veh => {
@@ -31,9 +31,7 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
     let textClass = "text-emerald-700 dark:text-emerald-300";
     let chevronClass = "text-emerald-600 dark:text-emerald-400";
     let IconComp = ShieldAlert;
-    let message = lang === 'en' 
-      ? "All inspections & docs up to date!" 
-      : "Toate actele și reviziile sunt la zi ✓";
+    let message = t.allInspectionsUpToDate || "Toate actele și reviziile sunt la zi ✓";
 
     if (criticalCount > 0) {
       containerClass = "bg-rose-50/90 dark:bg-rose-950/30 border-rose-300 dark:border-rose-900/50 hover:border-rose-500";
@@ -41,18 +39,14 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
       textClass = "text-rose-700 dark:text-rose-300 font-black";
       chevronClass = "text-rose-500";
       IconComp = AlertCircle;
-      message = lang === 'en'
-        ? `${criticalCount} overdue deadline${criticalCount === 1 ? '' : 's'}! Attention needed`
-        : `${criticalCount} ${criticalCount === 1 ? 'scadență depășită' : 'scadențe depășite'}! Necesită atenție`;
+      message = `${criticalCount} ${criticalCount === 1 ? (t.overdueDeadlinesSingular || 'scadență depășită! Necesită atenție') : (t.overdueDeadlinesPlural || 'scadențe depășite! Necesită atenție')}`;
     } else if (warningCount > 0) {
       containerClass = "bg-amber-50/90 dark:bg-amber-950/30 border-amber-300 dark:border-amber-900/50 hover:border-amber-500";
       iconClass = "bg-amber-500/20 text-amber-600 dark:text-amber-400";
       textClass = "text-amber-800 dark:text-amber-300 font-extrabold";
       chevronClass = "text-amber-600 dark:text-amber-400";
       IconComp = AlertTriangle;
-      message = lang === 'en'
-        ? `${warningCount} deadline${warningCount === 1 ? '' : 's'} upcoming soon`
-        : `${warningCount} ${warningCount === 1 ? 'termen scadent' : 'termene scadente'} în curând`;
+      message = `${warningCount} ${warningCount === 1 ? (t.upcomingDeadlinesSingular || 'termen scadent în curând') : (t.upcomingDeadlinesPlural || 'termene scadente în curând')}`;
     }
 
     if (inline) {
@@ -60,7 +54,7 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
         <div 
           onClick={onOpenAlertsTab}
           className={`h-8 rounded-xl border px-2 sm:px-2.5 flex items-center justify-between shadow-2xs cursor-pointer transition-all active:scale-[0.98] group w-full min-w-0 ${containerClass}`}
-          title="Apasă pentru detalii scadențe"
+          title={t.tapForAlerts || "Apasă pentru detalii scadențe"}
         >
           <div className="flex items-center gap-1.5 min-w-0 flex-1 truncate">
             <div className={`p-1 rounded-lg shrink-0 ${iconClass}`}>
@@ -79,7 +73,7 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
       <div 
         onClick={onOpenAlertsTab}
         className={`mb-3 rounded-2xl border px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between shadow-2xs cursor-pointer transition-all active:scale-[0.99] group ${containerClass}`}
-        title="Apasă pentru detalii scadențe"
+        title={t.tapForAlerts || "Apasă pentru detalii scadențe"}
       >
         <div className="flex items-center gap-2.5 min-w-0">
           <div className={`p-1.5 rounded-xl shrink-0 ${iconClass}`}>
@@ -123,47 +117,107 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
     switch (cat) {
       case 'rca':
         return {
-          tag: '🛡️ RCA',
+          tag: t.rcaBadge || '🛡️ RCA',
           color: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/30',
           icon: ShieldAlert
         };
       case 'itp':
         return {
-          tag: '🔍 ITP',
+          tag: t.itpBadge || '🔍 ITP',
           color: 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-500/30',
           icon: Calendar
         };
       case 'rovinieta':
         return {
-          tag: '🛣️ ROVINIETĂ',
+          tag: t.rovinietaBadge || '🛣️ ROVINIETĂ',
           color: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30',
           icon: Calendar
         };
       case 'casco':
         return {
-          tag: '📋 CASCO',
+          tag: t.cascoBadge || '📋 CASCO',
           color: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border-indigo-500/30',
           icon: ShieldAlert
         };
       case 'service':
         return {
-          tag: '🔧 REVIZIE',
+          tag: t.serviceBadge || '🔧 REVIZIE',
           color: 'bg-orange-500/15 text-orange-800 dark:text-orange-300 border-orange-500/30',
           icon: Wrench
         };
       case 'tires':
         return {
-          tag: '🛞 ANVELOPE',
+          tag: t.tiresBadge || '🛞 ANVELOPE',
           color: 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-500/30',
           icon: Disc
         };
       default:
         return {
-          tag: '⚠️ SCADENȚĂ',
+          tag: t.deadlineBadge || '⚠️ SCADENȚĂ',
           color: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border-slate-500/30',
           icon: AlertTriangle
         };
     }
+  };
+
+  const getAlertTitle = (alert) => {
+    if (alert.type === 'serviceKm') {
+      return alert.kmLeft <= 0 
+        ? (t.serviceOverdue || 'Revizie / Schimb Ulei DEPĂȘIT!')
+        : (t.serviceDueSoon || 'Revizie / Schimb Ulei în curând');
+    }
+    if (alert.type === 'rcaExpiry') {
+      return alert.daysLeft < 0 
+        ? `${t.mandatoryInsurance || 'Asigurare RCA'} ${t.expiredFeminine || t.expired || 'expirată!'}`
+        : `${t.mandatoryInsurance || 'Asigurare RCA'} ${t.expiresSoon || 'expiră în curând'}`;
+    }
+    if (alert.type === 'itpExpiry') {
+      return alert.daysLeft < 0 
+        ? `${t.itpInspection || 'Inspecție ITP'} ${t.expired || 'expirat!'}`
+        : `${t.itpInspection || 'Inspecție ITP'} ${t.expiresSoon || 'expiră în curând'}`;
+    }
+    if (alert.type === 'rovinietaExpiry') {
+      return alert.daysLeft < 0 
+        ? `${t.vignetteAndTaxes || 'Rovinietă'} ${t.expiredFeminine || t.expired || 'expirată!'}`
+        : `${t.vignetteAndTaxes || 'Rovinietă'} ${t.expiresSoon || 'expiră în curând'}`;
+    }
+    if (alert.type === 'cascoExpiry') {
+      return alert.daysLeft < 0 
+        ? `CASCO ${t.expired || 'expirat!'}`
+        : `CASCO ${t.expiresSoon || 'expiră în curând'}`;
+    }
+    if (alert.type === 'nextServiceDate') {
+      return alert.daysLeft < 0 
+        ? `${t.servicesAndOil || 'Revizie'} ${t.expired || 'expirată!'}`
+        : `${t.servicesAndOil || 'Revizie'} ${t.expiresSoon || 'în curând'}`;
+    }
+    return (lang === 'ro' ? alert.titleRo : alert.titleEn) || alert.titleRo;
+  };
+
+  const getAlertDetail = (alert) => {
+    if (alert.type === 'serviceKm') {
+      if (alert.kmLeft <= 0) {
+        return (t.kmOverdue || "Depășit cu {km} km (Limită: {limit} km)")
+          .replace('{km}', Math.abs(alert.kmLeft).toLocaleString('ro-RO'))
+          .replace('{limit}', (alert.vehicle?.nextServiceKm || '').toLocaleString('ro-RO'));
+      }
+      return (t.kmRemainingUntilService || "Mai sunt doar {km} km până la revizie")
+        .replace('{km}', alert.kmLeft.toLocaleString('ro-RO'));
+    }
+    if (alert.daysLeft !== undefined) {
+      if (alert.daysLeft < 0) {
+        return (t.expiredDaysAgoDetail || "Expirat de {days} zile ({date})")
+          .replace('{days}', Math.abs(alert.daysLeft))
+          .replace('{date}', alert.dueDate || '');
+      }
+      if (alert.daysLeft === 0) {
+        return t.dueToday || "Expiră astăzi!";
+      }
+      return (t.daysRemainingDetail || "Mai sunt doar {days} zile ({date})")
+        .replace('{days}', alert.daysLeft)
+        .replace('{date}', alert.dueDate || '');
+    }
+    return (lang === 'ro' ? alert.detailRo : alert.detailEn) || alert.detailRo;
   };
 
   return (
@@ -204,14 +258,14 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
               )}
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-              Revizii depășite, inspecții ITP și polițe RCA cu scadență apropiată
+              {t.alertsSubtitle || "Revizii depășite, inspecții ITP și polițe RCA cu scadență apropiată"}
             </p>
           </div>
         </div>
 
         <button 
           className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg transition-colors shrink-0"
-          aria-label={isExpanded ? "Restrânge" : "Extinde"}
+          aria-label={isExpanded ? (t.close || "Restrânge") : (t.open || "Extinde")}
         >
           {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </button>
@@ -252,11 +306,11 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
                       ? 'bg-rose-600 text-white animate-pulse' 
                       : 'bg-amber-500 text-slate-950 font-black'
                   }`}>
-                    {isCrit ? (alert.daysLeft !== undefined && alert.daysLeft < 0 ? "EXPIRAT" : "URGENT") : "ATENȚIE"}
+                    {isCrit ? (alert.daysLeft !== undefined && alert.daysLeft < 0 ? (t.expiredUpper || "EXPIRAT") : (t.urgent || "URGENT")) : (t.warning || "ATENȚIE")}
                   </span>
                 </div>
 
-                {/* RÂNDUL 2: CE ANUME A AJUNS LA SCADENȚĂ (FĂRĂ TRUNCHIERE) */}
+                {/* RÂNDUL 2: CE ANUME A AJUNS LA SCADENȚĂ */}
                 <div className="flex items-start gap-2.5">
                   <div className={`p-2 rounded-xl shrink-0 mt-0.5 ${
                     isCrit ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
@@ -271,7 +325,7 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
                         {meta.tag}
                       </span>
                       <h4 className="text-sm font-black text-slate-900 dark:text-white leading-snug">
-                        {lang === 'ro' ? alert.titleRo : alert.titleEn}
+                        {getAlertTitle(alert)}
                       </h4>
                     </div>
 
@@ -279,16 +333,16 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
                     <div className="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-1.5 flex items-center gap-2 flex-wrap">
                       <span className={`font-extrabold flex items-center gap-1 ${isCrit ? 'text-rose-700 dark:text-rose-400' : 'text-amber-800 dark:text-amber-300'}`}>
                         <Clock className="w-3.5 h-3.5 shrink-0" />
-                        <span>{lang === 'ro' ? alert.detailRo : alert.detailEn}</span>
+                        <span>{getAlertDetail(alert)}</span>
                       </span>
                       {alert.dueDate && (
                         <span className="text-slate-500 dark:text-slate-400">
-                          • Dată limită: <strong className="text-slate-800 dark:text-slate-200">{alert.dueDate}</strong>
+                          • {t.dueDateLabel || 'Dată limită'}: <strong className="text-slate-800 dark:text-slate-200">{alert.dueDate}</strong>
                         </span>
                       )}
                       {alert.vehicle.driver && (
                         <span className="text-slate-500 dark:text-slate-400">
-                          • Șofer: <strong className="text-slate-800 dark:text-slate-200">{alert.vehicle.driver}</strong>
+                          • {t.driverLabel || 'Șofer'}: <strong className="text-slate-800 dark:text-slate-200">{alert.vehicle.driver}</strong>
                         </span>
                       )}
                     </div>

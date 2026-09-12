@@ -75,10 +75,8 @@ export const ConnectModal = ({
 
   const handleShare = async () => {
     const shareData = {
-      title: "CarsApp - Gestiune Flotă Auto",
-      text: lang === 'ro' 
-        ? "Deschide aplicația CarsApp sau descarcă APK-ul:" 
-        : "Open CarsApp or download the APK:",
+      title: "CarsApp",
+      text: t.sharePrompt || "Deschide aplicația CarsApp sau descarcă APK-ul:",
       url: appUrl
     };
 
@@ -108,31 +106,31 @@ export const ConnectModal = ({
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[94vh] flex flex-col">
         
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/80 dark:bg-slate-900/90 shrink-0">
+        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
               <QrCode className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-1.5">
-                <span>{t.connectAndInstall || "Conectare & Instalare CarsApp"}</span>
+              <h3 className="font-black text-sm sm:text-base text-slate-900 dark:text-white leading-tight">
+                {t.connectDevicesTitle || "Conectează Dispozitive"}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                {t.connectSubtitle || "Scanează codul QR sau descarcă fișierul APK"}
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                {t.connectDevicesDesc || "Sincronizare pe orice telefon, tabletă sau PC"}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-5">
+        {/* Scrollable Body */}
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
           
           {/* Toast feedback */}
           {toastMessage && (
@@ -142,21 +140,23 @@ export const ConnectModal = ({
             </div>
           )}
 
-          {/* QR Code Card */}
-          <div className="bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 text-center shadow-inner flex flex-col items-center">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs mb-3 border border-emerald-500/20">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>{t.scanQrCode || "Cod QR Conectare Directă"}</span>
-            </div>
-
-            {/* QR Canvas */}
-            <div className="p-3 bg-white rounded-2xl shadow-md border border-slate-200/80 inline-block mb-3">
+          {/* QR Code Container */}
+          <div className="flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 text-center shadow-inner">
+            <div className="bg-white p-3 rounded-2xl shadow-md border border-slate-200/80 mb-3">
               <canvas ref={canvasRef} className="rounded-lg max-w-[200px] max-h-[200px] sm:max-w-[220px] sm:max-h-[220px]" />
             </div>
+            <div className="inline-flex items-center gap-1.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-black">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{t.scanWithCamera || "Scanează cu camera telefonului"}</span>
+            </div>
+          </div>
 
-            {/* URL Box + Copy Button */}
-            <div className="w-full max-w-sm flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-1.5 px-2.5">
-              <Globe className="w-4 h-4 text-slate-400 shrink-0" />
+          {/* Quick Copy Link Bar */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              {t.appLinkDirect || "Link Direct Aplicație:"}
+            </label>
+            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-1.5 pl-3">
               <input
                 type="text"
                 readOnly
@@ -174,7 +174,7 @@ export const ConnectModal = ({
                 title={t.copyLink || "Copiază Link"}
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? (lang === 'en' ? "Copied!" : "Copiat!") : (t.copyLink || "Copiază")}</span>
+                <span>{copied ? (t.linkCopied || "Copiat!") : (t.copyLink || "Copiază")}</span>
               </button>
             </div>
           </div>
@@ -189,7 +189,7 @@ export const ConnectModal = ({
               className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-500/25 transition-all transform active:scale-[0.98] cursor-pointer"
             >
               <Download className="w-5 h-5 stroke-[2.5]" />
-              <span>{lang === 'en' ? `Download App (${apkFileName})` : `Descarcă Aplicația (${apkFileName})`}</span>
+              <span>{t.downloadApkBtn || "Descarcă Aplicația"} ({apkFileName})</span>
             </a>
 
             <div className="flex items-center justify-between gap-2 px-1">
@@ -202,7 +202,7 @@ export const ConnectModal = ({
                 className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? "Share via WhatsApp" : "Trimite pe WhatsApp"}</span>
+                <span>{t.shareWhatsApp || "Trimite pe WhatsApp"}</span>
               </button>
             </div>
           </div>

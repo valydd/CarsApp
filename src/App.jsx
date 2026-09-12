@@ -543,14 +543,14 @@ export function App() {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>{t.dashboard || (lang === 'en' ? "Main Dashboard" : "Panou Principal")}</span>
+                <span>{t.dashboard || "Panou Principal"}</span>
               </button>
               {!isAllSelected && (
                 <button
                   onClick={() => handleSelectAllVehicles(true)}
                   className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
-                  {lang === 'en' ? "All vehicles" : "Toate mașinile"}
+                  {t.allCars || t.allVehicles || "Toate mașinile"}
                 </button>
               )}
             </div>
@@ -580,14 +580,14 @@ export function App() {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>{t.dashboard || (lang === 'en' ? "Main Dashboard" : "Panou Principal")}</span>
+                <span>{t.dashboard || "Panou Principal"}</span>
               </button>
               {!isAllSelected && (
                 <button
                   onClick={() => handleSelectAllVehicles(true)}
                   className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
-                  {lang === 'en' ? "All vehicles" : "Toate mașinile"}
+                  {t.allCars || t.allVehicles || "Toate mașinile"}
                 </button>
               )}
             </div>
@@ -614,10 +614,10 @@ export function App() {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors shrink-0 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? "Back" : "Înapoi"}</span>
+                <span>{t.back || "Înapoi"}</span>
               </button>
               <h2 className="text-base font-black text-slate-900 dark:text-white truncate">
-                {t.alertsTitle || (lang === 'en' ? "Deadlines & Alerts" : "Atenționări la Scadență")}
+                {t.alertsTitle || "Atenționări la Scadență"}
               </h2>
             </div>
 
@@ -629,15 +629,15 @@ export function App() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span>{lang === 'en' ? "Alert Button Pulsing" : "Pulsare Buton Alerte"}</span>
+                    <span>{t.pulseAlertsTitle || "Pulsare Buton Alerte"}</span>
                     <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${pulseAlerts ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
-                      {pulseAlerts ? (lang === 'en' ? "ACTIVE" : "ACTIV") : (lang === 'en' ? "STOPPED" : "OPRIT")}
+                      {pulseAlerts ? (t.pulseActive || "ACTIV") : (t.pulseStopped || "OPRIT")}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                     {pulseAlerts 
-                      ? (lang === 'en' ? "Button pulses with visible rectangular ripples" : "Butonul pulsează cu irizații vizibile în forma butonului") 
-                      : (lang === 'en' ? "Pulsing stopped (button remains colored for active alerts)" : "Pulsarea este oprită (butonul rămâne colorat dacă există alerte)")}
+                      ? (t.pulseActiveDesc || "Butonul pulsează cu irizații vizibile în forma butonului") 
+                      : (t.pulseStoppedDesc || "Pulsarea este oprită (butonul rămâne colorat dacă există alerte)")}
                   </p>
                 </div>
               </div>
@@ -877,7 +877,7 @@ export function App() {
             }`}
           >
             <Car className="w-5 h-5" />
-            <span className="text-[10px] mt-1">{t.fleet || (lang === 'en' ? "Fleet" : "Flotă")}</span>
+            <span className="text-[10px] mt-1">{t.fleet || "Flotă"}</span>
           </button>
 
           <button
@@ -890,7 +890,7 @@ export function App() {
             }`}
           >
             <BarChart3 className="w-5 h-5" />
-            <span className="text-[10px] mt-1">{t.costs || (lang === 'en' ? "Costs" : "Costuri")}</span>
+            <span className="text-[10px] mt-1">{t.costs || "Costuri"}</span>
           </button>
 
           {/* Big Central Floating Add Button */}
@@ -911,7 +911,7 @@ export function App() {
             }`}
           >
             <History className="w-5 h-5" />
-            <span className="text-[10px] mt-1">{t.log || (lang === 'en' ? "Log" : "Jurnal")}</span>
+            <span className="text-[10px] mt-1">{t.log || "Jurnal"}</span>
           </button>
 
           <button
@@ -944,7 +944,7 @@ export function App() {
                 </span>
               )}
             </div>
-            <span className="text-[10px] mt-1 leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>
+            <span className="text-[10px] mt-1 leading-tight">{t.alerts || "Alerte"}</span>
           </button>
         </div>
       )}
@@ -957,11 +957,11 @@ export function App() {
             setIsQuickAddOpen(false);
             setRecordToEdit(null);
           }}
-          vehicles={vehicles}
-          selectedVehicleId={activeVehicle ? activeVehicle.id : (activeVehicles[0]?.id || (vehicles[0]?.id || ''))}
           onSaveRecord={handleSaveRecord}
+          vehicles={vehicles}
+          defaultVehicleId={activeVehicle ? activeVehicle.id : (activeVehicles[0]?.id || (vehicles[0]?.id || ''))}
+          initialCategory={quickAddCategory}
           recordToEdit={recordToEdit}
-          defaultCategory={quickAddCategory}
           lang={lang}
         />
       )}
@@ -977,12 +977,13 @@ export function App() {
 
       {selectedVehicleForDetails && (
         <VehicleDetailsModal
-          vehicle={selectedVehicleForDetails}
-          records={records}
+          isOpen={!!selectedVehicleForDetails}
           onClose={() => {
             setSelectedVehicleForDetails(null);
             setIsVehicleDetailsInEdit(false);
           }}
+          vehicle={selectedVehicleForDetails}
+          records={records.filter(r => r.vehicleId === selectedVehicleForDetails.id)}
           onUpdateVehicle={handleUpdateVehicle}
           onDeleteVehicle={handleDeleteVehicle}
           initialEditing={isVehicleDetailsInEdit}
@@ -1046,29 +1047,29 @@ export function App() {
               </div>
               <div>
                 <h3 className="text-base font-black text-slate-900 dark:text-white">
-                  Cursă Personală În Desfășurare
+                  {t.ongoingTripTitle || "Cursă Personală În Desfășurare"}
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {ongoingTripAlert.title || "Cursă fără kilometraj de sfârșit"}
+                  {ongoingTripAlert.title || (t.ongoingTripSubtitle || "Cursă fără kilometraj de sfârșit")}
                 </p>
               </div>
             </div>
 
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-2xl p-3.5 text-xs text-slate-700 dark:text-slate-300 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-500 dark:text-slate-400">Vehicul:</span>
+                <span className="font-semibold text-slate-500 dark:text-slate-400">{t.selectVehicle || "Vehicul"}:</span>
                 <span className="font-mono font-bold text-slate-900 dark:text-white">
                   {vehicles.find(v => v.id === ongoingTripAlert.vehicleId)?.plate || ongoingTripAlert.vehicleId}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-500 dark:text-slate-400">Km Început:</span>
+                <span className="font-semibold text-slate-500 dark:text-slate-400">{t.startOdometer || "Km Început"}:</span>
                 <span className="font-mono font-black text-amber-700 dark:text-amber-400 text-sm">
                   {Number(ongoingTripAlert.startKm).toLocaleString('ro-RO')} km
                 </span>
               </div>
               <div className="pt-1.5 border-t border-amber-200/60 dark:border-amber-800/40 text-[11.5px] text-amber-900 dark:text-amber-200">
-                Ai o cursă personală începută pentru care nu ai introdus încă kilometrajul de final. Dorești să o finalizezi acum și să calculezi consumul?
+                {t.ongoingTripPrompt || "Ai o cursă personală începută pentru care nu ai introdus încă kilometrajul de final. Dorești să o finalizezi acum și să calculezi consumul?"}
               </div>
             </div>
 
@@ -1077,7 +1078,7 @@ export function App() {
                 onClick={() => setOngoingTripAlert(null)}
                 className="px-4 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               >
-                Mai Târziu
+                {t.later || "Mai Târziu"}
               </button>
               <button
                 onClick={() => {
@@ -1087,7 +1088,7 @@ export function App() {
                 }}
                 className="px-4 py-2.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
               >
-                🏁 Finalizează Cursa Acum
+                {t.finishTripNow || "🏁 Finalizează Cursa Acum"}
               </button>
             </div>
           </div>

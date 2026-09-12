@@ -109,9 +109,7 @@ export const PersonalTripsView = ({
   // Confirmation warning before switching a PAID trip back to UNPAID
   const handleToggleTripPaidClick = (trip) => {
     if (trip.isPaid) {
-      const warningMessage = lang === 'en'
-        ? "Warning: This trip is currently marked as PAID.\n\nAre you sure you want to mark it as UNPAID again?"
-        : "Atenție: Această cursă este marcată ca ACHITATĂ.\n\nSigur dorești să o treci din nou în starea NEACHITATĂ?";
+      const warningMessage = t.warningPaidTrip || "Atenție: Această cursă este marcată ca ACHITATĂ.\n\nSigur dorești să o treci din nou în starea NEACHITATĂ?";
       if (!window.confirm(warningMessage)) {
         return;
       }
@@ -131,7 +129,7 @@ export const PersonalTripsView = ({
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>{lang === 'en' ? "Back" : "Înapoi"}</span>
+          <span>{t.back || "Înapoi"}</span>
         </button>
 
         {onOpenAddTrip && (
@@ -140,7 +138,7 @@ export const PersonalTripsView = ({
             className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
-            <span>{lang === 'en' ? "Personal Trip" : "Cursă Personală"}</span>
+            <span>{t.addPersonalTripModalTitle || "Cursă Personală"}</span>
           </button>
         )}
       </div>
@@ -157,17 +155,15 @@ export const PersonalTripsView = ({
             <span>
               {selectedVehicle 
                 ? `${selectedVehicle.plate} • ${selectedVehicle.makeModel}` 
-                : (lang === 'en' ? "All Vehicles" : "Toate Mașinile")}
+                : (t.allCars || "Toate Mașinile")}
             </span>
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            {lang === 'en' ? "Personal Consumption & Weekend Trips" : "Consum Personal & Decontare Curse"}
+            {t.weekendTrips || "Consum Personal & Decontare Curse"}
           </h2>
           <p className="text-xs text-purple-200 mt-1 max-w-md">
-            {lang === 'en'
-              ? "Track personal trips, separate paid from unpaid balance, and compute exact fuel costs."
-              : "Evidența curselor personale, calculul sumelor de achitat și separarea curselor deja decontate."}
+            {t.personalTripsDesc || "Evidența curselor personale, calculul sumelor de achitat și separarea curselor deja decontate."}
           </p>
 
           {/* DUAL KPI STRIP: RĂMAS DE ACHITAT + TOTAL CĂLĂTORII */}
@@ -178,10 +174,10 @@ export const PersonalTripsView = ({
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? "Remaining Unpaid Balance" : "Rămas de Achitat"}</span>
+                  <span>{t.unpaidTrips || "Rămas de Achitat"}</span>
                 </span>
                 <span className="text-[10px] font-bold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-md">
-                  {unpaidTrips.length} {lang === 'en' ? "trips" : "curse"}
+                  {unpaidTrips.length} {unpaidTrips.length === 1 ? (t.trip || "cursă") : (t.trips || "curse")}
                 </span>
               </div>
 
@@ -191,7 +187,7 @@ export const PersonalTripsView = ({
 
               <div className="flex items-center gap-2 text-xs text-purple-100 font-semibold pt-1 border-t border-amber-400/20">
                 <span>🛣️ <strong>{unpaidKm.toLocaleString('ro-RO')} km</strong></span>
-                <span>• ⛽ <strong>{unpaidLiters} Litri</strong> consumați</span>
+                <span>• ⛽ <strong>{unpaidLiters} L</strong></span>
               </div>
             </div>
 
@@ -200,10 +196,10 @@ export const PersonalTripsView = ({
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-purple-200">
-                    {lang === 'en' ? "Total All Personal Trips:" : "Total Istoric Călătorii:"}
+                    {t.totalFleet || "Total Istoric Călătorii:"}
                   </span>
                   <span className="text-[10.5px] font-mono font-bold text-purple-300">
-                    {vehicleFilteredTrips.length} curse
+                    {vehicleFilteredTrips.length} {vehicleFilteredTrips.length === 1 ? (t.trip || "cursă") : (t.trips || "curse")}
                   </span>
                 </div>
 
@@ -214,7 +210,7 @@ export const PersonalTripsView = ({
 
               <div className="flex items-center justify-between text-xs text-purple-200 font-medium pt-1 border-t border-white/10">
                 <span>🛣️ Total: <strong>{totalPersonalKm.toLocaleString('ro-RO')} km</strong></span>
-                <span className="text-emerald-300">✓ Achitat: <strong>{paidCost.toLocaleString('ro-RO')} RON</strong></span>
+                <span className="text-emerald-300">✓ {t.settledTrip || "Achitat"}: <strong>{paidCost.toLocaleString('ro-RO')} RON</strong></span>
               </div>
             </div>
 
@@ -230,7 +226,7 @@ export const PersonalTripsView = ({
           <div className="flex items-center gap-2">
             <Navigation className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-              {lang === 'en' ? "Personal Trips Log" : "Jurnal Curse Personale"}
+              {t.weekendTrips || "Jurnal Curse Personale"}
             </h3>
             <span className="text-xs font-bold text-slate-400">({displayedTrips.length})</span>
           </div>
@@ -245,7 +241,7 @@ export const PersonalTripsView = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              {lang === 'en' ? "All" : "Toate"} ({vehicleFilteredTrips.length})
+              {t.allVehiclesFilter || "Toate"} ({vehicleFilteredTrips.length})
             </button>
             <button
               onClick={() => setStatusFilter('unpaid')}
@@ -255,7 +251,7 @@ export const PersonalTripsView = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              ⏳ {lang === 'en' ? "Unpaid" : "De Achitat"} ({unpaidTrips.length})
+              ⏳ {t.unpaidTrips || "De Achitat"} ({unpaidTrips.length})
             </button>
             <button
               onClick={() => setStatusFilter('paid')}
@@ -265,7 +261,7 @@ export const PersonalTripsView = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              ✓ {lang === 'en' ? "Paid" : "Achitate"} ({paidTrips.length})
+              ✓ {t.settledTrip || "Achitate"} ({paidTrips.length})
             </button>
           </div>
         </div>
@@ -277,10 +273,8 @@ export const PersonalTripsView = ({
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-3">
               {statusFilter === 'unpaid' 
-                ? (lang === 'en' ? "All personal trips are settled and paid! 🎉" : "Toate cursele personale sunt achitate! 🎉")
-                : (statusFilter === 'paid'
-                    ? (lang === 'en' ? "No paid trips in this filter." : "Nu există curse achitate în acest filtru.")
-                    : (lang === 'en' ? "No personal trips recorded yet." : "Nicio cursă personală înregistrată încă."))}
+                ? (t.allSettled || "Toate cursele personale sunt achitate! 🎉")
+                : (t.noTrips || "Nicio cursă personală înregistrată încă.")}
             </p>
             {onOpenAddTrip && statusFilter === 'all' && (
               <button
@@ -288,7 +282,7 @@ export const PersonalTripsView = ({
                 className="inline-flex items-center gap-1 text-xs font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? "Add Trip" : "Adaugă Cursă"}</span>
+                <span>{t.addPersonalTripModalTitle || "Adaugă Cursă"}</span>
               </button>
             )}
           </div>
@@ -328,7 +322,7 @@ export const PersonalTripsView = ({
                       {isOngoing && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-slate-950 shadow-2xs">
                           <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping" />
-                          <span>În Desfășurare</span>
+                          <span>{t.ongoingTripTitle || "În Desfășurare"}</span>
                         </span>
                       )}
                     </div>
@@ -339,7 +333,7 @@ export const PersonalTripsView = ({
                         <button
                           onClick={() => onEditTrip(trip)}
                           className="p-1 text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          title="Editează"
+                          title={t.edit || "Editează"}
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
@@ -347,12 +341,12 @@ export const PersonalTripsView = ({
                       {onDeleteTrip && (
                         <button
                           onClick={() => {
-                            if (window.confirm(lang === 'en' ? "Delete this personal trip?" : "Ștergi această cursă personală?")) {
+                            if (window.confirm(t.deleteTripConfirm || "Ștergi această cursă personală?")) {
                               onDeleteTrip(trip.id);
                             }
                           }}
                           className="p-1 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          title="Șterge"
+                          title={t.delete || "Șterge"}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -366,25 +360,25 @@ export const PersonalTripsView = ({
                       <div className="flex items-center justify-between gap-2 flex-wrap bg-white/70 dark:bg-slate-900/70 p-2.5 rounded-xl border border-amber-300/50 dark:border-amber-800/50">
                         <div className="text-xs font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                           <Gauge className="w-4 h-4 text-amber-500 shrink-0" />
-                          <span>Km Început: <strong className="font-mono font-black text-slate-900 dark:text-white">{Number(trip.startKm).toLocaleString('ro-RO')} km</strong></span>
+                          <span>{t.startOdometer || "Km Început"}: <strong className="font-mono font-black text-slate-900 dark:text-white">{Number(trip.startKm).toLocaleString('ro-RO')} km</strong></span>
                         </div>
                         <button
                           onClick={() => onEditTrip && onEditTrip(trip)}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md shadow-purple-500/20 transition-all active:scale-95 cursor-pointer"
                         >
-                          <span>🏁 Finalizează Cursa</span>
+                          <span>🏁 {t.finishTripNow || "Finalizează Cursa"}</span>
                         </button>
                       </div>
 
                       <div className="flex flex-col gap-0.5">
                         <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
                           <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span>Începută la: <strong>{formatTripDateRange(trip.startDate, trip.startDate)}</strong></span>
+                          <span>{t.startDate || "Data Început"}: <strong>{formatTripDateRange(trip.startDate, trip.startDate)}</strong></span>
                         </div>
                         {tripTime && (
                           <div className="text-[10px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1 pl-4.5">
                             <Clock className="w-2.5 h-2.5 text-amber-500 shrink-0" />
-                            <span>ora {tripTime}</span>
+                            <span>{tripTime}</span>
                           </div>
                         )}
                       </div>
@@ -416,7 +410,7 @@ export const PersonalTripsView = ({
                       <div className="text-[11px] text-slate-600 dark:text-slate-300 flex items-center gap-1 pt-1.5 border-t border-slate-200/50 dark:border-slate-800/50">
                         <Fuel className="w-3 h-3 text-blue-500 shrink-0" />
                         <span className="font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">
-                          {Number(trip.litersUsed).toFixed(2)} Litri
+                          {Number(trip.litersUsed).toFixed(2)} L
                         </span>
                         <span className="text-slate-400 text-[10px] whitespace-nowrap">
                           ({trip.avgL100} L/100 • {trip.fuelPrice} RON/L)
@@ -433,7 +427,7 @@ export const PersonalTripsView = ({
                           {tripTime && (
                             <div className="text-[10px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1 pl-4.5 mt-0.5">
                               <Clock className="w-3 h-3 text-purple-400 shrink-0" />
-                              <span>ora {tripTime}</span>
+                              <span>{tripTime}</span>
                             </div>
                           )}
                         </div>
@@ -446,17 +440,17 @@ export const PersonalTripsView = ({
                               ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25'
                               : 'bg-amber-500 text-slate-950 border-amber-500 hover:bg-amber-400 font-black shadow-amber-500/20'
                           }`}
-                          title={isPaid ? "Apasă pentru a marca ca Neachitată" : "Apasă pentru a marca ca Achitată"}
+                          title={isPaid ? (t.unpaidTrips || "Neachitată") : (t.settledTrip || "Achitată")}
                         >
                           {isPaid ? (
                             <>
                               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                              <span>✓ Achitat</span>
+                              <span>✓ {t.settledTrip || "Achitat"}</span>
                             </>
                           ) : (
                             <>
                               <Clock className="w-3.5 h-3.5" />
-                              <span>⏳ De Achitat</span>
+                              <span>⏳ {t.unpaidTrips || "De Achitat"}</span>
                             </>
                           )}
                         </button>

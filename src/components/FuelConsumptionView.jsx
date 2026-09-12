@@ -42,7 +42,7 @@ export const FuelConsumptionView = ({
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>{t.dashboard || (lang === 'en' ? "Main Dashboard" : "Panou Principal")}</span>
+          <span>{t.dashboard || "Panou Principal"}</span>
         </button>
 
         {onAddFueling && (
@@ -51,7 +51,7 @@ export const FuelConsumptionView = ({
             className="inline-flex items-center gap-1.5 text-xs font-black text-slate-950 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 px-3 py-1.5 rounded-xl shadow-md shadow-emerald-500/25 transition-all active:scale-95 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
-            <span>{lang === 'en' ? "Fueling" : "Alimentare"}</span>
+            <span>{t.fuel || "Alimentare"}</span>
           </button>
         )}
       </div>
@@ -65,23 +65,21 @@ export const FuelConsumptionView = ({
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-2.5 py-1 rounded-xl text-xs font-bold mb-2">
             <Fuel className="w-3.5 h-3.5" />
-            <span>{selectedVehicle ? `${selectedVehicle.plate} • ${selectedVehicle.makeModel}` : (lang === 'en' ? "Entire Fleet" : "Toată Flota")}</span>
+            <span>{selectedVehicle ? `${selectedVehicle.plate} • ${selectedVehicle.makeModel}` : (t.allCars || "Toată Flota")}</span>
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            {t.fuelConsumption || (lang === 'en' ? "Fuel & Consumption" : "Carburant & Consum")}
+            {t.fuelConsumption || "Carburant & Consum"}
           </h2>
           <p className="text-xs text-blue-100 mt-1 max-w-md">
-            {lang === 'en' 
-              ? "Detailed logs, full-tank consumption calculations, and average fuel costs." 
-              : "Istoric detaliat alimentări, calcul consum din plinuri și cost mediu carburant."}
+            {t.fuelLogsDesc || "Istoric detaliat alimentări, calcul consum din plinuri și cost mediu carburant."}
           </p>
 
           {/* KPI Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-4 border-t border-white/15">
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-blue-100 font-semibold block">
-                {lang === 'en' ? "Avg Consumption" : "Consum Mediu"}
+                {t.avgConsumptionShort || "Consum Mediu"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {avgConsumption ? `${avgConsumption} L/100` : "—"}
@@ -90,7 +88,7 @@ export const FuelConsumptionView = ({
 
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-blue-100 font-semibold block">
-                {lang === 'en' ? "Total Liters" : "Total Litri"}
+                {t.totalLiters || "Total Litri"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {totalLiters.toLocaleString('ro-RO')} <span className="text-xs font-bold">L</span>
@@ -99,7 +97,7 @@ export const FuelConsumptionView = ({
 
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-blue-100 font-semibold block">
-                {lang === 'en' ? "Total Fuel Cost" : "Cost Total"}
+                {t.totalFuelCost || "Cost Total"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {totalFuelCost.toLocaleString('ro-RO')} <span className="text-xs font-bold">RON</span>
@@ -108,7 +106,7 @@ export const FuelConsumptionView = ({
 
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-blue-100 font-semibold block">
-                {lang === 'en' ? "Avg Price / Liter" : "Preț Mediu / L"}
+                {t.pricePerLiter || "Preț Mediu / L"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {avgPricePerLiter ? `${avgPricePerLiter} RON` : "—"}
@@ -157,9 +155,7 @@ export const FuelConsumptionView = ({
         <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-3 text-xs text-blue-800 dark:text-blue-300 flex items-center gap-2.5">
           <AlertCircle className="w-4 h-4 shrink-0 text-blue-500" />
           <span>
-            {lang === 'en'
-              ? "Tip: Check «Full tank» on at least two consecutive fuelings with odometer (km) to calculate exact consumption."
-              : "Sfat: Bifează «Plin complet» la cel puțin două alimentări consecutive cu kilometrajul completat pentru a calcula consumul mediu exact."}
+            {t.fuelingHint || "Sfat: Bifează «Plin complet» la cel puțin două alimentări consecutive cu kilometrajul completat pentru a calcula consumul mediu exact."}
           </span>
         </div>
       )}
@@ -170,7 +166,7 @@ export const FuelConsumptionView = ({
           <div className="flex items-center gap-2">
             <Fuel className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-              {t.fuelHistory || (lang === 'en' ? "Fueling History" : "Istoric Alimentări")}
+              {t.fuelHistory || "Istoric Alimentări"}
             </h3>
             <span className="text-xs font-bold text-slate-400">({fuelRecords.length})</span>
           </div>
@@ -178,7 +174,7 @@ export const FuelConsumptionView = ({
 
         {fuelRecords.length === 0 ? (
           <div className="py-8 text-center text-xs text-slate-400">
-            {lang === 'en' ? "No fueling records found." : "Nu există nicio alimentare înregistrată încă."}
+            {t.noFuelRecords || "Nu există nicio alimentare înregistrată încă."}
           </div>
         ) : (
           <div className="space-y-2.5">
@@ -242,11 +238,11 @@ export const FuelConsumptionView = ({
                       {isFull ? (
                         <span className="whitespace-nowrap shrink-0 inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold">
                           <CheckCircle2 className="w-2.5 h-2.5" />
-                          {lang === 'en' ? "Full" : "Plin"}
+                          {t.fullTank || "Plin"}
                         </span>
                       ) : (
                         <span className="whitespace-nowrap shrink-0 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded text-[9.5px] font-medium">
-                          {lang === 'en' ? "Partial" : "Parțial"}
+                          {t.partialTank || "Parțial"}
                         </span>
                       )}
                     </div>

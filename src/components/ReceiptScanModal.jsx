@@ -179,9 +179,7 @@ export const ReceiptScanModal = ({
       console.warn('Camera start error:', err);
       setIsScanningLive(false);
       setCameraError(
-        lang === 'en'
-          ? 'Live camera could not be started. Check camera permissions or take a photo below.'
-          : 'Camera live nu a putut porni. Verifică permisiunea camerei sau fă o poză directă mai jos.'
+        t.cameraLiveError || 'Camera live nu a putut porni. Verifică permisiunea camerei sau fă o poză directă mai jos.'
       );
     }
   };
@@ -200,9 +198,7 @@ export const ReceiptScanModal = ({
       handleExtractedResult(parsed);
     } catch (err) {
       alert(
-        lang === 'en'
-          ? 'No valid QR or Barcode detected in the image. Try the "Receipt Photo / OCR" tab.'
-          : 'Nu s-a detectat niciun cod QR sau cod de bare în imagine. Încearcă tab-ul „Foto Bon (OCR)”.'
+        t.noQrDetected || 'Nu s-a detectat niciun cod QR sau cod de bare în imagine. Încearcă tab-ul „Foto Bon (OCR)”.'
       );
     }
     if (e.target) e.target.value = '';
@@ -215,7 +211,7 @@ export const ReceiptScanModal = ({
 
     setIsOcrProcessing(true);
     setOcrProgress(5);
-    setOcrStatusText(lang === 'en' ? 'Preparing OCR engine...' : 'Se inițializează motorul OCR...');
+    setOcrStatusText(t.ocrInitializing || 'Se inițializează motorul OCR...');
 
     let worker = null;
     try {
@@ -224,13 +220,11 @@ export const ReceiptScanModal = ({
           if (m.status === 'recognizing text') {
             setOcrProgress(Math.round(m.progress * 100));
             setOcrStatusText(
-              lang === 'en' 
-                ? `Reading receipt text: ${Math.round(m.progress * 100)}%` 
-                : `Se analizează textul bonului: ${Math.round(m.progress * 100)}%`
+              `${t.ocrAnalyzing || 'Se analizează textul bonului'}: ${Math.round(m.progress * 100)}%`
             );
           } else if (m.status) {
             setOcrStatusText(
-              lang === 'en' ? 'Processing image...' : 'Se procesează imaginea bonului...'
+              t.ocrProcessing || 'Se procesează imaginea bonului...'
             );
           }
         }
@@ -242,9 +236,7 @@ export const ReceiptScanModal = ({
 
       if (!text.trim()) {
         alert(
-          lang === 'en'
-            ? 'Could not read any text from the photo. Make sure the receipt is clear and well lit.'
-            : 'Nu s-a putut citi textul din fotografie. Asigură-te că bonul este bine luminat și clar.'
+          t.ocrEmptyError || 'Nu s-a putut citi textul din fotografie. Asigură-te că bonul este bine luminat și clar.'
         );
         setIsOcrProcessing(false);
         return;
@@ -258,9 +250,7 @@ export const ReceiptScanModal = ({
         try { await worker.terminate(); } catch (te) {}
       }
       alert(
-        lang === 'en'
-          ? 'Error processing photo. You can enter data manually or paste the text.'
-          : 'Eroare la procesarea fotografiei. Poți introduce datele manual sau lipi textul.'
+        t.ocrProcessError || 'Eroare la procesarea fotografiei. Poți introduce datele manual sau lipi textul.'
       );
     } finally {
       setIsOcrProcessing(false);
@@ -277,9 +267,7 @@ export const ReceiptScanModal = ({
   const handleConfirmAndApply = () => {
     if (!scannedAmount && !scannedLiters) {
       alert(
-        lang === 'en'
-          ? 'Please enter at least the total amount or liters before applying.'
-          : 'Te rugăm să introduci cel puțin suma totală sau numărul de litri.'
+        t.enterAmountOrLiters || 'Te rugăm să introduci cel puțin suma totală sau numărul de litri.'
       );
       return;
     }
@@ -311,10 +299,10 @@ export const ReceiptScanModal = ({
             </div>
             <div>
               <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-1.5">
-                <span>{lang === 'en' ? 'Scan Fuel Receipt' : 'Scanare Bon Carburant'}</span>
+                <span>{t.scanReceipt || 'Scanare Bon Carburant'}</span>
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                {lang === 'en' ? 'QR Code, Barcode or Receipt Photo' : 'Cod QR, Cod de bare sau Foto Bon (OCR)'}
+                {t.scanReceiptDesc || 'Cod QR, Cod de bare sau Foto Bon (OCR)'}
               </p>
             </div>
           </div>
@@ -338,7 +326,7 @@ export const ReceiptScanModal = ({
                 <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span className="text-xs font-black">
-                    {lang === 'en' ? 'Receipt data extracted successfully!' : 'Datele din bon au fost extrase!'}
+                    {t.receiptExtractedSuccess || 'Datele din bon au fost extrase!'}
                   </span>
                 </div>
                 <button
@@ -347,7 +335,7 @@ export const ReceiptScanModal = ({
                   className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1 cursor-pointer"
                 >
                   <RefreshCw className="w-3 h-3" />
-                  <span>{lang === 'en' ? 'Scan again' : 'Rescanează'}</span>
+                  <span>{t.scanAgain || 'Rescanează'}</span>
                 </button>
               </div>
 
@@ -357,7 +345,7 @@ export const ReceiptScanModal = ({
                 <div className="space-y-1">
                   <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                     <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>{lang === 'en' ? 'Total Amount (RON)' : 'Valoare Totală (RON)'}</span>
+                    <span>{t.totalAmount || 'Valoare Totală (RON)'}</span>
                   </label>
                   <input
                     type="number"
@@ -378,7 +366,7 @@ export const ReceiptScanModal = ({
                 <div className="space-y-1">
                   <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                     <Fuel className="w-3.5 h-3.5 text-blue-500" />
-                    <span>{lang === 'en' ? 'Quantity (Liters)' : 'Cantitate (Litri)'}</span>
+                    <span>{t.quantityLiters || 'Cantitate (Litri)'}</span>
                   </label>
                   <input
                     type="number"
@@ -399,7 +387,7 @@ export const ReceiptScanModal = ({
               {/* Price per Liter calculation */}
               <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-xs">
                 <span className="text-slate-500 dark:text-slate-400">
-                  {lang === 'en' ? 'Calculated Price / Liter:' : 'Preț calculat / Litru:'}
+                  {t.pricePerLiter || 'Preț calculat / Litru:'}
                 </span>
                 <span className="font-mono font-black text-slate-900 dark:text-white">
                   {scannedPricePerLiter ? `${scannedPricePerLiter} RON / L` : '—'}
@@ -411,10 +399,10 @@ export const ReceiptScanModal = ({
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <Layers className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>{lang === 'en' ? 'Fuel Type' : 'Tipul de Carburant'}</span>
+                    <span>{t.fuelType || 'Tipul de Carburant'}</span>
                   </span>
                   <span className="text-[10px] font-normal text-slate-400">
-                    {lang === 'en' ? '(Click to change)' : '(Apasă pentru a alege)'}
+                    {t.clickToChange || '(Apasă pentru a alege)'}
                   </span>
                 </label>
 
@@ -430,7 +418,7 @@ export const ReceiptScanModal = ({
                     }`}
                   >
                     <span className="text-sm">🟢</span>
-                    <span className="text-xs font-extrabold">{lang === 'en' ? 'Petrol' : 'Benzină'}</span>
+                    <span className="text-xs font-extrabold">{t.petrol || 'Benzină'}</span>
                   </button>
 
                   {/* Diesel */}
@@ -444,7 +432,7 @@ export const ReceiptScanModal = ({
                     }`}
                   >
                     <span className="text-sm">🟡</span>
-                    <span className="text-xs font-extrabold">{lang === 'en' ? 'Diesel' : 'Motorină'}</span>
+                    <span className="text-xs font-extrabold">{t.diesel || 'Motorină'}</span>
                   </button>
 
                   {/* GPL */}
@@ -468,7 +456,7 @@ export const ReceiptScanModal = ({
                 <div className="space-y-1">
                   <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-purple-500" />
-                    <span>{lang === 'en' ? 'Receipt Date' : 'Data Bonului'}</span>
+                    <span>{t.receiptDate || 'Data Bonului'}</span>
                   </label>
                   <input
                     type="date"
@@ -480,13 +468,13 @@ export const ReceiptScanModal = ({
 
                 <div className="space-y-1">
                   <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                    {lang === 'en' ? 'Station / Notes' : 'Stație / Notițe'}
+                    {t.stationNotes || 'Stație / Notițe'}
                   </label>
                   <input
                     type="text"
                     value={scannedStation}
                     onChange={(e) => setScannedStation(e.target.value)}
-                    placeholder={lang === 'en' ? 'e.g. Petrom, OMV' : 'ex: Petrom, OMV'}
+                    placeholder="ex: Petrom, OMV"
                     className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-xs outline-hidden focus:border-emerald-500"
                   />
                 </div>
@@ -499,7 +487,7 @@ export const ReceiptScanModal = ({
                 className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 transition-all active:scale-[0.98] cursor-pointer"
               >
                 <Check className="w-4 h-4 stroke-[3]" />
-                <span>{lang === 'en' ? 'Apply Receipt Data to Form' : 'Aplică Datele din Bon'}</span>
+                <span>{t.applyReceiptData || 'Aplică Datele din Bon'}</span>
               </button>
 
             </div>
@@ -522,7 +510,7 @@ export const ReceiptScanModal = ({
                   }`}
                 >
                   <QrCode className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'QR & Barcode' : 'Cod QR & Bare'}</span>
+                  <span>{t.qrAndBarcode || 'Cod QR & Bare'}</span>
                 </button>
 
                 <button
@@ -538,7 +526,7 @@ export const ReceiptScanModal = ({
                   }`}
                 >
                   <Camera className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'Receipt Photo (OCR)' : 'Foto Bon (OCR)'}</span>
+                  <span>{t.receiptPhotoOcr || 'Foto Bon (OCR)'}</span>
                 </button>
               </div>
 
@@ -554,7 +542,7 @@ export const ReceiptScanModal = ({
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center bg-slate-900 text-slate-300">
                         <RefreshCw className="w-6 h-6 animate-spin text-emerald-500 mb-2" />
                         <span className="text-xs font-bold">
-                          {lang === 'en' ? 'Initializing camera...' : 'Se pornește camera...'}
+                          {t.initializingCamera || 'Se pornește camera...'}
                         </span>
                       </div>
                     )}
@@ -568,16 +556,14 @@ export const ReceiptScanModal = ({
                           onClick={startLiveScanner}
                           className="px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-bold text-white border border-slate-700"
                         >
-                          {lang === 'en' ? 'Retry camera' : 'Reîncearcă camera'}
+                          {t.retryCamera || 'Reîncearcă camera'}
                         </button>
                       </div>
                     )}
                   </div>
 
                   <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
-                    {lang === 'en' 
-                      ? 'Point your camera at the QR code or Barcode printed on the receipt' 
-                      : 'Îndreaptă camera spre codul QR fiscal sau codul de bare de pe bon'}
+                    {t.pointCameraQr || 'Îndreaptă camera spre codul QR fiscal sau codul de bare de pe bon'}
                   </p>
 
                   {/* Photo & Upload Buttons for QR / Barcode */}
@@ -597,7 +583,7 @@ export const ReceiptScanModal = ({
                         className="w-full py-2.5 px-2 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 hover:bg-blue-100 text-xs font-bold text-blue-700 dark:text-blue-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <Camera className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                        <span>{lang === 'en' ? 'Take Photo' : 'Fă Poză Cod'}</span>
+                        <span>{t.takeCodePhoto || 'Fă Poză Cod'}</span>
                       </button>
                     </div>
 
@@ -615,7 +601,7 @@ export const ReceiptScanModal = ({
                         className="w-full py-2.5 px-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <Upload className="w-3.5 h-3.5 text-blue-500" />
-                        <span>{lang === 'en' ? 'From Gallery' : 'Din Galerie'}</span>
+                        <span>{t.fromGallery || 'Din Galerie'}</span>
                       </button>
                     </div>
                   </div>
@@ -633,7 +619,7 @@ export const ReceiptScanModal = ({
                       </div>
                       <div className="space-y-1 w-full max-w-xs">
                         <h4 className="text-xs font-black text-slate-900 dark:text-white">
-                          {ocrStatusText || (lang === 'en' ? 'Analyzing receipt...' : 'Se analizează bonul...')}
+                          {ocrStatusText || t.analyzingReceipt || 'Se analizează bonul...'}
                         </h4>
                         <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                           <div
@@ -643,7 +629,7 @@ export const ReceiptScanModal = ({
                         </div>
                       </div>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        {lang === 'en' ? 'Extracting total, liters, and fuel type' : 'Extragem automat valoarea, litrii și tipul de combustibil'}
+                        {t.extractingReceiptData || 'Extragem automat valoarea, litrii și tipul de combustibil'}
                       </p>
                     </div>
                   ) : (
@@ -670,10 +656,10 @@ export const ReceiptScanModal = ({
                             </div>
                             <div>
                               <h4 className="text-xs font-black text-slate-900 dark:text-white">
-                                {lang === 'en' ? 'Take Photo of Receipt (Camera)' : 'Fă Poză Bonului (Cameră Foto)'}
+                                {t.takeReceiptPhotoCamera || 'Fă Poză Bonului (Cameră Foto)'}
                               </h4>
                               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                                {lang === 'en' ? 'Take clear photo of full receipt or totals' : 'Fotografiază bonul clar pentru citire text automată'}
+                                {t.takeClearReceiptPhoto || 'Fotografiază bonul clar pentru citire text automată'}
                               </p>
                             </div>
                           </div>
@@ -698,7 +684,7 @@ export const ReceiptScanModal = ({
                           className="w-full py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
                         >
                           <Upload className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>{lang === 'en' ? 'Select photo from gallery' : 'Alege poză din galerie'}</span>
+                          <span>{t.selectPhotoFromGallery || 'Alege poză din galerie'}</span>
                         </button>
                       </div>
 
@@ -710,7 +696,7 @@ export const ReceiptScanModal = ({
                           className="text-[11px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 inline-flex items-center gap-1 cursor-pointer"
                         >
                           <FileText className="w-3.5 h-3.5" />
-                          <span>{showManualInput ? (lang === 'en' ? 'Hide text box' : 'Ascunde casetă text') : (lang === 'en' ? 'Or paste raw receipt text' : 'Sau lipește textul bonului')}</span>
+                          <span>{showManualInput ? (t.hideTextBox || 'Ascunde casetă text') : (t.orPasteRawReceiptText || 'Sau lipește textul bonului')}</span>
                         </button>
 
                         {showManualInput && (
@@ -718,7 +704,7 @@ export const ReceiptScanModal = ({
                             <textarea
                               value={manualText}
                               onChange={(e) => setManualText(e.target.value)}
-                              placeholder={lang === 'en' ? 'Paste receipt text here...' : 'Lipește aici textul bonului fiscal...'}
+                              placeholder={t.pasteReceiptTextPlaceholder || 'Lipește aici textul bonului fiscal...'}
                               className="w-full h-20 p-2 text-xs font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl outline-hidden focus:border-emerald-500 text-slate-900 dark:text-white resize-none"
                             />
                             <button
@@ -727,7 +713,7 @@ export const ReceiptScanModal = ({
                               disabled={!manualText.trim()}
                               className="w-full py-2 bg-emerald-500 disabled:opacity-50 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
                             >
-                              {lang === 'en' ? 'Extract from text' : 'Extrage din text'}
+                              {t.extractFromText || 'Extrage din text'}
                             </button>
                           </div>
                         )}
@@ -751,7 +737,7 @@ export const ReceiptScanModal = ({
             onClick={onClose}
             className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
           >
-            {lang === 'en' ? 'Close' : 'Închide'}
+            {t.closeBtn || 'Închide'}
           </button>
         </div>
 

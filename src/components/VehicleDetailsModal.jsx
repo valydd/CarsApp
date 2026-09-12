@@ -26,7 +26,59 @@ export const VehicleDetailsModal = ({
   initialEditing = false,
   lang
 }) => {
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
+
+  const getAlertTitle = (alert) => {
+    if (alert.type === 'serviceKm') {
+      return alert.kmLeft <= 0 
+        ? `${t.servicesAndOil || 'Revizie'} ${t.expired || 'expirată!'}` 
+        : `${t.servicesAndOil || 'Revizie'} ${t.expiresSoon || 'în curând'}`;
+    }
+    if (alert.category === 'rca') {
+      return alert.daysLeft < 0 ? `${t.rcaBadge || 'RCA'} ${t.expiredFeminine || 'expirată!'}` : `${t.rcaBadge || 'RCA'} ${t.expiresSoon || 'în curând'}`;
+    }
+    if (alert.category === 'itp') {
+      return alert.daysLeft < 0 ? `${t.itpBadge || 'ITP'} ${t.expired || 'expirat!'}` : `${t.itpBadge || 'ITP'} ${t.expiresSoon || 'în curând'}`;
+    }
+    if (alert.category === 'rovinieta') {
+      return alert.daysLeft < 0 ? `${t.rovinietaBadge || 'Rovinietă'} ${t.expiredFeminine || 'expirată!'}` : `${t.rovinietaBadge || 'Rovinietă'} ${t.expiresSoon || 'în curând'}`;
+    }
+    if (alert.category === 'casco') {
+      return alert.daysLeft < 0 ? `${t.cascoBadge || 'CASCO'} ${t.expiredFeminine || 'expirată!'}` : `${t.cascoBadge || 'CASCO'} ${t.expiresSoon || 'în curând'}`;
+    }
+    if (alert.category === 'service') {
+      return alert.daysLeft < 0 
+        ? `${t.servicesAndOil || 'Revizie'} ${t.expired || 'expirată!'}` 
+        : `${t.servicesAndOil || 'Revizie'} ${t.expiresSoon || 'în curând'}`;
+    }
+    return (lang === 'ro' ? alert.titleRo : alert.titleEn) || alert.titleRo;
+  };
+
+  const getAlertDetail = (alert) => {
+    if (alert.type === 'serviceKm') {
+      if (alert.kmLeft <= 0) {
+        return (t.kmOverdue || "Depășit cu {km} km (Limită: {limit} km)")
+          .replace('{km}', Math.abs(alert.kmLeft).toLocaleString('ro-RO'))
+          .replace('{limit}', (vehicle?.nextServiceKm || '').toLocaleString('ro-RO'));
+      }
+      return (t.kmRemainingUntilService || "Mai sunt doar {km} km până la revizie")
+        .replace('{km}', alert.kmLeft.toLocaleString('ro-RO'));
+    }
+    if (alert.daysLeft !== undefined) {
+      if (alert.daysLeft < 0) {
+        return (t.expiredDaysAgoDetail || "Expirat de {days} zile ({date})")
+          .replace('{days}', Math.abs(alert.daysLeft))
+          .replace('{date}', alert.dueDate || '');
+      }
+      if (alert.daysLeft === 0) {
+        return t.dueToday || "Expiră astăzi!";
+      }
+      return (t.daysRemainingDetail || "Mai sunt doar {days} zile ({date})")
+        .replace('{days}', alert.daysLeft)
+        .replace('{date}', alert.dueDate || '');
+    }
+    return (lang === 'ro' ? alert.detailRo : alert.detailEn) || alert.detailRo;
+  };
 
   const [formData, setFormData] = useState({
     plate: vehicle?.plate || '',
@@ -147,13 +199,13 @@ export const VehicleDetailsModal = ({
             <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-3.5 space-y-2">
               <div className="flex items-center gap-1.5 text-xs font-bold text-rose-600 dark:text-rose-400">
                 <AlertTriangle className="w-4 h-4" />
-                <span>Atenționări Active</span>
+                <span>{t.alert || "Atenționări Active"}</span>
               </div>
               <div className="space-y-1.5">
                 {alerts.map((a, i) => (
                   <div key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between bg-white dark:bg-slate-950/40 px-2.5 py-1 rounded-lg border border-rose-100 dark:border-transparent">
-                    <span>{lang === 'ro' ? a.titleRo : a.titleEn}</span>
-                    <span className="font-bold text-rose-600 dark:text-rose-400">{lang === 'ro' ? a.detailRo : a.detailEn}</span>
+                    <span>{getAlertTitle(a)}</span>
+                    <span className="font-bold text-rose-600 dark:text-rose-400">{getAlertDetail(a)}</span>
                   </div>
                 ))}
               </div>

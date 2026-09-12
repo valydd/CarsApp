@@ -383,12 +383,12 @@ export const QuickAddModal = ({
             </div>
             <div>
               <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">
-                {recordToEdit ? (lang === 'ro' ? "Editare Înregistrare" : "Edit Record") : t.addRecord}
+                {recordToEdit ? (t.editRecord || "Editare Înregistrare") : t.addRecord}
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 {recordToEdit 
-                  ? (lang === 'ro' ? "Corectează kilometrajul, suma, lucrările sau piesele" : "Correct mileage, amounts, work or parts")
-                  : (lang === 'ro' ? "Înregistrează rapid alimentări, revizii sau reparații" : "Quickly log fuel, service or repairs")}
+                  ? (t.editRecordSubtitle || "Corectează kilometrajul, suma, lucrările sau piesele")
+                  : (t.addRecordSubtitle || "Înregistrează rapid alimentări, revizii sau reparații")}
               </p>
             </div>
           </div>
@@ -528,7 +528,7 @@ export const QuickAddModal = ({
                   className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
                 >
                   <ScanLine className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? "Scan Receipt" : "Scanează Bon"}</span>
+                  <span>{t.scanReceipt || "Scanează Bon"}</span>
                 </button>
               </div>
 
@@ -910,7 +910,7 @@ export const QuickAddModal = ({
               className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-black shadow-lg shadow-emerald-500/25 transition-all transform active:scale-95 flex items-center gap-1.5"
             >
               <Check className="w-4 h-4 stroke-[3]" />
-              <span>{recordToEdit ? (lang === 'ro' ? "Salvează Modificările" : "Save Changes") : t.save}</span>
+              <span>{recordToEdit ? (t.saveChanges || "Salvează Modificările") : t.save}</span>
             </button>
           </div>
         </form>

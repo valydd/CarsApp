@@ -50,7 +50,7 @@ export const Navbar = ({
           type="button"
           onClick={onToggleImmersive}
           className="fixed top-2.5 sm:top-4 right-3 sm:right-6 z-50 w-8 h-8 rounded-full bg-white/95 dark:bg-slate-900/95 text-emerald-600 dark:text-emerald-400 border-2 border-emerald-500/85 dark:border-emerald-400/90 shadow-md shadow-emerald-500/20 dark:shadow-black/40 backdrop-blur-md flex items-center justify-center cursor-pointer active:scale-90 hover:scale-105 transition-all animate-in fade-in slide-in-from-top-3 duration-200"
-          title={lang === 'en' ? "Restore Header & Navigation" : "Afișează antetul și bara de jos"}
+          title={t.restoreNav || "Afișează antetul și bara de jos"}
           aria-label="Restore Header & Navigation"
         >
           <Minimize2 className="w-4 h-4 stroke-[2.8]" />
@@ -215,7 +215,7 @@ export const Navbar = ({
                   type="button"
                   onClick={onToggleImmersive}
                   className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90"
-                  title={lang === 'en' ? "Full Screen Scroll (Hide Header & Bottom Bar)" : "Ecran complet (ascunde antetul și bara de jos)"}
+                  title={t.fullScreen || "Ecran complet"}
                 >
                   <Maximize2 className="w-4 h-4 stroke-[2.2]" />
                 </button>
@@ -231,7 +231,7 @@ export const Navbar = ({
               >
                 <Car className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span className="text-xs font-black tracking-tight whitespace-nowrap">
-                  {t.vehicles || (lang === 'en' ? 'Vehicles' : 'Vehicule')}
+                  {t.vehicles || 'Vehicule'}
                 </span>
                 <span className="w-5 h-5 rounded-full bg-slate-950 text-emerald-300 font-mono font-black text-[10.5px] flex items-center justify-center shadow-xs ml-0.5">
                   {vehiclesCount || 0}

@@ -137,7 +137,7 @@ export const CostPerKmView = ({
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors shrink-0 cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>{lang === 'en' ? "Back" : "Înapoi"}</span>
+          <span>{t.back || "Înapoi"}</span>
         </button>
 
         {/* Time period filters */}
@@ -150,7 +150,7 @@ export const CostPerKmView = ({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            {lang === 'en' ? "All Time" : "Tot Istoricul"}
+            {t.allTime || "Tot Istoricul"}
           </button>
           <button
             onClick={() => setTimeFilter('year')}
@@ -160,7 +160,7 @@ export const CostPerKmView = ({
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            {lang === 'en' ? "This Year" : "Anul Curent"}
+            {t.thisYear || "Anul Curent"}
           </button>
         </div>
       </div>
@@ -177,66 +177,64 @@ export const CostPerKmView = ({
             <span>
               {selectedVehicle 
                 ? `${selectedVehicle.plate} • ${selectedVehicle.makeModel}` 
-                : (lang === 'en' ? "Fleet Efficiency & Cost / Km" : "Eficiență Flotă & Cost / Km")}
+                : (t.fleetEfficiency || "Eficiență Flotă & Cost / Km")}
             </span>
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            {lang === 'en' ? "Cost / Kilometer Analysis" : "Analiză Detaliată Cost / Kilometru"}
+            {t.costPerKmTitle || "Analiză Detaliată Cost / Kilometru"}
           </h2>
           <p className="text-xs text-purple-100 mt-1 max-w-lg">
-            {lang === 'en'
-              ? "Accurate calculation of true operational cost per kilometer driven, split by fuel, maintenance, parts, and fixed fees."
-              : "Calculul exact al costului real de exploatare per kilometru parcurs, defalcat pe carburant, mecanică, revizii și taxe."}
+            {t.costPerKmDesc || "Calculul exact al costului real de exploatare per kilometru parcurs, defalcat pe carburant, mecanică, revizii și taxe."}
           </p>
 
           {/* KPI Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-4 border-t border-white/15">
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-purple-200 font-semibold block">
-                {lang === 'en' ? "Fleet Cost / Km" : "Cost Total / Km"}
+                {t.fleetCostPerKm || "Cost Total / Km"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {fleetAvgCostPerKm ? `${fleetAvgCostPerKm} RON` : "—"}
               </span>
               <span className="text-[9.5px] text-purple-300 block">
-                {fleetAvgCostPerKm ? "/ kilometru parcurs" : "Date insuficiente"}
+                {fleetAvgCostPerKm ? "/ km" : (t.insufficientData || "Date insuficiente")}
               </span>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-purple-200 font-semibold block">
-                {lang === 'en' ? "Fuel Cost / Km" : "Carburant / Km"}
+                {t.fuelPerKm || "Carburant / Km"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {fleetFuelPerKm ? `${fleetFuelPerKm} RON` : "—"}
               </span>
               <span className="text-[9.5px] text-emerald-300 block">
-                {fleetAvgCostPerKm && fleetFuelPerKm ? `${Math.round((fleetFuelPerKm / fleetAvgCostPerKm) * 100)}% din cost total` : "Carburant"}
+                {fleetAvgCostPerKm && fleetFuelPerKm ? `${Math.round((fleetFuelPerKm / fleetAvgCostPerKm) * 100)}%` : (t.fuel || "Carburant")}
               </span>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-purple-200 font-semibold block">
-                {lang === 'en' ? "Service & Parts / Km" : "Mecanică & Revizii / Km"}
+                {t.maintPerKm || "Mecanică & Revizii / Km"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {fleetMaintPerKm ? `${fleetMaintPerKm} RON` : "—"}
               </span>
               <span className="text-[9.5px] text-amber-300 block">
-                {fleetAvgCostPerKm && fleetMaintPerKm ? `${Math.round((fleetMaintPerKm / fleetAvgCostPerKm) * 100)}% din cost total` : "Întreținere"}
+                {fleetAvgCostPerKm && fleetMaintPerKm ? `${Math.round((fleetMaintPerKm / fleetAvgCostPerKm) * 100)}%` : (t.services || "Revizii")}
               </span>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl">
               <span className="text-[10px] text-purple-200 font-semibold block">
-                {lang === 'en' ? "Total Km Driven" : "Kilometri Parcurși"}
+                {t.totalFleetKm || "Kilometri Parcurși"}
               </span>
               <span className="text-base sm:text-xl font-black">
                 {totalFleetKm.toLocaleString('ro-RO')} <span className="text-xs font-bold">km</span>
               </span>
               <span className="text-[9.5px] text-purple-300 block">
-                Total distanță flotă
+                {t.totalFleet || "Total Flotă"}
               </span>
             </div>
           </div>
@@ -253,7 +251,7 @@ export const CostPerKmView = ({
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block">
-                Cea Mai Economică Mașină
+                {t.mostEfficientCar || "Cea Mai Economică Mașină"}
               </span>
               <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate">
                 {bestVehicle.vehicle.plate} • {bestVehicle.vehicle.makeModel}
@@ -271,7 +269,7 @@ export const CostPerKmView = ({
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-400 block">
-                Cel Mai Mare Cost / Km
+                {t.highestCostPerKm || "Cel Mai Mare Cost / Km"}
               </span>
               <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate">
                 {mostExpensiveVehicle.vehicle.plate} • {mostExpensiveVehicle.vehicle.makeModel}
@@ -290,7 +288,7 @@ export const CostPerKmView = ({
           <div className="flex items-center gap-2">
             <Gauge className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-              {lang === 'en' ? "Vehicles Cost / Km Ranking" : "Clasament Cost / Km per Vehicul"}
+              {t.costPerKmRanking || "Clasament Cost / Km per Vehicul"}
             </h3>
             <span className="text-xs font-bold text-slate-400">({rankedStats.length})</span>
           </div>
@@ -298,7 +296,7 @@ export const CostPerKmView = ({
 
         {rankedStats.length === 0 ? (
           <div className="py-8 text-center text-xs text-slate-400">
-            {lang === 'en' ? "No vehicles found." : "Nu există vehicule înregistrate."}
+            {t.noVehicles || "Nu există vehicule înregistrate."}
           </div>
         ) : (
           <div className="space-y-3">
@@ -347,7 +345,7 @@ export const CostPerKmView = ({
                         </span>
                       ) : (
                         <span className="text-xs font-semibold text-slate-400 italic">
-                          Fără km suficienți
+                          {t.insufficientData || "Fără km suficienți"}
                         </span>
                       )}
                     </div>
@@ -359,7 +357,7 @@ export const CostPerKmView = ({
                     <div className="bg-white dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/60 p-2 rounded-xl">
                       <span className="text-[9.5px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                         <Fuel className="w-2.5 h-2.5 text-blue-500" />
-                        <span>Carburant / km</span>
+                        <span>{t.fuel || "Carburant"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-blue-600 dark:text-blue-400 block mt-0.5">
                         {stat.fuelPerKm ? `${stat.fuelPerKm} lei/km` : '—'}
@@ -373,7 +371,7 @@ export const CostPerKmView = ({
                     <div className="bg-white dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/60 p-2 rounded-xl">
                       <span className="text-[9.5px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                         <Wrench className="w-2.5 h-2.5 text-rose-500" />
-                        <span>Reparații / km</span>
+                        <span>{t.repairs || "Reparații"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-rose-600 dark:text-rose-400 block mt-0.5">
                         {stat.repairPerKm ? `${stat.repairPerKm} lei/km` : '0 lei/km'}
@@ -387,7 +385,7 @@ export const CostPerKmView = ({
                     <div className="bg-white dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/60 p-2 rounded-xl">
                       <span className="text-[9.5px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                         <Droplet className="w-2.5 h-2.5 text-amber-500" />
-                        <span>Revizii / km</span>
+                        <span>{t.services || "Revizii"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-amber-600 dark:text-amber-400 block mt-0.5">
                         {stat.servicePerKm ? `${stat.servicePerKm} lei/km` : '0 lei/km'}
@@ -401,7 +399,7 @@ export const CostPerKmView = ({
                     <div className="bg-white dark:bg-slate-900/90 border border-slate-200/60 dark:border-slate-800/60 p-2 rounded-xl">
                       <span className="text-[9.5px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                         <ShieldCheck className="w-2.5 h-2.5 text-emerald-500" />
-                        <span>Taxe & RCA / km</span>
+                        <span>{t.taxes || "Taxe"} / km</span>
                       </span>
                       <span className="font-mono font-black text-xs text-emerald-600 dark:text-emerald-400 block mt-0.5">
                         {stat.fixedPerKm ? `${stat.fixedPerKm} lei/km` : '0 lei/km'}
@@ -415,13 +413,13 @@ export const CostPerKmView = ({
                   {/* RÂNDUL 3: Totaluri absolute (Km parcurși • Total cheltuit • Înregistrări) */}
                   <div className="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400 pt-1 flex-wrap gap-1">
                     <span className="font-semibold">
-                      🛣️ Distanță: <strong className="text-slate-800 dark:text-slate-200">{stat.distanceDriven.toLocaleString('ro-RO')} km</strong>
+                      🛣️ {t.distanceDriven || "Distanță"}: <strong className="text-slate-800 dark:text-slate-200">{stat.distanceDriven.toLocaleString('ro-RO')} km</strong>
                     </span>
                     <span>
-                      💰 Cheltuieli totale: <strong className="text-slate-800 dark:text-slate-200">{stat.totalCost.toLocaleString('ro-RO')} RON</strong>
+                      💰 {t.cost || "Total"}: <strong className="text-slate-800 dark:text-slate-200">{stat.totalCost.toLocaleString('ro-RO')} RON</strong>
                     </span>
                     <span>
-                      📝 <strong className="text-slate-800 dark:text-slate-200">{stat.recordsCount}</strong> înregistrări
+                      📝 <strong className="text-slate-800 dark:text-slate-200">{stat.recordsCount}</strong>
                     </span>
                   </div>
                 </div>

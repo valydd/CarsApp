@@ -60,32 +60,32 @@ export const DashboardStats = ({
     if (selectedVehicle.rcaExpiry) {
       const diffDays = getDaysRemaining(selectedVehicle.rcaExpiry);
       if (diffDays < 0) {
-        rcaStatusText = lang === 'en' ? "Expired!" : "Expirată!";
+        rcaStatusText = t.expiredFeminine || t.expired || "Expirată!";
         rcaStatusColor = "text-rose-600 dark:text-rose-400";
-        rcaSubText = lang === 'en' ? `Expired by ${Math.abs(diffDays)} days` : `Expirat de ${Math.abs(diffDays)} zile`;
+        rcaSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
       } else if (diffDays <= 30) {
-        rcaStatusText = `${diffDays} ${lang === 'en' ? "days" : "zile"}`;
+        rcaStatusText = `${diffDays} ${t.days || "zile"}`;
         rcaStatusColor = "text-amber-600 dark:text-amber-400";
-        rcaSubText = lang === 'en' ? "Expires soon" : "Expiră în curând";
+        rcaSubText = t.expiresSoon || "Expiră în curând";
       } else {
-        rcaStatusText = lang === 'en' ? "Valid" : "Validă";
+        rcaStatusText = t.validFeminine || t.valid || "Validă";
         rcaStatusColor = "text-emerald-600 dark:text-emerald-400";
-        rcaSubText = `${diffDays} ${lang === 'en' ? "days left" : "zile rămase"}`;
+        rcaSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
       }
     } else {
       rcaStatusText = "—";
-      rcaSubText = lang === 'en' ? "Not set" : "Nespecificat";
+      rcaSubText = t.notSet || "Nespecificat";
     }
   } else {
     const expiredCount = vehicles.filter(v => v.rcaExpiry && (getDaysRemaining(v.rcaExpiry) < 0)).length;
     if (expiredCount > 0) {
-      rcaStatusText = `${expiredCount} ${lang === 'en' ? "expired" : "expirate"}`;
+      rcaStatusText = `${expiredCount} ${t.expired || "expirate"}`;
       rcaStatusColor = "text-rose-600 dark:text-rose-400";
-      rcaSubText = lang === 'en' ? "Requires renewal" : "Necesită reînnoire";
+      rcaSubText = t.requiresRenewal || "Necesită reînnoire";
     } else {
-      rcaStatusText = lang === 'en' ? "All Valid" : "Toate Valide";
+      rcaStatusText = t.allValid || "Toate Valide";
       rcaStatusColor = "text-emerald-600 dark:text-emerald-400";
-      rcaSubText = lang === 'en' ? `${vehicles.length} active policies` : `${vehicles.length} polițe active`;
+      rcaSubText = `${vehicles.length} ${t.activePolicies || "polițe active"}`;
     }
   }
 
@@ -98,32 +98,32 @@ export const DashboardStats = ({
     if (selectedVehicle.itpExpiry) {
       const diffDays = getDaysRemaining(selectedVehicle.itpExpiry);
       if (diffDays < 0) {
-        itpStatusText = lang === 'en' ? "Expired!" : "Expirat!";
+        itpStatusText = t.expired || "Expirat!";
         itpStatusColor = "text-rose-600 dark:text-rose-400";
-        itpSubText = lang === 'en' ? `Expired by ${Math.abs(diffDays)} days` : `Expirat de ${Math.abs(diffDays)} zile`;
+        itpSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
       } else if (diffDays <= 30) {
-        itpStatusText = `${diffDays} ${lang === 'en' ? "days" : "zile"}`;
+        itpStatusText = `${diffDays} ${t.days || "zile"}`;
         itpStatusColor = "text-amber-600 dark:text-amber-400";
-        itpSubText = lang === 'en' ? "Expires soon" : "Expiră în curând";
+        itpSubText = t.expiresSoon || "Expiră în curând";
       } else {
-        itpStatusText = lang === 'en' ? "Valid" : "Valid";
+        itpStatusText = t.valid || "Valid";
         itpStatusColor = "text-emerald-600 dark:text-emerald-400";
-        itpSubText = `${diffDays} ${lang === 'en' ? "days left" : "zile rămase"}`;
+        itpSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
       }
     } else {
       itpStatusText = "—";
-      itpSubText = lang === 'en' ? "Not set" : "Nespecificat";
+      itpSubText = t.notSet || "Nespecificat";
     }
   } else {
     const expiredCount = vehicles.filter(v => v.itpExpiry && (getDaysRemaining(v.itpExpiry) < 0)).length;
     if (expiredCount > 0) {
-      itpStatusText = `${expiredCount} ${lang === 'en' ? "expired" : "expirate"}`;
+      itpStatusText = `${expiredCount} ${t.expired || "expirate"}`;
       itpStatusColor = "text-rose-600 dark:text-rose-400";
-      itpSubText = lang === 'en' ? "Inspection overdue" : "Inspecție depășită";
+      itpSubText = t.inspectionOverdue || "Inspecție depășită";
     } else {
-      itpStatusText = lang === 'en' ? "All Valid" : "Toate la zi";
+      itpStatusText = t.allUpToDate || t.allValid || "Toate la zi";
       itpStatusColor = "text-emerald-600 dark:text-emerald-400";
-      itpSubText = lang === 'en' ? `${vehicles.length} inspections active` : `${vehicles.length} inspecții la zi`;
+      itpSubText = `${vehicles.length} ${t.activeInspections || "inspecții la zi"}`;
     }
   }
 
@@ -136,32 +136,32 @@ export const DashboardStats = ({
     if (selectedVehicle.rovinietaExpiry) {
       const diffDays = getDaysRemaining(selectedVehicle.rovinietaExpiry);
       if (diffDays < 0) {
-        rovStatusText = lang === 'en' ? "Expired!" : "Expirată!";
+        rovStatusText = t.expiredFeminine || t.expired || "Expirată!";
         rovStatusColor = "text-rose-600 dark:text-rose-400";
-        rovSubText = lang === 'en' ? `Expired by ${Math.abs(diffDays)} days` : `Expirat de ${Math.abs(diffDays)} zile`;
+        rovSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
       } else if (diffDays <= 30) {
-        rovStatusText = `${diffDays} ${lang === 'en' ? "days" : "zile"}`;
+        rovStatusText = `${diffDays} ${t.days || "zile"}`;
         rovStatusColor = "text-amber-600 dark:text-amber-400";
-        rovSubText = lang === 'en' ? "Expires soon" : "Expiră în curând";
+        rovSubText = t.expiresSoon || "Expiră în curând";
       } else {
-        rovStatusText = lang === 'en' ? "Valid" : "Validă";
+        rovStatusText = t.validFeminine || t.valid || "Validă";
         rovStatusColor = "text-emerald-600 dark:text-emerald-400";
-        rovSubText = `${diffDays} ${lang === 'en' ? "days left" : "zile rămase"}`;
+        rovSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
       }
     } else {
       rovStatusText = "—";
-      rovSubText = lang === 'en' ? "Not set" : "Nespecificat";
+      rovSubText = t.notSet || "Nespecificat";
     }
   } else {
     const expiredCount = (vehicles || []).filter(v => v && v.rovinietaExpiry && (getDaysRemaining(v.rovinietaExpiry) < 0)).length;
     if (expiredCount > 0) {
-      rovStatusText = `${expiredCount} ${lang === 'en' ? "expired" : "expirate"}`;
+      rovStatusText = `${expiredCount} ${t.expired || "expirate"}`;
       rovStatusColor = "text-rose-600 dark:text-rose-400";
-      rovSubText = lang === 'en' ? "Requires renewal" : "Necesită achiziție";
+      rovSubText = t.requiresPurchase || "Necesită achiziție";
     } else {
-      rovStatusText = lang === 'en' ? "All Valid" : "Toate Valide";
+      rovStatusText = t.allValid || "Toate Valide";
       rovStatusColor = "text-emerald-600 dark:text-emerald-400";
-      rovSubText = lang === 'en' ? `${(vehicles || []).length} active vignettes` : `${(vehicles || []).length} roviniete active`;
+      rovSubText = `${(vehicles || []).length} ${t.activeVignettes || "roviniete active"}`;
     }
   }
 
@@ -180,9 +180,9 @@ export const DashboardStats = ({
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
               {selectedVehicle 
-                ? `Cost ${selectedVehicle.plate}` 
+                ? `${t.cost || 'Cost'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
-                  ? (lang === 'en' ? `Cost (${selectedCount} cars)` : `Cost (${selectedCount} mașini)`)
+                  ? `${t.cost || 'Cost'} (${selectedCount} ${t.checkedVehicles || 'mașini'})`
                   : t.totalFleetCost}
             </span>
             <div className="p-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
@@ -198,8 +198,8 @@ export const DashboardStats = ({
               {selectedVehicle 
                 ? selectedVehicle.makeModel 
                 : isMultiSelection 
-                  ? (lang === 'en' ? `${selectedCount} of ${totalVehiclesCount} checked` : `${selectedCount} din ${totalVehiclesCount} bifate`)
-                  : (lang === 'en' ? 'Total fleet' : 'Total cheltuieli flotă')}
+                  ? `${selectedCount} / ${totalVehiclesCount} ${t.checkedVehicles || 'bifate'}`
+                  : (t.totalFleet || 'Total cheltuieli flotă')}
             </span>
           </div>
         </div>
@@ -208,14 +208,14 @@ export const DashboardStats = ({
         <div 
           onClick={() => onNavigateTab && onNavigateTab('fuel')}
           className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru date despre carburant & consum"
+          title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
               {selectedVehicle 
-                ? `${lang === 'en' ? 'Consumption' : 'Consum'} ${selectedVehicle.plate}` 
+                ? `${t.consumption || 'Consum'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
-                  ? (lang === 'en' ? `Consumption (${selectedCount})` : `Consum (${selectedCount} mașini)`)
+                  ? `${t.consumption || 'Consum'} (${selectedCount})`
                   : t.avgFleetConsumption}
             </span>
             <div className="p-1 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors shrink-0">
@@ -233,7 +233,7 @@ export const DashboardStats = ({
           </div>
           <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
             <span className="truncate text-blue-600 dark:text-blue-400 font-semibold">
-              {lang === 'en' ? 'Tap for fuel logs →' : 'Vezi alimentări →'}
+              {t.viewLogs || 'Vezi alimentări →'}
             </span>
           </div>
         </div>
@@ -242,14 +242,14 @@ export const DashboardStats = ({
         <div 
           onClick={() => onNavigateTab && onNavigateTab('costPerKm')}
           className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru analiză detaliată Cost / Km"
+          title={t.costPerKmTitle || "Apasă pentru analiză detaliată Cost / Km"}
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
               {selectedVehicle 
-                ? `Cost / Km ${selectedVehicle.plate}` 
+                ? `${t.costPerKm || 'Cost / Km'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
-                  ? (lang === 'en' ? `Cost / Km (${selectedCount})` : `Cost / Km (${selectedCount})`)
+                  ? `${t.costPerKm || 'Cost / Km'} (${selectedCount})`
                   : t.costPerKm}
             </span>
             <div className="p-1 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:bg-purple-500/20 transition-colors shrink-0">
@@ -278,11 +278,11 @@ export const DashboardStats = ({
         <div 
           onClick={() => onNavigateTab && onNavigateTab('personal')}
           className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-fuchsia-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru evidență consum & decontare curse personale"
+          title={t.personalTripsTitle || "Apasă pentru evidență consum & decontare curse personale"}
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {lang === 'en' ? "Weekend Trips" : "Curse Weekend"}
+              {t.weekendTrips || t.personalTrips || "Curse Weekend"}
             </span>
             <div className="p-1 rounded-xl bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400 group-hover:bg-fuchsia-500/20 transition-colors shrink-0">
               <Navigation className="w-3.5 h-3.5" />
@@ -296,8 +296,8 @@ export const DashboardStats = ({
               <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
                 <span className="truncate text-fuchsia-600 dark:text-fuchsia-400 font-semibold">
                   {unpaidPersonalCost > 0 
-                    ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length === 1 ? '1 cursă' : `${unpaidTrips.length} curse`})` 
-                    : (totalPersonalCost > 0 ? (lang === 'en' ? "All settled ✓" : "Toate achitate ✓") : (lang === 'en' ? "0 trips" : "0 curse"))}
+                    ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length} ${unpaidTrips.length === 1 ? (t.trip || 'cursă') : (t.trips || 'curse')})` 
+                    : (totalPersonalCost > 0 ? (t.allSettled || "Toate achitate ✓") : (t.noTrips || "0 curse"))}
                 </span>
               </div>
             </div>
@@ -310,7 +310,7 @@ export const DashboardStats = ({
                   onOpenAddPersonalTrip();
                 }}
                 className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-fuchsia-100 hover:bg-fuchsia-200 text-fuchsia-700 dark:bg-fuchsia-950/80 dark:hover:bg-fuchsia-900 dark:text-fuchsia-300 border border-fuchsia-300/80 dark:border-fuchsia-700/80 shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0 mb-0.5"
-                title="Adaugă rapid cursă personală"
+                title={t.addPersonalTrip || "Adaugă rapid cursă personală"}
               >
                 <Plus className="w-4.5 h-4.5 stroke-[2.6]" />
               </button>
@@ -331,7 +331,7 @@ export const DashboardStats = ({
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {t.repairsAndParts || (lang === 'en' ? "Repairs & Parts" : "Reparații & Piese")}
+              {t.repairsAndParts || "Reparații & Piese"}
             </span>
             <div className="p-1 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 transition-colors shrink-0">
               <Wrench className="w-3.5 h-3.5" />
@@ -342,7 +342,7 @@ export const DashboardStats = ({
           </div>
           <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
             <span className="truncate">
-              {repairRecords.length} {lang === 'en' ? "repairs" : "intervenții"}
+              {repairRecords.length} {t.interventions || "intervenții"}
             </span>
           </div>
         </div>
@@ -355,7 +355,7 @@ export const DashboardStats = ({
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {t.servicesAndOil || (lang === 'en' ? "Service & Oil" : "Revizii & Ulei")}
+              {t.servicesAndOil || "Revizii & Service"}
             </span>
             <div className="p-1 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 transition-colors shrink-0">
               <Sparkles className="w-3.5 h-3.5" />
@@ -367,8 +367,8 @@ export const DashboardStats = ({
           <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
             <span className="truncate">
               {selectedVehicle?.nextServiceKm 
-                ? `${lang === 'en' ? 'Next:' : 'Următoarea:'} ${selectedVehicle.nextServiceKm.toLocaleString()} km`
-                : `${serviceRecords.length} ${lang === 'en' ? 'services' : 'revizii'}`}
+                ? `${t.nextService || 'Următoarea'}: ${selectedVehicle.nextServiceKm.toLocaleString()} km`
+                : `${serviceRecords.length} ${t.services || 'revizii'}`}
             </span>
           </div>
         </div>
@@ -381,7 +381,7 @@ export const DashboardStats = ({
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {t.tiresAndWheels || (lang === 'en' ? "Tires & Wheels" : "Anvelope & Roți")}
+              {t.tiresAndWheels || "Anvelope & Roți"}
             </span>
             <div className="p-1 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 group-hover:bg-cyan-500/20 transition-colors shrink-0">
               <Disc className="w-3.5 h-3.5" />
@@ -393,14 +393,14 @@ export const DashboardStats = ({
                 {tiresTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400">RON</span>
               </>
             ) : (
-              selectedVehicle?.tires?.size || (lang === 'en' ? "Configured" : "Configurate")
+              selectedVehicle?.tires?.size || t.configured || "Configurate"
             )}
           </div>
           <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
             <span className="truncate">
               {tiresRecords.length > 0 
-                ? `${tiresRecords.length} ${lang === 'en' ? 'records / sets' : 'achiziții / schimburi'}`
-                : (selectedVehicle?.tires ? `${selectedVehicle.tires.brand} (${selectedVehicle.tires.type})` : (lang === 'en' ? 'Tire management' : 'Gestiune anvelope'))}
+                ? `${tiresRecords.length} ${t.tireRecords || 'achiziții / schimburi'}`
+                : (selectedVehicle?.tires ? `${selectedVehicle.tires.brand} (${selectedVehicle.tires.type})` : (t.tireManagement || 'Gestiune anvelope'))}
             </span>
           </div>
         </div>
@@ -413,7 +413,7 @@ export const DashboardStats = ({
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {t.mandatoryInsurance || (lang === 'en' ? "Insurance (RCA)" : "Asigurare RCA")}
+              {t.mandatoryInsurance || "Asigurare RCA"}
             </span>
             <div className="p-1 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors shrink-0">
               <FileText className="w-3.5 h-3.5" />
@@ -435,7 +435,7 @@ export const DashboardStats = ({
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {t.itpInspection || (lang === 'en' ? "ITP Inspection" : "Inspecție ITP")}
+              {t.itpInspection || "Inspecție ITP"}
             </span>
             <div className="p-1 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors shrink-0">
               <CheckSquare className="w-3.5 h-3.5" />
@@ -457,7 +457,7 @@ export const DashboardStats = ({
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-              {t.vignetteAndTaxes || (lang === 'en' ? "Vignette & Tolls" : "Rovinietă & Taxe")}
+              {t.vignetteAndTaxes || "Rovinietă & Taxe"}
             </span>
             <div className="p-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
               <MapPin className="w-3.5 h-3.5" />
@@ -481,7 +481,7 @@ export const DashboardStats = ({
             ? 'bg-rose-50/80 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/40 hover:border-rose-500/50' 
             : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800/80 hover:border-emerald-500/50'
         }`}
-        title="Apasă pentru alerte și scadențe"
+        title={t.alerts || "Apasă pentru alerte și scadențe"}
       >
         <div className="flex items-center gap-2.5 min-w-0">
           <div className={`p-1.5 rounded-xl shrink-0 ${
@@ -491,15 +491,15 @@ export const DashboardStats = ({
           </div>
           <div className="min-w-0">
             <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-              <span>{t.urgentAlertsCount || (lang === 'en' ? 'Urgent Alerts' : 'Atenționări Urgente')}:</span>
+              <span>{t.urgentAlertsCount || 'Atenționări Urgente'}:</span>
               <span className={activeAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}>
-                {activeAlertsCount} {activeAlertsCount === 1 ? (lang === 'en' ? 'alert' : 'alertă') : (lang === 'en' ? 'alerts' : 'alerte')}
+                {activeAlertsCount} {activeAlertsCount === 1 ? (t.alert || 'alertă') : (t.alertsCount || 'alerte')}
               </span>
             </div>
             <p className="text-[10.5px] text-slate-500 dark:text-slate-400 truncate">
               {activeAlertsCount > 0 
-                ? (lang === 'en' ? 'Click to inspect overdue or upcoming deadlines' : 'Apasă pentru a vedea scadențele depășite sau apropiate')
-                : (lang === 'en' ? 'All vehicle inspections, services and documents are compliant' : 'Toate inspecțiile, reviziile și actele vehiculelor sunt conforme')}
+                ? (t.inspectDeadlines || 'Apasă pentru a vedea scadențele depășite sau apropiate')
+                : (t.allCompliant || 'Toate inspecțiile, reviziile și actele vehiculelor sunt conforme')}
             </p>
           </div>
         </div>
@@ -509,7 +509,7 @@ export const DashboardStats = ({
             ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' 
             : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
         }`}>
-          {lang === 'en' ? 'View >' : 'Vezi >'}
+          {t.viewDetails || 'Vezi >'}
         </span>
       </div>
 

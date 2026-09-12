@@ -99,7 +99,19 @@ export const CategoryDetailView = ({
 
   const config = categoryConfig[category] || categoryConfig.repair;
   const CategoryIcon = config.icon;
-  const categoryTitle = lang === 'en' ? config.titleEn : config.titleRo;
+  
+  const getCategoryTitle = () => {
+    switch (category) {
+      case 'repair': return t.repairs || "Reparații & Piese";
+      case 'service': return t.services || "Revizii & Schimb Ulei";
+      case 'tires': return t.tiresBadge || t.tireRecords || "Anvelope & Roți";
+      case 'insurance': return t.rcaBadge || "Asigurări (RCA & CASCO)";
+      case 'itp': return t.itpBadge || "Inspecție Tehnică Periodică (ITP)";
+      case 'rovinieta': return t.rovinietaBadge || "Rovinietă & Taxe de Drum";
+      default: return t.repairs || "Reparații";
+    }
+  };
+  const categoryTitle = getCategoryTitle();
 
   // Selected vehicle IDs
   const activeVehicleIds = vehicles.map(v => v.id);
@@ -119,27 +131,28 @@ export const CategoryDetailView = ({
 
   // Helper for expiry dates
   const getExpiryStatus = (dateStr) => {
-    if (!dateStr) return { text: "Nespecificat", color: "text-slate-400", isExpired: false, days: null };
+    if (!dateStr) return { text: t.notSet || "Nespecificat", color: "text-slate-400", isExpired: false, days: null };
     const diffDays = getDaysRemaining(dateStr);
-    if (diffDays === null) return { text: "Nespecificat", color: "text-slate-400", isExpired: false, days: null };
+    if (diffDays === null) return { text: t.notSet || "Nespecificat", color: "text-slate-400", isExpired: false, days: null };
     if (diffDays < 0) {
+      const absDays = Math.abs(diffDays);
       return { 
-        text: `Expirat de ${Math.abs(diffDays)} zile (${dateStr})`, 
+        text: `${t.expiredBy || "Expirat de"} ${absDays} ${t.days || "zile"} (${dateStr})`, 
         color: "text-rose-600 dark:text-rose-400 font-bold", 
         isExpired: true,
         days: diffDays
       };
     } else if (diffDays <= 30) {
       return { 
-        text: `Expiră în ${diffDays} zile (${dateStr})`, 
+        text: `${t.expiresSoon || "Expiră în"} ${diffDays} ${t.days || "zile"} (${dateStr})`, 
         color: "text-amber-600 dark:text-amber-400 font-bold", 
         isExpired: false,
         days: diffDays
       };
     } else {
       return { 
-        text: `Valid până la ${dateStr} (${diffDays} zile rămase)`, 
-        color: "text-emerald-600 dark:text-emerald-400 font-bold", 
+        text: `${t.valid || "Valabil"} (${dateStr})`, 
+        color: "text-emerald-600 dark:text-emerald-400 font-semibold", 
         isExpired: false,
         days: diffDays
       };
@@ -208,7 +221,7 @@ export const CategoryDetailView = ({
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>{t.dashboard || (lang === 'en' ? "Main Dashboard" : "Panou Principal")}</span>
+          <span>{t.dashboard || "Panou Principal"}</span>
         </button>
 
         {onOpenAddRecord && (
@@ -217,7 +230,7 @@ export const CategoryDetailView = ({
             className="inline-flex items-center gap-1.5 text-xs font-black text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 px-3.5 py-1.5 rounded-xl shadow-md shadow-emerald-500/20 transition-all active:scale-95 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
-            <span>{lang === 'en' ? `+ Add ${categoryTitle}` : `+ Adaugă Înregistrare`}</span>
+            <span>+ {t.addRecord || "Adaugă Înregistrare"}</span>
           </button>
         )}
       </div>
@@ -235,14 +248,14 @@ export const CategoryDetailView = ({
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 {vehicles.length === 1 
-                  ? `Date și istoric pentru ${vehicles[0].plate} (${vehicles[0].makeModel})` 
-                  : `Date pentru ${vehicles.length} mașini selectate din flotă`}
+                  ? `${vehicles[0].plate} • ${vehicles[0].makeModel}` 
+                  : `${vehicles.length} ${t.checkedVehicles || "mașini selectate"}`}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto bg-slate-50 dark:bg-slate-950 px-3.5 py-2 rounded-2xl border border-slate-200/80 dark:border-slate-800">
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Total Cheltuieli:</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">{t.totalFleet || "Total Cheltuieli"}:</span>
             <span className="font-mono font-black text-sm sm:text-base text-emerald-600 dark:text-emerald-400">
               {totalAmount.toLocaleString('ro-RO')} RON
             </span>
@@ -256,11 +269,11 @@ export const CategoryDetailView = ({
           <div className="flex items-center gap-2">
             <Car className="w-4 h-4 text-slate-400" />
             <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white uppercase tracking-wider">
-              {lang === 'en' ? "Vehicle Technical Status" : "Stare Tehnică Vehicule Selectate"} ({vehicles.length})
+              {t.fleet || "Stare Tehnică Vehicule Selectate"} ({vehicles.length})
             </h3>
           </div>
           <span className="text-[11px] text-slate-400 italic">
-            {lang === 'en' ? "Tap Edit to modify specs" : "Apasă Editează pentru a modifica datele"}
+            {t.edit || "Editează"}
           </span>
         </div>
 
@@ -297,7 +310,7 @@ export const CategoryDetailView = ({
                     }`}
                   >
                     {isEditing ? <X className="w-3 h-3" /> : <Pencil className="w-3 h-3" />}
-                    <span>{isEditing ? (lang === 'en' ? 'Cancel' : 'Anulează') : (lang === 'en' ? 'Edit' : 'Editează')}</span>
+                    <span>{isEditing ? (t.cancel || 'Anulează') : (t.edit || 'Editează')}</span>
                   </button>
                 </div>
               </div>
@@ -510,7 +523,7 @@ export const CategoryDetailView = ({
                       onClick={() => setEditingVehicleId(null)}
                       className="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                     >
-                      {lang === 'en' ? "Cancel" : "Anulează"}
+                      {t.cancel || "Anulează"}
                     </button>
                     <button
                       type="button"
@@ -518,7 +531,7 @@ export const CategoryDetailView = ({
                       className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-black text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-md shadow-emerald-500/20 transition-all active:scale-95 cursor-pointer"
                     >
                       <Save className="w-3.5 h-3.5" />
-                      <span>{lang === 'en' ? "Save Changes" : "Salvează Modificările"}</span>
+                      <span>{t.save || "Salvează Modificările"}</span>
                     </button>
                   </div>
 
@@ -531,7 +544,7 @@ export const CategoryDetailView = ({
                   {category === 'tires' && (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                       <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
-                        <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">Tip Anvelope</span>
+                        <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">{t.tiresBadge || "Tip Anvelope"}</span>
                         <span className="font-bold text-slate-900 dark:text-white capitalize">
                           {veh.tires?.type === 'summer' ? '☀️ Vară' : veh.tires?.type === 'winter' ? '❄️ Iarnă' : '🍂 All-Season'}
                         </span>
@@ -539,17 +552,17 @@ export const CategoryDetailView = ({
                       <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
                         <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">Dimensiune</span>
                         <span className="font-mono font-bold text-slate-900 dark:text-white">
-                          {veh.tires?.size || 'Nespecificat'}
+                          {veh.tires?.size || (t.notSet || 'Nespecificat')}
                         </span>
                       </div>
                       <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
                         <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">Marcă & Model</span>
                         <span className="font-bold text-slate-900 dark:text-white truncate block">
-                          {veh.tires?.brand || 'Nespecificat'}
+                          {veh.tires?.brand || (t.notSet || 'Nespecificat')}
                         </span>
                       </div>
                       <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
-                        <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">DOT (An fabricație)</span>
+                        <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">DOT</span>
                         <span className="font-mono font-bold text-slate-900 dark:text-white">
                           {veh.tires?.dot ? `DOT ${veh.tires.dot}` : '—'}
                         </span>
@@ -568,7 +581,7 @@ export const CategoryDetailView = ({
                           </span>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
-                          <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">Următoarea Revizie</span>
+                          <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">{t.nextService || "Următoarea Revizie"}</span>
                           <span className="font-mono font-bold text-slate-900 dark:text-white">
                             {veh.nextServiceKm ? `${veh.nextServiceKm.toLocaleString('ro-RO')} km` : '—'}
                           </span>
@@ -582,22 +595,22 @@ export const CategoryDetailView = ({
                                 : 'text-emerald-600 dark:text-emerald-400'
                             }`}>
                               {veh.nextServiceKm - veh.currentKm < 0 
-                                ? `Depășit cu ${Math.abs(veh.nextServiceKm - veh.currentKm).toLocaleString('ro-RO')} km` 
-                                : `${(veh.nextServiceKm - veh.currentKm).toLocaleString('ro-RO')} km`}
+                                ? `-${Math.abs(veh.nextServiceKm - veh.currentKm).toLocaleString('ro-RO')} km` 
+                                : `+${(veh.nextServiceKm - veh.currentKm).toLocaleString('ro-RO')} km`}
                             </span>
                           ) : '—'}
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
-                          <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">Dată Programată</span>
+                          <span className="text-[10px] text-slate-400 font-semibold block mb-0.5">Dată</span>
                           <span className="font-bold text-slate-900 dark:text-white">
-                            {veh.nextServiceDate || 'Nespecificată'}
+                            {veh.nextServiceDate || (t.notSet || 'Nespecificată')}
                           </span>
                         </div>
                       </div>
 
                       {(veh.oilType || veh.oilBrand) && (
                         <div className="bg-teal-500/10 border border-teal-500/20 p-2.5 rounded-xl flex items-center justify-between text-xs">
-                          <span className="font-semibold text-teal-800 dark:text-teal-300">Ulei Recomandat:</span>
+                          <span className="font-semibold text-teal-800 dark:text-teal-300">Ulei:</span>
                           <span className="font-mono font-bold text-teal-900 dark:text-teal-200">
                             {veh.oilType} {veh.oilBrand ? `(${veh.oilBrand})` : ''}
                           </span>
@@ -610,13 +623,13 @@ export const CategoryDetailView = ({
                   {category === 'insurance' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                       <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
-                        <span className="text-[10px] text-slate-400 font-semibold block mb-1">Poliță RCA</span>
+                        <span className="text-[10px] text-slate-400 font-semibold block mb-1">{t.rcaBadge || "Poliță RCA"}</span>
                         <p className={`text-xs ${getExpiryStatus(veh.rcaExpiry).color}`}>
                           {getExpiryStatus(veh.rcaExpiry).text}
                         </p>
                       </div>
                       <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60">
-                        <span className="text-[10px] text-slate-400 font-semibold block mb-1">Poliță CASCO</span>
+                        <span className="text-[10px] text-slate-400 font-semibold block mb-1">{t.cascoBadge || "Poliță CASCO"}</span>
                         <p className={`text-xs ${getExpiryStatus(veh.cascoExpiry).color}`}>
                           {getExpiryStatus(veh.cascoExpiry).text}
                         </p>
@@ -627,7 +640,7 @@ export const CategoryDetailView = ({
                   {/* D. ITP */}
                   {category === 'itp' && (
                     <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs">
-                      <span className="text-[10px] text-slate-400 font-semibold block mb-1">Inspecție Tehnică Periodică (ITP)</span>
+                      <span className="text-[10px] text-slate-400 font-semibold block mb-1">{t.itpBadge || "Inspecție Tehnică Periodică (ITP)"}</span>
                       <p className={`text-xs ${getExpiryStatus(veh.itpExpiry).color}`}>
                         {getExpiryStatus(veh.itpExpiry).text}
                       </p>
@@ -637,7 +650,7 @@ export const CategoryDetailView = ({
                   {/* E. ROVINIETA */}
                   {category === 'rovinieta' && (
                     <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs">
-                      <span className="text-[10px] text-slate-400 font-semibold block mb-1">Valabilitate Rovinietă</span>
+                      <span className="text-[10px] text-slate-400 font-semibold block mb-1">{t.rovinietaBadge || "Valabilitate Rovinietă"}</span>
                       <p className={`text-xs ${getExpiryStatus(veh.rovinietaExpiry).color}`}>
                         {getExpiryStatus(veh.rovinietaExpiry).text}
                       </p>
@@ -647,7 +660,7 @@ export const CategoryDetailView = ({
                   {/* F. REPAIRS */}
                   {category === 'repair' && (
                     <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs flex items-center justify-between">
-                      <span className="text-slate-500 dark:text-slate-400">Total reparații înregistrate:</span>
+                      <span className="text-slate-500 dark:text-slate-400">{t.repairs || "Total reparații"}:</span>
                       <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
                         {categoryRecords.filter(r => r.vehicleId === veh.id).reduce((sum, r) => sum + (Number(r.amount) || 0), 0).toLocaleString('ro-RO')} RON
                       </span>
@@ -667,7 +680,7 @@ export const CategoryDetailView = ({
           <div className="flex items-center gap-2">
             <CategoryIcon className={`w-4 h-4 ${config.color}`} />
             <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-              {lang === 'en' ? "Recorded Invoices & History" : "Istoric Facturi & Intervenții"}
+              {t.recordsListTitle || "Istoric Facturi & Intervenții"}
             </h3>
             <span className="text-xs font-bold text-slate-400">({categoryRecords.length})</span>
           </div>
@@ -679,9 +692,7 @@ export const CategoryDetailView = ({
               <CategoryIcon className="w-6 h-6" />
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-3">
-              {lang === 'en' 
-                ? `No ${categoryTitle.toLowerCase()} records found for the selected vehicles.` 
-                : `Nu există facturi sau intervenții de ${categoryTitle.toLowerCase()} înregistrate pentru mașinile selectate.`}
+              {t.noRecordsFound || "Nu există facturi sau intervenții înregistrate pentru mașinile selectate."}
             </p>
             {onOpenAddRecord && (
               <button
@@ -689,7 +700,7 @@ export const CategoryDetailView = ({
                 className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-xl transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? `Add Record` : `Adaugă Înregistrare`}</span>
+                <span>+ {t.addRecord || "Adaugă Înregistrare"}</span>
               </button>
             )}
           </div>
@@ -725,7 +736,7 @@ export const CategoryDetailView = ({
                           <button
                             onClick={() => onEditRecord(rec)}
                             className="p-1 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                            title="Editează"
+                            title={t.edit || "Editează"}
                           >
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
@@ -733,12 +744,12 @@ export const CategoryDetailView = ({
                         {onDeleteRecord && (
                           <button
                             onClick={() => {
-                              if (window.confirm(lang === 'en' ? "Delete this record?" : "Ștergi această înregistrare?")) {
+                              if (window.confirm(t.deleteRecordConfirm || "Ștergi această înregistrare?")) {
                                 onDeleteRecord(rec.id);
                               }
                             }}
                             className="p-1 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                            title="Șterge"
+                            title={t.delete || "Șterge"}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
