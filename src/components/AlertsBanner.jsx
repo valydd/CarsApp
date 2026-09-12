@@ -238,7 +238,7 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
                 {/* RÂNDUL 1: Mașină [RO AG-51-APK] Model | Insignă URGENT / ATENȚIE */}
                 <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-black/5 dark:border-white/5">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-xs font-black tracking-wider text-slate-900 dark:text-white bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-slate-300 dark:border-slate-700 shadow-2xs">
+                    <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-xs font-black tracking-wider text-slate-900 dark:text-white bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-slate-700 dark:border-slate-500 shadow-2xs">
                       <span className="text-[10px] text-blue-600 font-bold mr-1">RO</span>
                       {alert.plate}
                     </span>

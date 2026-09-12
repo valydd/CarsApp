@@ -52,7 +52,7 @@ export const VehicleCarousel = ({
         <div className="shrink-0 flex items-center">
           {/* Dacă exact o mașină este selectată: afișează plăcuța de înmatriculare */}
           {singleVehicle && (
-            <div className="h-8 inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2.5 rounded-xl text-[11px] font-mono font-black text-slate-900 dark:text-slate-100 shadow-2xs whitespace-nowrap">
+            <div className="h-8 inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-700 dark:border-slate-500 px-2.5 rounded-xl text-[11px] font-mono font-black text-slate-900 dark:text-slate-100 shadow-2xs whitespace-nowrap">
               <span className="text-[8.5px] text-blue-500 font-bold leading-none">RO</span>
               <span className="leading-none tracking-tight">{singleVehicle.plate}</span>
               <button
@@ -226,7 +226,7 @@ export const VehicleCarousel = ({
                       </div>
 
                       {/* Plăcuță Înmatriculare */}
-                      <span className="whitespace-nowrap shrink-0 inline-flex items-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-0.5 font-mono text-xs font-black text-slate-900 dark:text-slate-100 shadow-2xs">
+                      <span className="whitespace-nowrap shrink-0 inline-flex items-center bg-slate-100 dark:bg-slate-800 border border-slate-700 dark:border-slate-500 rounded-lg px-2 py-0.5 font-mono text-xs font-black text-slate-900 dark:text-slate-100 shadow-2xs">
                         <span className="text-[8px] text-blue-500 mr-1 font-bold">RO</span>
                         {veh.plate}
                       </span>

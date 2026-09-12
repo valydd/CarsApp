@@ -153,7 +153,7 @@ export const RecordsList = ({
 
                     {/* Sub-row under Title: Plate on Left, Compact Evidentiated Amount on Right */}
                     <div className="flex items-center justify-between gap-2 mt-1.5">
-                      <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 shadow-2xs">
+                      <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-700 dark:border-slate-500 shadow-2xs">
                         <span className="text-[8px] text-blue-500 font-bold mr-1 leading-none">RO</span>
                         <span className="leading-none">{veh?.plate || '—'}</span>
                       </span>
