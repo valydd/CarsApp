@@ -102,13 +102,13 @@ export const CategoryDetailView = ({
   
   const getCategoryTitle = () => {
     switch (category) {
-      case 'repair': return t.repairs || "Reparații & Piese";
-      case 'service': return t.services || "Revizii & Schimb Ulei";
-      case 'tires': return t.tiresBadge || t.tireRecords || "Anvelope & Roți";
-      case 'insurance': return t.rcaBadge || "Asigurări (RCA & CASCO)";
-      case 'itp': return t.itpBadge || "Inspecție Tehnică Periodică (ITP)";
-      case 'rovinieta': return t.rovinietaBadge || "Rovinietă & Taxe de Drum";
-      default: return t.repairs || "Reparații";
+      case 'repair': return t.repairsAndParts || "Reparații & Piese";
+      case 'service': return t.servicesAndOil || "Revizii & Schimb Ulei";
+      case 'tires': return t.tiresAndWheels || "Anvelope & Roți";
+      case 'insurance': return t.mandatoryInsurance || "Asigurări (RCA & CASCO)";
+      case 'itp': return t.itpInspection || "Inspecție Tehnică Periodică (ITP)";
+      case 'rovinieta': return t.vignetteAndTaxes || "Rovinietă & Taxe de Drum";
+      default: return t.repairsAndParts || "Reparații";
     }
   };
   const categoryTitle = getCategoryTitle();
@@ -660,7 +660,7 @@ export const CategoryDetailView = ({
                   {/* F. REPAIRS */}
                   {category === 'repair' && (
                     <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs flex items-center justify-between">
-                      <span className="text-slate-500 dark:text-slate-400">{t.repairs || "Total reparații"}:</span>
+                      <span className="text-slate-500 dark:text-slate-400">{t.totalRepairs || "Total reparații"}:</span>
                       <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
                         {categoryRecords.filter(r => r.vehicleId === veh.id).reduce((sum, r) => sum + (Number(r.amount) || 0), 0).toLocaleString('ro-RO')} RON
                       </span>

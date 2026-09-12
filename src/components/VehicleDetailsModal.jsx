@@ -31,27 +31,27 @@ export const VehicleDetailsModal = ({
   const getAlertTitle = (alert) => {
     if (alert.type === 'serviceKm') {
       return alert.kmLeft <= 0 
-        ? `${t.servicesAndOil || 'Revizie'} ${t.expired || 'expirată!'}` 
-        : `${t.servicesAndOil || 'Revizie'} ${t.expiresSoon || 'în curând'}`;
+        ? (t.serviceOverdue || `${t.servicesAndOil || 'Revizie'} ${t.expired || 'expirată!'}`)
+        : (t.serviceDueSoon || `${t.servicesAndOil || 'Revizie'} ${t.expiresSoon || 'în curând'}`);
     }
-    if (alert.category === 'rca') {
-      return alert.daysLeft < 0 ? `${t.rcaBadge || 'RCA'} ${t.expiredFeminine || 'expirată!'}` : `${t.rcaBadge || 'RCA'} ${t.expiresSoon || 'în curând'}`;
+    if (alert.category === 'rca' || alert.type === 'rcaExpiry') {
+      return alert.daysLeft < 0 ? `${t.rcaBadge || 'RCA'} ${t.expiredFeminine || t.expired || 'expirată!'}` : `${t.rcaBadge || 'RCA'} ${t.expiresSoon || 'în curând'}`;
     }
-    if (alert.category === 'itp') {
+    if (alert.category === 'itp' || alert.type === 'itpExpiry') {
       return alert.daysLeft < 0 ? `${t.itpBadge || 'ITP'} ${t.expired || 'expirat!'}` : `${t.itpBadge || 'ITP'} ${t.expiresSoon || 'în curând'}`;
     }
-    if (alert.category === 'rovinieta') {
-      return alert.daysLeft < 0 ? `${t.rovinietaBadge || 'Rovinietă'} ${t.expiredFeminine || 'expirată!'}` : `${t.rovinietaBadge || 'Rovinietă'} ${t.expiresSoon || 'în curând'}`;
+    if (alert.category === 'rovinieta' || alert.type === 'rovinietaExpiry') {
+      return alert.daysLeft < 0 ? `${t.rovinietaBadge || 'Rovinietă'} ${t.expiredFeminine || t.expired || 'expirată!'}` : `${t.rovinietaBadge || 'Rovinietă'} ${t.expiresSoon || 'în curând'}`;
     }
-    if (alert.category === 'casco') {
-      return alert.daysLeft < 0 ? `${t.cascoBadge || 'CASCO'} ${t.expiredFeminine || 'expirată!'}` : `${t.cascoBadge || 'CASCO'} ${t.expiresSoon || 'în curând'}`;
+    if (alert.category === 'casco' || alert.type === 'cascoExpiry') {
+      return alert.daysLeft < 0 ? `${t.cascoBadge || 'CASCO'} ${t.expired || 'expirat!'}` : `${t.cascoBadge || 'CASCO'} ${t.expiresSoon || 'în curând'}`;
     }
-    if (alert.category === 'service') {
+    if (alert.category === 'service' || alert.type === 'nextServiceDate') {
       return alert.daysLeft < 0 
         ? `${t.servicesAndOil || 'Revizie'} ${t.expired || 'expirată!'}` 
         : `${t.servicesAndOil || 'Revizie'} ${t.expiresSoon || 'în curând'}`;
     }
-    return (lang === 'ro' ? alert.titleRo : alert.titleEn) || alert.titleRo;
+    return (lang === 'ro' ? alert.titleRo : alert.titleEn) || alert.titleRo || '';
   };
 
   const getAlertDetail = (alert) => {

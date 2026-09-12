@@ -268,5 +268,9 @@
   "orPasteRawReceiptText": "Sau lipește textul bonului",
   "pasteReceiptTextPlaceholder": "Lipește aici textul bonului fiscal...",
   "extractFromText": "Extrage din text",
-  "closeBtn": "Închide"
+  "closeBtn": "Închide",
+  "recordsListTitle": "Istoric Facturi & Intervenții",
+  "totalRepairs": "Total reparații",
+  "totalServices": "Total revizii",
+  "noRecordsFound": "Nu există facturi sau intervenții înregistrate pentru mașinile selectate."
 }
