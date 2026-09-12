@@ -194,16 +194,18 @@ export const FuelConsumptionView = ({
                   key={rec.id}
                   className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-3.5 space-y-2.5 hover:border-blue-400/40 transition-all shadow-xs"
                 >
-                  {/* RÂNDUL 1: Antet Mașină + Dată & Oră (Stânga) | Butoane Acțiuni (Dreapta) */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                  {/* RÂNDUL 1: Antet Mașină + Dată/Oră (Stânga) | Butoane Acțiuni (Dreapta) */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-1 min-w-0">
                       {veh && (
-                        <span className="whitespace-nowrap shrink-0 inline-flex items-center bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-2 py-0.5 rounded-md text-[11px] font-mono font-black shadow-xs">
-                          <span className="text-[9px] text-blue-400 dark:text-blue-600 font-bold mr-1 leading-none">RO</span>
-                          <span className="leading-none">{veh.plate}</span>
-                        </span>
+                        <div>
+                          <span className="inline-flex items-center bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-2 py-0.5 rounded-md text-[11px] font-mono font-black shadow-xs">
+                            <span className="text-[9px] text-blue-400 dark:text-blue-600 font-bold mr-1 leading-none">RO</span>
+                            <span className="leading-none">{veh.plate}</span>
+                          </span>
+                        </div>
                       )}
-                      <div className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium">
                         <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                         <span>{rec.date}</span>
                         {recTime && (
@@ -217,7 +219,7 @@ export const FuelConsumptionView = ({
                     </div>
 
                     {/* Acțiuni (Edit / Delete) */}
-                    <div className="flex items-center gap-0.5 shrink-0">
+                    <div className="flex items-center gap-0.5 shrink-0 pt-0.5">
                       {onEditRecord && (
                         <button
                           onClick={() => onEditRecord(rec)}
@@ -243,42 +245,46 @@ export const FuelConsumptionView = ({
                     </div>
                   </div>
 
-                  {/* RÂNDUL 2: Statistici Cheie Card Ordonat (Cost Total | Cantitate | Kilometraj) */}
-                  <div className="grid grid-cols-3 divide-x divide-slate-200 dark:divide-slate-800/80 bg-slate-50 dark:bg-slate-950/60 rounded-xl p-2 border border-slate-200/60 dark:border-slate-800/60">
-                    {/* Cost Total */}
-                    <div className="text-center px-1">
-                      <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-0.5">
-                        {lang === 'en' ? "Total" : "Cost Total"}
+                  {/* RÂNDUL 2: Rânduri Orizontale Unul Sub Altul (Cost Total, Cantitate, Kilometraj) */}
+                  <div className="bg-slate-50 dark:bg-slate-950/60 rounded-xl px-3 py-1.5 border border-slate-200/60 dark:border-slate-800/60 divide-y divide-slate-200/60 dark:border-slate-800/60">
+                    {/* 1. Cost Total */}
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                        <DollarSign className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>{lang === 'en' ? "Total Cost" : "Cost Total"}</span>
                       </span>
-                      <div className="text-xs sm:text-sm font-black font-mono text-emerald-600 dark:text-emerald-400 leading-tight">
-                        {Number(rec.amount).toLocaleString('ro-RO')}
-                        <span className="text-[10px] font-bold ml-0.5 text-slate-500 dark:text-slate-400">RON</span>
-                      </div>
+                      <span className="font-mono font-black text-sm text-emerald-600 dark:text-emerald-400">
+                        {Number(rec.amount).toLocaleString('ro-RO')} RON
+                      </span>
                     </div>
 
-                    {/* Cantitate & Preț */}
-                    <div className="text-center px-1">
-                      <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-0.5">
-                        {lang === 'en' ? "Quantity" : "Cantitate"}
+                    {/* 2. Cantitate */}
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                        <Fuel className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                        <span>{lang === 'en' ? "Quantity" : "Cantitate"}</span>
                       </span>
-                      <div className="text-xs sm:text-sm font-black font-mono text-blue-600 dark:text-blue-400 leading-tight">
-                        {liters > 0 ? `${liters} L` : "—"}
-                      </div>
-                      {pricePerL && (
-                        <span className="text-[9.5px] font-medium text-slate-500 dark:text-slate-400 block mt-0.5 leading-none">
-                          {pricePerL} RON/L
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono font-bold text-xs sm:text-sm text-blue-600 dark:text-blue-400">
+                          {liters > 0 ? `${liters} L` : "—"}
                         </span>
-                      )}
+                        {pricePerL && (
+                          <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                            ({pricePerL} RON/L)
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Kilometraj Bord */}
-                    <div className="text-center px-1">
-                      <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-0.5">
-                        {lang === 'en' ? "Odometer" : "Kilometraj"}
+                    {/* 3. Kilometraj */}
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                        <Gauge className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                        <span>{lang === 'en' ? "Odometer" : "Kilometraj"}</span>
                       </span>
-                      <div className="text-xs sm:text-sm font-black font-mono text-slate-700 dark:text-slate-200 leading-tight">
+                      <span className="font-mono font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-200">
                         {rec.km ? `${Number(rec.km).toLocaleString('ro-RO')} km` : "—"}
-                      </div>
+                      </span>
                     </div>
                   </div>
 
