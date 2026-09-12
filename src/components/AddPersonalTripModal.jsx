@@ -29,14 +29,37 @@ export const AddPersonalTripModal = ({
   const [isReceiptScanOpen, setIsReceiptScanOpen] = useState(false);
   const [scannedReceipt, setScannedReceipt] = useState(null);
 
+  const formatDateToDisplay = (dStr) => {
+    if (!dStr) return '';
+    const parts = dStr.split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+    return dStr;
+  };
+
+  const handleStartDateChange = (val) => {
+    setStartDate(val);
+    if (!endDate || endDate < val) {
+      setEndDate(val);
+    }
+    const disp = formatDateToDisplay(val);
+    setTitle((prev) => {
+      if (!prev) {
+        return lang === 'en' ? `Weekend Trip (${disp})` : `Cursă Weekend (${disp})`;
+      }
+      if (prev.includes('(') && prev.includes(')')) {
+        return prev.replace(/\(.*?\)/, `(${disp})`);
+      }
+      return `${prev} (${disp})`;
+    });
+  };
+
   const handleApplyReceiptData = (data) => {
     if (!data) return;
     setScannedReceipt(data);
     if (data.date) {
-      setStartDate(data.date);
-      if (!endDate || endDate < data.date) {
-        setEndDate(data.date);
-      }
+      handleStartDateChange(data.date);
     }
     if (data.pricePerLiter) {
       setCustomFuelPrice(data.pricePerLiter.toString());
@@ -89,13 +112,13 @@ export const AddPersonalTripModal = ({
       setIsPaid(Boolean(tripToEdit.isPaid));
     } else {
       const vId = defaultVehicleId || (vehicles[0]?.id || '');
-      const veh = vehicles.find(v => v.id === vId);
       setVehicleId(vId);
       const todayStr = new Date().toISOString().slice(0, 10);
-      setTitle(lang === 'en' ? `Weekend Trip (${todayStr})` : `Cursă Weekend (${todayStr})`);
+      const formattedToday = formatDateToDisplay(todayStr);
+      setTitle(lang === 'en' ? `Weekend Trip (${formattedToday})` : `Cursă Weekend (${formattedToday})`);
       setStartDate(todayStr);
       setEndDate(todayStr);
-      setStartKm(veh?.currentKm ? String(veh.currentKm) : '');
+      setStartKm('');
       setEndKm('');
       setCustomAvgL100('');
       setCustomFuelPrice('');
@@ -184,14 +207,7 @@ export const AddPersonalTripModal = ({
             </label>
             <select
               value={vehicleId}
-              onChange={(e) => {
-                const newId = e.target.value;
-                setVehicleId(newId);
-                const v = vehicles.find(veh => veh.id === newId);
-                if (v?.currentKm && !startKm) {
-                  setStartKm(String(v.currentKm));
-                }
-              }}
+              onChange={(e) => setVehicleId(e.target.value)}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
               required
             >
@@ -303,7 +319,7 @@ export const AddPersonalTripModal = ({
               <input
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={(e) => handleStartDateChange(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
                 required
               />
@@ -323,11 +339,11 @@ export const AddPersonalTripModal = ({
             </div>
           </div>
 
-          {/* 4. Odometer: Start Km & End Km */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* 4. Odometer: Start Km & End Km (pe același rând) */}
+          <div className="grid grid-cols-2 gap-3 items-start">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
-                <Gauge className="w-3 h-3 text-purple-500" />
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1 whitespace-nowrap">
+                <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
                 <span>{lang === 'en' ? "Start Odometer (km)" : "Km Început"}</span>
               </label>
               <input
@@ -340,71 +356,71 @@ export const AddPersonalTripModal = ({
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
-                <span className="flex items-center gap-1">
-                  <Gauge className="w-3 h-3 text-purple-500" />
-                  <span>{lang === 'en' ? "End Odometer (km)" : "Km Sfârșit"}</span>
-                </span>
-                <span className="text-[10px] font-normal text-purple-600 dark:text-purple-400">
-                  (Opțional acum)
-                </span>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1 whitespace-nowrap">
+                <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
+                <span>{lang === 'en' ? "End Odometer (km)" : "Km Sfârșit"}</span>
               </label>
               <input
                 type="number"
                 value={endKm}
                 onChange={(e) => setEndKm(e.target.value)}
-                placeholder="ex: 136450 (sau lasă liber)"
+                placeholder="ex: 136450"
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
               />
+              <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 mt-1 block">
+                {lang === 'en' ? "(Optional now)" : "(Opțional acum)"}
+              </span>
             </div>
           </div>
 
-          {/* LIVE COMPUTED RESULT CARD */}
-          {isOngoing ? (
-            <div className="bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 rounded-2xl p-3.5 space-y-1.5 animate-in fade-in">
-              <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-black text-xs">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-                <span>Cursă În Desfășurare (Activă)</span>
+          {/* LIVE COMPUTED RESULT CARD - Doar după ce se introduce km început */}
+          {sKm > 0 && (
+            isOngoing ? (
+              <div className="bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 rounded-2xl p-3.5 space-y-1.5 animate-in fade-in">
+                <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-black text-xs">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                  <span>Cursă În Desfășurare (Activă)</span>
+                </div>
+                <p className="text-[11px] text-amber-700/90 dark:text-amber-300/90">
+                  Ai completat kilometrajul de început ({sKm.toLocaleString('ro-RO')} km). Poți salva cursa acum, iar când o termini vei introduce kilometrajul de final pentru a calcula distanța și costul.
+                </p>
               </div>
-              <p className="text-[11px] text-amber-700/90 dark:text-amber-300/90">
-                Ai completat kilometrajul de început ({sKm.toLocaleString('ro-RO')} km). Poți salva cursa acum, iar când o termini vei introduce kilometrajul de final pentru a calcula distanța și costul.
-              </p>
-            </div>
-          ) : (
-            <div className="bg-purple-500/10 dark:bg-purple-950/30 border border-purple-500/30 rounded-2xl p-3.5 space-y-2 animate-in fade-in">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-purple-900 dark:text-purple-300">
-                  {lang === 'en' ? "Distance Driven:" : "Distanță Parcursă:"}
-                </span>
-                <span className="font-mono font-black text-sm text-purple-700 dark:text-purple-300">
-                  +{kmDriven.toLocaleString('ro-RO')} km
-                </span>
-              </div>
+            ) : (
+              <div className="bg-purple-500/10 dark:bg-purple-950/30 border border-purple-500/30 rounded-2xl p-3.5 space-y-2 animate-in fade-in">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-purple-900 dark:text-purple-300">
+                    {lang === 'en' ? "Distance Driven:" : "Distanță Parcursă:"}
+                  </span>
+                  <span className="font-mono font-black text-sm text-purple-700 dark:text-purple-300">
+                    +{kmDriven.toLocaleString('ro-RO')} km
+                  </span>
+                </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600 dark:text-slate-400">
-                  {lang === 'en' ? "Estimated Fuel Used:" : "Consum Estimat:"}
-                </span>
-                <span className="font-mono font-bold text-slate-900 dark:text-white">
-                  {calculatedLiters} L <span className="text-[10px] text-slate-400">({effectiveAvgL100} L/100)</span>
-                </span>
-              </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-600 dark:text-slate-400">
+                    {lang === 'en' ? "Estimated Fuel Used:" : "Consum Estimat:"}
+                  </span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white">
+                    {calculatedLiters} L <span className="text-[10px] text-slate-400">({effectiveAvgL100} L/100)</span>
+                  </span>
+                </div>
 
-              <div className="pt-2 border-t border-purple-500/20 flex items-center justify-between text-xs">
-                <span className="font-black text-slate-900 dark:text-white">
-                  {lang === 'en' ? "Calculated Personal Cost:" : "Cost Total Personal:"}
-                </span>
-                <span className="font-mono font-black text-base text-purple-600 dark:text-purple-400">
-                  {calculatedCost.toLocaleString('ro-RO')} RON
-                </span>
-              </div>
+                <div className="pt-2 border-t border-purple-500/20 flex items-center justify-between text-xs">
+                  <span className="font-black text-slate-900 dark:text-white">
+                    {lang === 'en' ? "Calculated Personal Cost:" : "Cost Total Personal:"}
+                  </span>
+                  <span className="font-mono font-black text-base text-purple-600 dark:text-purple-400">
+                    {calculatedCost.toLocaleString('ro-RO')} RON
+                  </span>
+                </div>
 
-              <div className="text-[10.5px] text-slate-500 dark:text-slate-400 pt-1">
-                {lang === 'en' 
-                  ? `Calculated using car's fuel rate (${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`
-                  : `Calculat pe baza consumului mașinii (${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`}
+                <div className="text-[10.5px] text-slate-500 dark:text-slate-400 pt-1">
+                  {lang === 'en' 
+                    ? `Calculated using car's fuel rate (${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`
+                    : `Calculat pe baza consumului mașinii (${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`}
+                </div>
               </div>
-            </div>
+            )
           )}
 
           {/* Status Achitat / Decontat */}
