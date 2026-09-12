@@ -917,11 +917,7 @@ export function App() {
             }`}
           >
             <div className="relative inline-flex items-center justify-center">
-              <ShieldAlert className={`w-5 h-5 transition-colors ${
-                totalAlertsCount > 0 
-                  ? (urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400')
-                  : ''
-              }`} />
+              <ShieldAlert className="w-5 h-5 transition-colors" />
               {totalAlertsCount > 0 && (
                 <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
                   {/* Unda compacta de pulsare radar (nu acopera iconita) */}
