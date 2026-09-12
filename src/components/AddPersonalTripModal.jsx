@@ -326,8 +326,8 @@ export const AddPersonalTripModal = ({
           </div>
 
           {/* 3. Dates & Time (Start Date, Ora, End Date) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            <div>
+          <div className="grid grid-cols-12 gap-2.5">
+            <div className="col-span-8 sm:col-span-5">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
                 <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
                 <span className="truncate">{lang === 'en' ? "Start Date" : "Data Început"}</span>
@@ -336,11 +336,11 @@ export const AddPersonalTripModal = ({
                 type="date"
                 value={startDate}
                 onChange={(e) => handleStartDateChange(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
+                className="w-full min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
                 required
               />
             </div>
-            <div>
+            <div className="col-span-4 sm:col-span-3">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
                 <Clock className="w-3 h-3 text-purple-500 shrink-0" />
                 <span className="truncate">{lang === 'en' ? "Time" : "Ora Cursă"}</span>
@@ -349,10 +349,10 @@ export const AddPersonalTripModal = ({
                 type="time"
                 value={tripTime}
                 onChange={(e) => setTripTime(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
+                className="w-full min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden text-center"
               />
             </div>
-            <div className="col-span-2 sm:col-span-1">
+            <div className="col-span-12 sm:col-span-4">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
                 <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
                 <span className="truncate">{lang === 'en' ? "End Date" : "Data Sfârșit"}</span>
@@ -361,7 +361,7 @@ export const AddPersonalTripModal = ({
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
+                className="w-full min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
                 required
               />
             </div>

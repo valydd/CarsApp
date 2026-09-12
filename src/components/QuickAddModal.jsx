@@ -451,9 +451,9 @@ export const QuickAddModal = ({
           </div>
 
           {/* 3. Essential Numbers (Amount, Date, Ora, Km) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
+          <div className="grid grid-cols-12 gap-2.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
             {/* Amount */}
-            <div className="col-span-2 sm:col-span-1">
+            <div className="col-span-12 sm:col-span-3">
               <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                 {t.totalAmount} (RON) *
               </label>
@@ -471,8 +471,8 @@ export const QuickAddModal = ({
               </div>
             </div>
 
-            {/* Date */}
-            <div>
+            {/* Date (Mai Lungă) */}
+            <div className="col-span-8 sm:col-span-4">
               <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                 {t.date}
               </label>
@@ -480,13 +480,13 @@ export const QuickAddModal = ({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
+                className="w-full min-w-0 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
                 required
               />
             </div>
 
-            {/* Time (Ora) */}
-            <div>
+            {/* Time / Ora (Mai Scurtă) */}
+            <div className="col-span-4 sm:col-span-2">
               <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate flex items-center gap-1">
                 <Clock className="w-3 h-3 text-blue-500 shrink-0" />
                 <span>Ora</span>
@@ -495,12 +495,12 @@ export const QuickAddModal = ({
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
+                className="w-full min-w-0 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500 text-center"
               />
             </div>
 
             {/* Km */}
-            <div className="col-span-2 sm:col-span-1">
+            <div className="col-span-12 sm:col-span-3">
               <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                 {t.currentKm}
               </label>
