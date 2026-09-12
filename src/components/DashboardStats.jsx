@@ -288,10 +288,20 @@ export const DashboardStats = ({
               <Navigation className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="flex items-center justify-between gap-1.5">
-            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-              {unpaidPersonalCost.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-fuchsia-600 dark:text-fuchsia-400">RON</span>
+          <div className="flex items-end justify-between gap-1.5">
+            <div className="min-w-0 flex-1">
+              <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                {unpaidPersonalCost.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-fuchsia-600 dark:text-fuchsia-400">RON</span>
+              </div>
+              <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                <span className="truncate text-fuchsia-600 dark:text-fuchsia-400 font-semibold">
+                  {unpaidPersonalCost > 0 
+                    ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length === 1 ? '1 cursă' : `${unpaidTrips.length} curse`})` 
+                    : (totalPersonalCost > 0 ? (lang === 'en' ? "All settled ✓" : "Toate achitate ✓") : (lang === 'en' ? "0 trips" : "0 curse"))}
+                </span>
+              </div>
             </div>
+
             {onOpenAddPersonalTrip && (
               <button
                 type="button"
@@ -299,19 +309,12 @@ export const DashboardStats = ({
                   e.stopPropagation();
                   onOpenAddPersonalTrip();
                 }}
-                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-fuchsia-100 hover:bg-fuchsia-200 text-fuchsia-700 dark:bg-fuchsia-950/80 dark:hover:bg-fuchsia-900 dark:text-fuchsia-300 border border-fuchsia-300/80 dark:border-fuchsia-700/80 shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0 translate-y-1.5 sm:translate-y-2"
+                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-fuchsia-100 hover:bg-fuchsia-200 text-fuchsia-700 dark:bg-fuchsia-950/80 dark:hover:bg-fuchsia-900 dark:text-fuchsia-300 border border-fuchsia-300/80 dark:border-fuchsia-700/80 shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0 mb-0.5"
                 title="Adaugă rapid cursă personală"
               >
                 <Plus className="w-4.5 h-4.5 stroke-[2.6]" />
               </button>
             )}
-          </div>
-          <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-            <span className="truncate text-fuchsia-600 dark:text-fuchsia-400 font-semibold">
-              {unpaidPersonalCost > 0 
-                ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length === 1 ? '1 cursă' : `${unpaidTrips.length} curse`})` 
-                : (totalPersonalCost > 0 ? (lang === 'en' ? "All settled ✓" : "Toate achitate ✓") : (lang === 'en' ? "0 trips" : "0 curse"))}
-            </span>
           </div>
         </div>
 
