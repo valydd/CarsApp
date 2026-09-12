@@ -12,7 +12,9 @@ import {
   Moon,
   QrCode,
   CloudUpload,
-  ChevronDown
+  ChevronDown,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { translations } from '../i18n';
 import { APP_VERSION } from '../version';
@@ -32,7 +34,9 @@ export const Navbar = ({
   urgentAlertsCount,
   totalAlertsCount = 0,
   pulseAlerts = true,
-  vehiclesCount
+  vehiclesCount,
+  isImmersive = false,
+  onToggleImmersive
 }) => {
   const t = translations[lang];
 
@@ -40,31 +44,33 @@ export const Navbar = ({
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-3 sm:px-6 py-2.5 transition-colors">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
         
-        {/* Row 1 on Mobile / Left side on Desktop: Brand + Fleet Badge */}
-        <div className="flex items-center justify-between gap-2">
-          {/* Logo + Name */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-md shadow-emerald-500/20 text-slate-950 font-black text-base sm:text-lg shrink-0">
-              🚗
+        {/* Row 1 on Mobile / Left side on Desktop: Brand + Language Switcher (Hidden in Immersive Mode) */}
+        {!isImmersive && (
+          <div className="flex items-center justify-between gap-2 transition-all duration-300">
+            {/* Logo + Name */}
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-md shadow-emerald-500/20 text-slate-950 font-black text-base sm:text-lg shrink-0">
+                🚗
+              </div>
+              <h1 className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight shrink-0 flex items-center gap-1.5">
+                <span>{t.appName}</span>
+                <span className="text-[9.5px] font-mono font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/60">
+                  v{APP_VERSION}
+                </span>
+              </h1>
             </div>
-            <h1 className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight shrink-0 flex items-center gap-1.5">
-              <span>{t.appName}</span>
-              <span className="text-[9.5px] font-mono font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/60">
-                v{APP_VERSION}
-              </span>
-            </h1>
-          </div>
 
-          {/* Language Switcher in top right (in place of FLOTĂ) */}
-          <button
-            type="button"
-            onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
-            className="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
-            title="Schimbă limba / Switch language"
-          >
-            <span>{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
-          </button>
-        </div>
+            {/* Language Switcher in top right (in place of FLOTĂ) */}
+            <button
+              type="button"
+              onClick={() => setLang(lang === 'ro' ? 'en' : 'ro')}
+              className="h-8 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-[11px] font-black text-slate-700 dark:text-slate-200 transition-all shadow-2xs flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
+              title="Schimbă limba / Switch language"
+            >
+              <span>{lang === 'ro' ? '🇷🇴 RO' : '🇬🇧 EN'}</span>
+            </button>
+          </div>
+        )}
 
         {/* Center Nav Tabs (Desktop / Tablet) */}
         <nav className="hidden md:flex items-center bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl border border-slate-200 dark:border-slate-700/50">
@@ -189,6 +195,28 @@ export const Navbar = ({
                 <CloudUpload className="w-4 h-4 stroke-[2.2]" />
               </button>
             )}
+
+            {/* Fullscreen / Immersive Scroll Toggle Button (Next to Export) */}
+            <button
+              type="button"
+              onClick={onToggleImmersive}
+              className={`w-8 h-8 rounded-full border transition-all flex items-center justify-center shrink-0 shadow-2xs cursor-pointer active:scale-90 ${
+                isImmersive
+                  ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-emerald-500/20 shadow-sm'
+                  : 'bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400'
+              }`}
+              title={
+                isImmersive
+                  ? (lang === 'en' ? "Restore Header & Navigation Bar" : "Afișează antetul și bara de navigare")
+                  : (lang === 'en' ? "Full Screen Scroll (Hide Header Title & Bottom Bar)" : "Ecran complet (ascunde titlul și bara de jos pentru derulare)")
+              }
+            >
+              {isImmersive ? (
+                <Minimize2 className="w-4 h-4 stroke-[2.2]" />
+              ) : (
+                <Maximize2 className="w-4 h-4 stroke-[2.2]" />
+              )}
+            </button>
 
           </div>
 

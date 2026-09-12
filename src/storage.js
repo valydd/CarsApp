@@ -176,6 +176,22 @@ export const setStoredPulseAlerts = (enabled) => {
   } catch (_) {}
 };
 
+const IMMERSIVE_MODE_KEY = 'carsapp_immersive_mode_v1';
+
+export const getStoredImmersiveMode = () => {
+  try {
+    return localStorage.getItem(IMMERSIVE_MODE_KEY) === 'true';
+  } catch (_) {
+    return false;
+  }
+};
+
+export const setStoredImmersiveMode = (enabled) => {
+  try {
+    localStorage.setItem(IMMERSIVE_MODE_KEY, String(enabled));
+  } catch (_) {}
+};
+
 export const getStoredVehicles = () => {
   try {
     const raw = localStorage.getItem(VEHICLES_KEY);

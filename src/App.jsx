@@ -32,6 +32,8 @@ import {
   setStoredTheme,
   getStoredPulseAlerts,
   setStoredPulseAlerts,
+  getStoredImmersiveMode,
+  setStoredImmersiveMode,
   initNativeDatabase
 } from './storage';
 import { calculateVehicleConsumption, calculateFleetConsumption, getVehicleAlerts, calculateCostRankings } from './utils/calculations';
@@ -63,11 +65,20 @@ export function App() {
   const [selectedVehicleIds, setSelectedVehicleIds] = useState(() => getStoredSelectedVehicleIds(getStoredVehicles()));
   const [activeTab, setActiveTab] = useState('dashboard');
   const [pulseAlerts, setPulseAlerts] = useState(getStoredPulseAlerts);
+  const [isImmersive, setIsImmersive] = useState(getStoredImmersiveMode);
 
   const handleTogglePulseAlerts = () => {
     setPulseAlerts(prev => {
       const next = !prev;
       setStoredPulseAlerts(next);
+      return next;
+    });
+  };
+
+  const handleToggleImmersive = () => {
+    setIsImmersive(prev => {
+      const next = !prev;
+      setStoredImmersiveMode(next);
       return next;
     });
   };
@@ -429,7 +440,9 @@ export function App() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
-      className="min-h-screen bg-slate-100 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 pb-20 md:pb-12 selection:bg-emerald-500 selection:text-slate-950 font-sans transition-colors duration-200 overflow-x-hidden w-full max-w-full"
+      className={`min-h-screen bg-slate-100 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 ${
+        isImmersive ? 'pb-4 md:pb-6' : 'pb-20 md:pb-12'
+      } selection:bg-emerald-500 selection:text-slate-950 font-sans transition-colors duration-200 overflow-x-clip w-full max-w-full`}
     >
       
       {/* Top Navbar */}
@@ -449,6 +462,8 @@ export function App() {
         totalAlertsCount={totalAlertsCount}
         pulseAlerts={pulseAlerts}
         vehiclesCount={vehicles.length}
+        isImmersive={isImmersive}
+        onToggleImmersive={handleToggleImmersive}
       />
 
       {/* Main Container */}
@@ -841,97 +856,99 @@ export function App() {
 
       </main>
 
-      {/* Floating Bottom Navigation Bar for Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-3 py-2 flex items-center justify-around shadow-lg">
-        <button
-          onClick={() => {
-            setActiveTab('dashboard');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-          }}
-          className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-          }`}
-        >
-          <Car className="w-5 h-5" />
-          <span className="text-[10px] mt-1">{t.fleet || (lang === 'en' ? "Fleet" : "Flotă")}</span>
-        </button>
+      {/* Floating Bottom Navigation Bar for Mobile (Hidden in Immersive Mode) */}
+      {!isImmersive && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-3 py-2 flex items-center justify-around shadow-lg animate-in fade-in slide-in-from-bottom duration-200">
+          <button
+            onClick={() => {
+              setActiveTab('dashboard');
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }}
+            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'dashboard' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            <Car className="w-5 h-5" />
+            <span className="text-[10px] mt-1">{t.fleet || (lang === 'en' ? "Fleet" : "Flotă")}</span>
+          </button>
 
-        <button
-          onClick={() => {
-            setActiveTab('rankings');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-          }}
-          className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'rankings' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-          }`}
-        >
-          <BarChart3 className="w-5 h-5" />
-          <span className="text-[10px] mt-1">{t.costs || (lang === 'en' ? "Costs" : "Costuri")}</span>
-        </button>
+          <button
+            onClick={() => {
+              setActiveTab('rankings');
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }}
+            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'rankings' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            <BarChart3 className="w-5 h-5" />
+            <span className="text-[10px] mt-1">{t.costs || (lang === 'en' ? "Costs" : "Costuri")}</span>
+          </button>
 
-        {/* Big Central Floating Add Button */}
-        <button
-          onClick={() => setIsQuickAddOpen(true)}
-          className="relative -top-4 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/40 transform active:scale-95 transition-transform cursor-pointer"
-        >
-          <Plus className="w-6 h-6 stroke-[3]" />
-        </button>
+          {/* Big Central Floating Add Button */}
+          <button
+            onClick={() => setIsQuickAddOpen(true)}
+            className="relative -top-4 w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/40 transform active:scale-95 transition-transform cursor-pointer"
+          >
+            <Plus className="w-6 h-6 stroke-[3]" />
+          </button>
 
-        <button
-          onClick={() => {
-            setActiveTab('records');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-          }}
-          className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'records' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
-          }`}
-        >
-          <History className="w-5 h-5" />
-          <span className="text-[10px] mt-1">{t.log || (lang === 'en' ? "Log" : "Jurnal")}</span>
-        </button>
+          <button
+            onClick={() => {
+              setActiveTab('records');
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }}
+            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'records' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            <History className="w-5 h-5" />
+            <span className="text-[10px] mt-1">{t.log || (lang === 'en' ? "Log" : "Jurnal")}</span>
+          </button>
 
-        <button
-          onClick={() => {
-            setActiveTab('alerts');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-          }}
-          className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none ${
-            totalAlertsCount > 0
-              ? (urgentAlertsCount > 0
-                  ? `text-rose-600 dark:text-rose-400 bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
-                  : `text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
-              : (activeTab === 'alerts' 
-                  ? 'text-emerald-600 dark:text-emerald-400 font-bold border border-transparent' 
-                  : 'text-slate-500 dark:text-slate-400 border border-transparent')
-          }`}
-        >
-          {/* Button-shaped Ripple Rings (exact rounded-xl outline of the button) */}
-          {totalAlertsCount > 0 && pulseAlerts && (
-            <div className="absolute inset-0 pointer-events-none overflow-visible">
-              <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-1 ${
-                urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
-              }`} />
-              <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-2 ${
-                urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
-              }`} />
-            </div>
-          )}
-
-          <div className="relative w-5 h-5 flex items-center justify-center">
-            {totalAlertsCount > 0 ? (
-              <div className="relative w-5 h-5 flex items-center justify-center">
-                <Shield className="w-5 h-5 stroke-[2.2] fill-current/15" />
-                <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black leading-none pt-0.5 text-current">
-                  {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
-                </span>
+          <button
+            onClick={() => {
+              setActiveTab('alerts');
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }}
+            className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none ${
+              totalAlertsCount > 0
+                ? (urgentAlertsCount > 0
+                    ? `text-rose-600 dark:text-rose-400 bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
+                    : `text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
+                : (activeTab === 'alerts' 
+                    ? 'text-emerald-600 dark:text-emerald-400 font-bold border border-transparent' 
+                    : 'text-slate-500 dark:text-slate-400 border border-transparent')
+            }`}
+          >
+            {/* Button-shaped Ripple Rings (exact rounded-xl outline of the button) */}
+            {totalAlertsCount > 0 && pulseAlerts && (
+              <div className="absolute inset-0 pointer-events-none overflow-visible">
+                <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-1 ${
+                  urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
+                }`} />
+                <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-2 ${
+                  urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
+                }`} />
               </div>
-            ) : (
-              <ShieldAlert className="w-5 h-5" />
             )}
-          </div>
-          <span className="text-[10px] mt-1 leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>
-        </button>
-      </div>
+
+            <div className="relative w-5 h-5 flex items-center justify-center">
+              {totalAlertsCount > 0 ? (
+                <div className="relative w-5 h-5 flex items-center justify-center">
+                  <Shield className="w-5 h-5 stroke-[2.2] fill-current/15" />
+                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black leading-none pt-0.5 text-current">
+                    {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
+                  </span>
+                </div>
+              ) : (
+                <ShieldAlert className="w-5 h-5" />
+              )}
+            </div>
+            <span className="text-[10px] mt-1 leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>
+          </button>
+        </div>
+      )}
 
       {/* MODALS */}
       {isQuickAddOpen && (
