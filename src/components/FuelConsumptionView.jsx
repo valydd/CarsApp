@@ -192,143 +192,114 @@ export const FuelConsumptionView = ({
               return (
                 <div
                   key={rec.id}
-                  className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-3.5 space-y-2.5 hover:border-blue-400/40 transition-all shadow-xs"
+                  className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-3 hover:border-blue-400/50 transition-colors shadow-2xs space-y-2"
                 >
-                  {/* RÂNDUL 1: Antet Mașină + Dată/Oră (Stânga) | Butoane Acțiuni (Dreapta) */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-1 min-w-0">
+                  {/* RÂNDUL 1: Mașină [RO AG-51-APK] pe stânga | Suma mare în căsuță + Butoane pe dreapta */}
+                  <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-slate-200/50 dark:border-slate-800/50">
+                    <div className="flex items-center gap-1.5 min-w-0">
                       {veh && (
-                        <div>
-                          <span className="inline-flex items-center bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-2 py-0.5 rounded-md text-[11px] font-mono font-black shadow-xs">
-                            <span className="text-[9px] text-blue-400 dark:text-blue-600 font-bold mr-1 leading-none">RO</span>
-                            <span className="leading-none">{veh.plate}</span>
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>{rec.date}</span>
-                        {recTime && (
-                          <>
-                            <span className="text-slate-300 dark:text-slate-700">•</span>
-                            <Clock className="w-3 h-3 text-blue-500 shrink-0" />
-                            <span className="font-mono">{recTime}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Acțiuni (Edit / Delete) */}
-                    <div className="flex items-center gap-0.5 shrink-0 pt-0.5">
-                      {onEditRecord && (
-                        <button
-                          onClick={() => onEditRecord(rec)}
-                          className="p-1.5 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          title="Editează"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                      {onDeleteRecord && (
-                        <button
-                          onClick={() => {
-                            if (window.confirm(t.confirmDelete || "Ștergi această înregistrare?")) {
-                              onDeleteRecord(rec.id);
-                            }
-                          }}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          title="Șterge"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <span className="whitespace-nowrap shrink-0 inline-flex items-center bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-1.5 py-0.5 text-[11px] font-mono font-black text-slate-800 dark:text-slate-100 shadow-2xs">
+                          <span className="text-[9px] text-blue-500 font-bold mr-1">RO</span>
+                          {veh.plate}
+                        </span>
                       )}
                     </div>
-                  </div>
 
-                  {/* RÂNDUL 2: Rânduri Orizontale Unul Sub Altul (Cost Total, Cantitate, Kilometraj) */}
-                  <div className="bg-slate-50 dark:bg-slate-950/60 rounded-xl px-3 py-1.5 border border-slate-200/60 dark:border-slate-800/60 divide-y divide-slate-200/60 dark:border-slate-800/60">
-                    {/* 1. Cost Total */}
-                    <div className="flex items-center justify-between py-1.5">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                        <DollarSign className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                        <span>{lang === 'en' ? "Total Cost" : "Cost Total"}</span>
-                      </span>
-                      <span className="font-mono font-black text-sm text-emerald-600 dark:text-emerald-400">
+                    {/* Dreapta: Suma mare clară în căsuță + Acțiuni */}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="font-mono font-black text-xs sm:text-sm text-slate-900 dark:text-white whitespace-nowrap bg-white dark:bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
                         {Number(rec.amount).toLocaleString('ro-RO')} RON
                       </span>
-                    </div>
-
-                    {/* 2. Cantitate */}
-                    <div className="flex items-center justify-between py-1.5">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                        <Fuel className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                        <span>{lang === 'en' ? "Quantity" : "Cantitate"}</span>
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-mono font-bold text-xs sm:text-sm text-blue-600 dark:text-blue-400">
-                          {liters > 0 ? `${liters} L` : "—"}
-                        </span>
-                        {pricePerL && (
-                          <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
-                            ({pricePerL} RON/L)
-                          </span>
+                      <div className="flex items-center gap-0.5">
+                        {onEditRecord && (
+                          <button
+                            onClick={() => onEditRecord(rec)}
+                            className="p-1 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                            title="Editează"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {onDeleteRecord && (
+                          <button
+                            onClick={() => {
+                              if (window.confirm(t.confirmDelete || "Ștergi această înregistrare?")) {
+                                onDeleteRecord(rec.id);
+                              }
+                            }}
+                            className="p-1 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                            title="Șterge"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         )}
                       </div>
                     </div>
-
-                    {/* 3. Kilometraj */}
-                    <div className="flex items-center justify-between py-1.5">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                        <Gauge className="w-3.5 h-3.5 text-purple-500 shrink-0" />
-                        <span>{lang === 'en' ? "Odometer" : "Kilometraj"}</span>
-                      </span>
-                      <span className="font-mono font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-200">
-                        {rec.km ? `${Number(rec.km).toLocaleString('ro-RO')} km` : "—"}
-                      </span>
-                    </div>
                   </div>
 
-                  {/* RÂNDUL 3: Badges Combustibil + Rezervor + Șofer + Note */}
-                  <div className="flex items-center justify-between gap-1.5 pt-0.5 flex-wrap">
+                  {/* RÂNDUL 2: Etichete Aliniate Curat: [Tip Carburant] [Plin / Parțial] • [Șofer] */}
+                  <div className="flex items-center gap-1.5 flex-wrap text-[11px] text-slate-500 dark:text-slate-400">
+                    {rec.details?.fuelType === 'gpl' ? (
+                      <span className="whitespace-nowrap shrink-0 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
+                        🟢 GPL
+                      </span>
+                    ) : rec.details?.fuelType === 'petrol' ? (
+                      <span className="whitespace-nowrap shrink-0 bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
+                        ⛽ Benzină
+                      </span>
+                    ) : rec.details?.fuelType === 'diesel' ? (
+                      <span className="whitespace-nowrap shrink-0 bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-black">
+                        ⛽ Diesel
+                      </span>
+                    ) : null}
+
+                    {isFull ? (
+                      <span className="whitespace-nowrap shrink-0 inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold">
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        {lang === 'en' ? "Full" : "Plin"}
+                      </span>
+                    ) : (
+                      <span className="whitespace-nowrap shrink-0 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded text-[9.5px] font-medium">
+                        {lang === 'en' ? "Partial" : "Parțial"}
+                      </span>
+                    )}
+
+                    {veh?.driver && <span>• 👤 {veh.driver}</span>}
+                  </div>
+
+                  {/* RÂNDUL 3: [⛽ Litri Alimentați] • Preț/L pe stânga | [🛣️ Kilometraj] pe dreapta */}
+                  <div className="flex items-center justify-between gap-2 text-xs text-slate-700 dark:text-slate-300 font-semibold pt-0.5">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      {rec.details?.fuelType === 'gpl' ? (
-                        <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-lg text-[10.5px] font-bold">
-                          🟢 GPL
-                        </span>
-                      ) : rec.details?.fuelType === 'petrol' ? (
-                        <span className="inline-flex items-center gap-1 bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-lg text-[10.5px] font-bold">
-                          ⛽ Benzină
-                        </span>
-                      ) : rec.details?.fuelType === 'diesel' ? (
-                        <span className="inline-flex items-center gap-1 bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-lg text-[10.5px] font-bold">
-                          ⛽ Diesel
-                        </span>
-                      ) : null}
-
-                      {isFull ? (
-                        <span className="inline-flex items-center gap-1 bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-lg text-[10.5px] font-bold">
-                          <CheckCircle2 className="w-3 h-3 text-blue-500" />
-                          {lang === 'en' ? "Full tank" : "Plin complet"}
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-lg text-[10px] font-medium">
-                          {lang === 'en' ? "Partial" : "Parțial"}
-                        </span>
-                      )}
-
-                      {veh?.driver && (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 ml-1">
-                          <User className="w-3 h-3 text-slate-400" />
-                          <span>{veh.driver}</span>
+                      <span className="whitespace-nowrap inline-flex items-center text-xs font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/40 px-2 py-0.5 rounded-md">
+                        ⛽ {liters > 0 ? `${liters} Litri` : "Alimentare"}
+                      </span>
+                      {pricePerL && (
+                        <span className="text-slate-600 dark:text-slate-400 text-[11px] whitespace-nowrap">
+                          • {pricePerL} RON/L
                         </span>
                       )}
                     </div>
 
-                    {rec.notes && (
-                      <div className="w-full text-[11px] text-slate-500 dark:text-slate-400 italic bg-slate-100/60 dark:bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-200/40 dark:border-slate-800/40 truncate">
-                        💬 "{rec.notes}"
-                      </div>
+                    {rec.km && (
+                      <span className="whitespace-nowrap font-mono text-[11px] text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200/60 dark:border-slate-800/60 inline-flex items-center gap-1">
+                        🛣️ {Number(rec.km).toLocaleString('ro-RO')} km
+                      </span>
                     )}
+                  </div>
+
+                  {/* RÂNDUL 4: Data • [🕒 Ora] • Note */}
+                  <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pt-0.5 flex-wrap">
+                    <span className="inline-flex items-center gap-1 font-medium whitespace-nowrap">
+                      <Calendar className="w-3 h-3 text-slate-400" />
+                      {rec.date}
+                    </span>
+                    {recTime && (
+                      <span className="inline-flex items-center gap-1 font-mono text-[10.5px] font-semibold text-slate-600 dark:text-slate-300 bg-slate-200/70 dark:bg-slate-800/70 px-1.5 py-0.2 rounded border border-slate-300/50 dark:border-slate-700/50 whitespace-nowrap">
+                        <Clock className="w-2.5 h-2.5 text-blue-500 shrink-0" />
+                        <span>ora {recTime}</span>
+                      </span>
+                    )}
+                    {rec.notes && <span className="truncate italic max-w-xs">• {rec.notes}</span>}
                   </div>
                 </div>
               );
