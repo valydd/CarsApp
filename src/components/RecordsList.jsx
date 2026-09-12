@@ -12,7 +12,8 @@ import {
   Pencil,
   Filter,
   Calendar,
-  Gauge
+  Gauge,
+  Clock
 } from 'lucide-react';
 import { translations } from '../i18n';
 
@@ -126,6 +127,8 @@ export const RecordsList = ({
             const meta = getCategoryMeta(rec.category);
             const Icon = meta.icon;
 
+            const recTime = rec.time || rec.details?.time || (rec.id && rec.id.startsWith('rec-') && !isNaN(Number(rec.id.replace('rec-', ''))) ? new Date(Number(rec.id.replace('rec-', ''))).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : null);
+
             return (
               <div
                 key={rec.id}
@@ -142,7 +145,7 @@ export const RecordsList = ({
                       <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate leading-snug">
                         {rec.title}
                       </h4>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 shadow-2xs">
                           <span className="text-[8px] text-blue-500 font-bold mr-1 leading-none">RO</span>
                           <span className="leading-none">{veh?.plate || '—'}</span>
@@ -151,6 +154,12 @@ export const RecordsList = ({
                           <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
                           {rec.date}
                         </span>
+                        {recTime && (
+                          <span className="text-[10.5px] font-mono text-slate-500 dark:text-slate-400 inline-flex items-center gap-0.5 bg-slate-100 dark:bg-slate-950 px-1.5 py-0.2 rounded border border-slate-200 dark:border-slate-800">
+                            <Clock className="w-2.5 h-2.5 text-slate-400 shrink-0" />
+                            <span>ora {recTime}</span>
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>

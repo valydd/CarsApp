@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Fuel, Plus, TrendingUp, DollarSign, Gauge, Calendar, Trash2, Edit3, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Fuel, Plus, TrendingUp, DollarSign, Gauge, Calendar, Trash2, Edit3, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { translations } from '../i18n';
 import { calculateVehicleConsumption } from '../utils/calculations';
 
@@ -187,6 +187,7 @@ export const FuelConsumptionView = ({
               const liters = Number(rec.details?.liters) || 0;
               const pricePerL = Number(rec.details?.pricePerLiter) || (liters > 0 ? (rec.amount / liters).toFixed(2) : null);
               const isFull = rec.details?.fullTank;
+              const recTime = rec.time || rec.details?.time || (rec.id && rec.id.startsWith('rec-') && !isNaN(Number(rec.id.replace('rec-', ''))) ? new Date(Number(rec.id.replace('rec-', ''))).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : null);
 
               return (
                 <div
@@ -279,11 +280,20 @@ export const FuelConsumptionView = ({
                     )}
                   </div>
 
-                  {/* RÂNDUL 3: Data Calendaristică • Note/Șofer */}
-                  <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pt-0.5">
-                    <span>📅 {rec.date}</span>
+                  {/* RÂNDUL 3: Data Calendaristică • Ora • Note/Șofer */}
+                  <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pt-0.5 flex-wrap">
+                    <span className="inline-flex items-center gap-1 font-medium">
+                      <Calendar className="w-3 h-3 text-slate-400" />
+                      {rec.date}
+                    </span>
+                    {recTime && (
+                      <span className="inline-flex items-center gap-1 font-mono text-[10.5px] font-semibold text-slate-600 dark:text-slate-300 bg-slate-200/70 dark:bg-slate-800/70 px-1.5 py-0.2 rounded border border-slate-300/50 dark:border-slate-700/50">
+                        <Clock className="w-2.5 h-2.5 text-blue-500 shrink-0" />
+                        <span>ora {recTime}</span>
+                      </span>
+                    )}
                     {veh?.driver && <span>• 👤 {veh.driver}</span>}
-                    {rec.notes && <span className="truncate italic">• {rec.notes}</span>}
+                    {rec.notes && <span className="truncate italic max-w-xs">• {rec.notes}</span>}
                   </div>
                 </div>
               );

@@ -159,6 +159,23 @@ export const setStoredTheme = (theme) => {
   localStorage.setItem(THEME_KEY, theme);
 };
 
+const PULSE_ALERTS_KEY = 'carsapp_pulse_alerts_v1';
+
+export const getStoredPulseAlerts = () => {
+  try {
+    const raw = localStorage.getItem(PULSE_ALERTS_KEY);
+    return raw !== null ? raw === 'true' : true;
+  } catch (_) {
+    return true;
+  }
+};
+
+export const setStoredPulseAlerts = (enabled) => {
+  try {
+    localStorage.setItem(PULSE_ALERTS_KEY, String(enabled));
+  } catch (_) {}
+};
+
 export const getStoredVehicles = () => {
   try {
     const raw = localStorage.getItem(VEHICLES_KEY);

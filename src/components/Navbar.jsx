@@ -25,6 +25,7 @@ export const Navbar = ({
   onOpenExport,
   urgentAlertsCount,
   totalAlertsCount = 0,
+  pulseAlerts = true,
   vehiclesCount
 }) => {
   const t = translations[lang];
@@ -118,10 +119,14 @@ export const Navbar = ({
             {t.alerts}
             {totalAlertsCount > 0 && (
               <span className="relative flex items-center justify-center ml-0.5">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                  urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
-                }`} />
-                <span className={`relative inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black text-white shadow-xs animate-pulse leading-none ${
+                {pulseAlerts && (
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                  }`} />
+                )}
+                <span className={`relative inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black text-white shadow-xs leading-none ${
+                  pulseAlerts ? 'animate-pulse' : ''
+                } ${
                   urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
                 }`}>
                   {totalAlertsCount > 99 ? '99+' : totalAlertsCount}

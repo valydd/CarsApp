@@ -30,6 +30,8 @@ import {
   setStoredLanguage,
   getStoredTheme,
   setStoredTheme,
+  getStoredPulseAlerts,
+  setStoredPulseAlerts,
   initNativeDatabase
 } from './storage';
 import { calculateVehicleConsumption, calculateFleetConsumption, getVehicleAlerts, calculateCostRankings } from './utils/calculations';
@@ -47,7 +49,9 @@ import {
   Sparkles,
   ChevronRight,
   ArrowLeft,
-  AlertTriangle
+  AlertTriangle,
+  Bell,
+  BellOff
 } from 'lucide-react';
 
 export function App() {
@@ -57,6 +61,15 @@ export function App() {
   const [records, setRecords] = useState(getStoredRecords());
   const [selectedVehicleIds, setSelectedVehicleIds] = useState(() => getStoredSelectedVehicleIds(getStoredVehicles()));
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [pulseAlerts, setPulseAlerts] = useState(getStoredPulseAlerts);
+
+  const handleTogglePulseAlerts = () => {
+    setPulseAlerts(prev => {
+      const next = !prev;
+      setStoredPulseAlerts(next);
+      return next;
+    });
+  };
 
   // Modals
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
@@ -430,6 +443,7 @@ export function App() {
         onOpenExport={() => setIsExportOpen(true)}
         urgentAlertsCount={urgentAlertsCount}
         totalAlertsCount={totalAlertsCount}
+        pulseAlerts={pulseAlerts}
         vehiclesCount={vehicles.length}
       />
 
@@ -586,6 +600,45 @@ export function App() {
                 {t.alertsTitle || (lang === 'en' ? "Deadlines & Alerts" : "Atenționări la Scadență")}
               </h2>
             </div>
+
+            {/* Opțiune Activare / Oprire Pulsare Bulină Atenționare */}
+            <div className="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-2xs">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className={`p-2 rounded-xl shrink-0 ${pulseAlerts ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                  {pulseAlerts ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span>{lang === 'en' ? "Pulsing Alert Dot" : "Pulsare Bulină Atenționare"}</span>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${pulseAlerts ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
+                      {pulseAlerts ? (lang === 'en' ? "ACTIVE" : "ACTIV") : (lang === 'en' ? "STOPPED" : "OPRIT")}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                    {pulseAlerts 
+                      ? (lang === 'en' ? "Alert dot pulses on bottom icon" : "Bulina pulsează la iconița din bara de jos") 
+                      : (lang === 'en' ? "Alert dot is static (pulsing disabled)" : "Pulsarea este oprită, bulina rămâne statică")}
+                  </p>
+                </div>
+              </div>
+
+              {/* Modern Toggle Switch */}
+              <button
+                type="button"
+                onClick={handleTogglePulseAlerts}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                  pulseAlerts ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'
+                }`}
+                title={pulseAlerts ? "Oprește pulsarea bulinei" : "Activează pulsarea bulinei"}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                    pulseAlerts ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
             <AlertsBanner
               vehicles={activeVehicles.length > 0 ? activeVehicles : vehicles}
               onSelectVehicle={(vId) => setSelectedVehicleIds([vId])}
@@ -856,11 +909,15 @@ export function App() {
             {totalAlertsCount > 0 && (
               <span className="absolute -top-1.5 -right-3 flex items-center justify-center pointer-events-none">
                 {/* Bulină pulsantă efect radar/ping */}
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                  urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
-                }`} />
+                {pulseAlerts && (
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                  }`} />
+                )}
                 {/* Bulină vizibilă cu numărul de alerte */}
-                <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900 animate-pulse leading-none select-none ${
+                <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white shadow-md ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
+                  pulseAlerts ? 'animate-pulse' : ''
+                } ${
                   urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
                 }`}>
                   {totalAlertsCount > 99 ? '99+' : totalAlertsCount}

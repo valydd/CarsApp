@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Utility for parsing fuel receipts from QR codes, barcodes, or OCR text.
  * Specifically tuned for Romanian fiscal receipts (OMV, Petrom, Rompetrol, MOL, Lukoil, Socar etc.)
  */
@@ -105,6 +105,24 @@ export const parseReceiptText = (rawText) => {
     detectedDate = new Date().toISOString().slice(0, 10);
   }
 
+  // Detect Time if present: e.g. "ORA: 14:35", "14:35:20", "14:35"
+  let detectedTime = null;
+  const timeRegexPatterns = [
+    /(?:ORA|TIME|H|OR[AĂ])[:\s]*([0-2]?[0-9]:[0-5][0-9](?::[0-5][0-9])?)/i,
+    /\b([0-2][0-9]:[0-5][0-9](?::[0-5][0-9])?)\b/
+  ];
+  for (const tPattern of timeRegexPatterns) {
+    const tMatch = text.match(tPattern);
+    if (tMatch && tMatch[1]) {
+      const tVal = tMatch[1].slice(0, 5);
+      const [h, m] = tVal.split(':').map(Number);
+      if (h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+        detectedTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        break;
+      }
+    }
+  }
+
   // 4. Detect Quantity / Liters and Unit Price
   // Patterns like: "35.500 L", "35.50 L", "35.500 X 7.25", "35,50 LTR"
   const lines = text.split('\n');
@@ -187,6 +205,7 @@ export const parseReceiptText = (rawText) => {
     pricePerLiter: detectedPricePerLiter ? detectedPricePerLiter.toString() : '',
     fuelType: detectedFuelType, // 'petrol', 'diesel', 'gpl' or null
     date: detectedDate,
+    time: detectedTime,
     station: detectedStation,
     rawText: text
   };

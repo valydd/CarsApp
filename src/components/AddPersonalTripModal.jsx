@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Navigation, Calendar, Gauge, Fuel, DollarSign, Check, AlertCircle, ScanLine, Camera } from 'lucide-react';
+import { X, Navigation, Calendar, Gauge, Fuel, DollarSign, Check, AlertCircle, ScanLine, Camera, Clock } from 'lucide-react';
 import { translations } from '../i18n';
 import { calculateVehicleConsumption } from '../utils/calculations';
 import { ReceiptScanModal } from './ReceiptScanModal';
@@ -16,10 +16,16 @@ export const AddPersonalTripModal = ({
 }) => {
   const t = translations[lang] || translations.ro;
 
+  const getCurrentTimeStr = () => {
+    const now = new Date();
+    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  };
+
   const [vehicleId, setVehicleId] = useState('');
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [tripTime, setTripTime] = useState(getCurrentTimeStr());
   const [startKm, setStartKm] = useState('');
   const [endKm, setEndKm] = useState('');
   const [customAvgL100, setCustomAvgL100] = useState('');
@@ -60,6 +66,9 @@ export const AddPersonalTripModal = ({
     setScannedReceipt(data);
     if (data.date) {
       handleStartDateChange(data.date);
+    }
+    if (data.time) {
+      setTripTime(data.time);
     }
     if (data.pricePerLiter) {
       setCustomFuelPrice(data.pricePerLiter.toString());
@@ -104,6 +113,7 @@ export const AddPersonalTripModal = ({
       setTitle(tripToEdit.title || '');
       setStartDate(tripToEdit.startDate || '');
       setEndDate(tripToEdit.endDate || '');
+      setTripTime(tripToEdit.time || (tripToEdit.createdAt ? new Date(tripToEdit.createdAt).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : getCurrentTimeStr()));
       setStartKm(tripToEdit.startKm ? String(tripToEdit.startKm) : '');
       setEndKm(tripToEdit.endKm ? String(tripToEdit.endKm) : '');
       setCustomAvgL100(tripToEdit.avgL100 ? String(tripToEdit.avgL100) : '');
@@ -118,6 +128,7 @@ export const AddPersonalTripModal = ({
       setTitle(lang === 'en' ? `Weekend Trip (${formattedToday})` : `Cursă Weekend (${formattedToday})`);
       setStartDate(todayStr);
       setEndDate(todayStr);
+      setTripTime(getCurrentTimeStr());
       setStartKm('');
       setEndKm('');
       setCustomAvgL100('');
@@ -164,7 +175,7 @@ export const AddPersonalTripModal = ({
       tripCost: calculatedCost,
       isPaid: Boolean(isPaid),
       notes: notes.trim(),
-      time: tripToEdit?.time || timeStr,
+      time: tripTime || timeStr,
       createdAt: tripToEdit?.createdAt || now.toISOString(),
       updatedAt: now.toISOString()
     };
@@ -314,31 +325,43 @@ export const AddPersonalTripModal = ({
             />
           </div>
 
-          {/* 3. Dates (Start & End) */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* 3. Dates & Time (Start Date, Ora, End Date) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-purple-500" />
-                <span>{lang === 'en' ? "Start Date" : "Data Început"}</span>
+                <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
+                <span className="truncate">{lang === 'en' ? "Start Date" : "Data Început"}</span>
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => handleStartDateChange(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
                 required
               />
             </div>
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-purple-500" />
-                <span>{lang === 'en' ? "End Date" : "Data Sfârșit"}</span>
+                <Clock className="w-3 h-3 text-purple-500 shrink-0" />
+                <span className="truncate">{lang === 'en' ? "Time" : "Ora Cursă"}</span>
+              </label>
+              <input
+                type="time"
+                value={tripTime}
+                onChange={(e) => setTripTime(e.target.value)}
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
+              />
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
+                <span className="truncate">{lang === 'en' ? "End Date" : "Data Sfârșit"}</span>
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
                 required
               />
             </div>

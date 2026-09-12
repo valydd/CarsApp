@@ -15,7 +15,8 @@ import {
   Sparkles,
   Info,
   ScanLine,
-  Camera
+  Camera,
+  Clock
 } from 'lucide-react';
 import { translations } from '../i18n';
 import confetti from 'canvas-confetti';
@@ -38,7 +39,12 @@ export const QuickAddModal = ({
   const [category, setCategory] = useState(defaultCategory || 'fuel');
   
   // Common fields
+  const getCurrentTimeStr = () => {
+    const now = new Date();
+    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  };
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [time, setTime] = useState(getCurrentTimeStr());
   const [km, setKm] = useState('');
   const [amount, setAmount] = useState('');
   const [notes, setNotes] = useState('');
@@ -58,6 +64,7 @@ export const QuickAddModal = ({
     if (scanned.liters) setLiters(scanned.liters.toString());
     if (scanned.pricePerLiter) setPricePerLiter(scanned.pricePerLiter.toString());
     if (scanned.date) setDate(scanned.date);
+    if (scanned.time) setTime(scanned.time);
     if (scanned.fuelType) setFuelSubType(scanned.fuelType);
     if (scanned.station) {
       if (!title) {
@@ -106,6 +113,8 @@ export const QuickAddModal = ({
       setVehicleId(recordToEdit.vehicleId || (vehicles[0]?.id || ''));
       setCategory(recordToEdit.category || 'fuel');
       setDate(recordToEdit.date || new Date().toISOString().slice(0, 10));
+      const editTime = recordToEdit.time || (recordToEdit.details?.time) || (recordToEdit.id && recordToEdit.id.startsWith('rec-') && !isNaN(Number(recordToEdit.id.replace('rec-', ''))) ? new Date(Number(recordToEdit.id.replace('rec-', ''))).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : getCurrentTimeStr());
+      setTime(editTime);
       setKm(recordToEdit.km !== undefined && recordToEdit.km !== null ? recordToEdit.km.toString() : '');
       setAmount(recordToEdit.amount !== undefined && recordToEdit.amount !== null ? recordToEdit.amount.toString() : '');
       setNotes(recordToEdit.notes || '');
@@ -164,6 +173,7 @@ export const QuickAddModal = ({
         setFuelSubType('petrol');
       }
       setDate(new Date().toISOString().slice(0, 10));
+      setTime(getCurrentTimeStr());
       setAmount('');
       setNotes('');
       setTitle('');
@@ -185,6 +195,7 @@ export const QuickAddModal = ({
         setKm(vehicles[0].currentKm.toString());
       }
       setDate(new Date().toISOString().slice(0, 10));
+      setTime(getCurrentTimeStr());
       setAmount('');
       setNotes('');
       setTitle('');
@@ -311,11 +322,12 @@ export const QuickAddModal = ({
       vehicleId,
       category,
       date,
+      time: time || getCurrentTimeStr(),
       km: parseInt(km) || 0,
       amount: parseFloat(amount),
       currency: "RON",
       title: defaultTitle,
-      details,
+      details: { ...details, time: time || getCurrentTimeStr() },
       notes
     };
 
@@ -438,11 +450,11 @@ export const QuickAddModal = ({
             </div>
           </div>
 
-          {/* 3. Essential Numbers (Amount, Date, Km) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
+          {/* 3. Essential Numbers (Amount, Date, Ora, Km) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
             {/* Amount */}
-            <div>
-              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                 {t.totalAmount} (RON) *
               </label>
               <div className="relative">
@@ -461,21 +473,35 @@ export const QuickAddModal = ({
 
             {/* Date */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                 {t.date}
               </label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
+                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
                 required
               />
             </div>
 
-            {/* Km */}
+            {/* Time (Ora) */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate flex items-center gap-1">
+                <Clock className="w-3 h-3 text-blue-500 shrink-0" />
+                <span>Ora</span>
+              </label>
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
+              />
+            </div>
+
+            {/* Km */}
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                 {t.currentKm}
               </label>
               <input
