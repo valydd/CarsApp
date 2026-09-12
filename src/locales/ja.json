@@ -274,5 +274,19 @@
   "totalServices": "点検総額",
   "noRecordsFound": "選択された車両の請求書または作業記録はありません。",
   "paidBadge": "精算済",
-  "unpaidBadge": "未精算"
+  "unpaidBadge": "未精算",
+  "costAnalysis": "費用分析",
+  "viewFleet": "全車両表示",
+  "unassigned": "未割り当て",
+  "vehiclesInFleetAnalysis": "台の車両を分析中",
+  "totalExpenses": "総支出",
+  "allCategories": "すべて",
+  "noRecordsForFilters": "選択した条件に該当する記録はありません。",
+  "distributionByCategory": "カテゴリー別支出割合",
+  "tapForDetails": "タップして詳細を表示",
+  "totalRecorded": "記録総額",
+  "noExpensesRecorded": "支出記録はありません。",
+  "tapToOpen": "タップして開く",
+  "total": "合計",
+  "tap": "タップ"
 }

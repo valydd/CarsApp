@@ -274,5 +274,19 @@
   "totalServices": "Wartungen gesamt",
   "noRecordsFound": "Keine Rechnungen oder Wartungen für die ausgewählten Fahrzeuge erfasst.",
   "paidBadge": "Bezahlt",
-  "unpaidBadge": "Offen"
+  "unpaidBadge": "Offen",
+  "costAnalysis": "Kostenanalyse",
+  "viewFleet": "Fuhrpark ansehen",
+  "unassigned": "Nicht zugewiesen",
+  "vehiclesInFleetAnalysis": "Fahrzeuge in Fuhrparkanalyse",
+  "totalExpenses": "Gesamtausgaben",
+  "allCategories": "Alle",
+  "noRecordsForFilters": "Keine Einträge für die ausgewählten Filter gefunden.",
+  "distributionByCategory": "Verteilung nach Kategorien",
+  "tapForDetails": "Tippen für Details",
+  "totalRecorded": "Erfasst gesamt",
+  "noExpensesRecorded": "Keine Ausgaben erfasst.",
+  "tapToOpen": "Tippen zum Öffnen",
+  "total": "Gesamt",
+  "tap": "Tippen"
 }

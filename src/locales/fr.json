@@ -274,5 +274,19 @@
   "totalServices": "Total entretiens",
   "noRecordsFound": "Aucune facture ou intervention enregistrée pour les véhicules sélectionnés.",
   "paidBadge": "Réglé",
-  "unpaidBadge": "À Régler"
+  "unpaidBadge": "À Régler",
+  "costAnalysis": "Analyse des Coûts",
+  "viewFleet": "Voir la Flotte",
+  "unassigned": "Non assigné",
+  "vehiclesInFleetAnalysis": "véhicules en analyse de flotte",
+  "totalExpenses": "Total Dépenses",
+  "allCategories": "Toutes",
+  "noRecordsForFilters": "Aucun enregistrement trouvé pour les filtres sélectionnés.",
+  "distributionByCategory": "Répartition par Catégorie",
+  "tapForDetails": "Appuyez pour les détails",
+  "totalRecorded": "Total enregistré",
+  "noExpensesRecorded": "Aucune dépense enregistrée.",
+  "tapToOpen": "Appuyez pour ouvrir",
+  "total": "Total",
+  "tap": "Appuyez"
 }

@@ -274,5 +274,19 @@
   "totalServices": "Totale onderhoudsbeurten",
   "noRecordsFound": "Geen facturen of onderhoud geregistreerd voor de geselecteerde voertuigen.",
   "paidBadge": "Betaald",
-  "unpaidBadge": "Openstaand"
+  "unpaidBadge": "Openstaand",
+  "costAnalysis": "Kostenanalyse",
+  "viewFleet": "Wagenpark Bekijken",
+  "unassigned": "Niet toegewezen",
+  "vehiclesInFleetAnalysis": "voertuigen in analyse",
+  "totalExpenses": "Totale Uitgaven",
+  "allCategories": "Alle",
+  "noRecordsForFilters": "Geen gegevens gevonden voor de geselecteerde filters.",
+  "distributionByCategory": "Verdeling per Categorie",
+  "tapForDetails": "Tik voor details",
+  "totalRecorded": "Totaal geregistreerd",
+  "noExpensesRecorded": "Geen uitgaven geregistreerd.",
+  "tapToOpen": "Tik om te openen",
+  "total": "Totaal",
+  "tap": "Tik"
 }

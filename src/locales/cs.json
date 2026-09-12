@@ -274,5 +274,19 @@
   "totalServices": "Servisy celkem",
   "noRecordsFound": "Pro vybraná vozidla nejsou evidovány žádné faktury ani servisní záznamy.",
   "paidBadge": "Uhrazeno",
-  "unpaidBadge": "K Úhradě"
+  "unpaidBadge": "K Úhradě",
+  "costAnalysis": "Analýza Nákladů",
+  "viewFleet": "Zobrazit Vozový Park",
+  "unassigned": "Nepřiřazeno",
+  "vehiclesInFleetAnalysis": "vozidel v analýze",
+  "totalExpenses": "Celkové Výdaje",
+  "allCategories": "Vše",
+  "noRecordsForFilters": "Pro vybrané filtry nebyly nalezeny žádné záznamy.",
+  "distributionByCategory": "Rozdělení podle Kategorií",
+  "tapForDetails": "Klepněte pro podrobnosti",
+  "totalRecorded": "Celkem evidováno",
+  "noExpensesRecorded": "Nejsou evidovány žádné výdaje.",
+  "tapToOpen": "Klepnutím otevřete",
+  "total": "Celkem",
+  "tap": "Klepněte"
 }

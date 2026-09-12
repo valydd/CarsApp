@@ -274,5 +274,19 @@
   "totalServices": "Totale tagliandi",
   "noRecordsFound": "Nessuna fattura o intervento registrato per i veicoli selezionati.",
   "paidBadge": "Saldato",
-  "unpaidBadge": "Da Saldare"
+  "unpaidBadge": "Da Saldare",
+  "costAnalysis": "Analisi dei Costi",
+  "viewFleet": "Vedi Flotta",
+  "unassigned": "Non assegnato",
+  "vehiclesInFleetAnalysis": "veicoli nell'analisi flotta",
+  "totalExpenses": "Spese Totali",
+  "allCategories": "Tutte",
+  "noRecordsForFilters": "Nessun dato trovato per i filtri selezionati.",
+  "distributionByCategory": "Distribuzione per Categoria",
+  "tapForDetails": "Tocca per i dettagli",
+  "totalRecorded": "Totale registrato",
+  "noExpensesRecorded": "Nessuna spesa registrata.",
+  "tapToOpen": "Tocca per aprire",
+  "total": "Totale",
+  "tap": "Tocca"
 }

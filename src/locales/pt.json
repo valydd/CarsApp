@@ -274,5 +274,19 @@
   "totalServices": "Total de revisões",
   "noRecordsFound": "Nenhuma fatura ou intervenção registada para os veículos selecionados.",
   "paidBadge": "Pago",
-  "unpaidBadge": "Pendente"
+  "unpaidBadge": "Pendente",
+  "costAnalysis": "Análise de Custos",
+  "viewFleet": "Ver Frota",
+  "unassigned": "Não atribuído",
+  "vehiclesInFleetAnalysis": "veículos em análise de frota",
+  "totalExpenses": "Despesas Totais",
+  "allCategories": "Todas",
+  "noRecordsForFilters": "Nenhum registo encontrado para os filtros selecionados.",
+  "distributionByCategory": "Distribuição por Categorias",
+  "tapForDetails": "Toque para ver detalhes",
+  "totalRecorded": "Total registado",
+  "noExpensesRecorded": "Nenhuma despesa registada.",
+  "tapToOpen": "Toque para abrir",
+  "total": "Total",
+  "tap": "Toque"
 }

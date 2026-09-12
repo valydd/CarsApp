@@ -274,5 +274,19 @@
   "totalServices": "Total revizii",
   "noRecordsFound": "Nu există facturi sau intervenții înregistrate pentru mașinile selectate.",
   "paidBadge": "Achitat",
-  "unpaidBadge": "De Achitat"
+  "unpaidBadge": "De Achitat",
+  "costAnalysis": "Analiză Costuri",
+  "viewFleet": "Vezi Flota",
+  "unassigned": "Neatribuit",
+  "vehiclesInFleetAnalysis": "vehicule în analiză flotă",
+  "totalExpenses": "Total Cheltuieli",
+  "allCategories": "Toate",
+  "noRecordsForFilters": "Nu există înregistrări pentru filtrele selectate.",
+  "distributionByCategory": "Distribuție pe Categorii",
+  "tapForDetails": "Apasă pentru detalii",
+  "totalRecorded": "Total înregistrat",
+  "noExpensesRecorded": "Nu există cheltuieli înregistrate.",
+  "tapToOpen": "Apasă pentru a deschide",
+  "total": "Total",
+  "tap": "Apasă"
 }

@@ -274,5 +274,19 @@
   "totalServices": "총 점검비",
   "noRecordsFound": "선택된 차량에 대한 영수증 또는 정비 기록이 없습니다.",
   "paidBadge": "정산완료",
-  "unpaidBadge": "미정산"
+  "unpaidBadge": "미정산",
+  "costAnalysis": "비용 분석",
+  "viewFleet": "전체 차량 보기",
+  "unassigned": "미지정",
+  "vehiclesInFleetAnalysis": "대 차량 분석 중",
+  "totalExpenses": "총 지출",
+  "allCategories": "전체",
+  "noRecordsForFilters": "선택한 필터에 해당하는 기록이 없습니다.",
+  "distributionByCategory": "카테고리별 지출 비중",
+  "tapForDetails": "상세보기를 위해 탭하세요",
+  "totalRecorded": "총 기록 금액",
+  "noExpensesRecorded": "기록된 지출이 없습니다.",
+  "tapToOpen": "열려면 탭하세요",
+  "total": "합계",
+  "tap": "탭"
 }

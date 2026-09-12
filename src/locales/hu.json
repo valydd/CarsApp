@@ -274,5 +274,19 @@
   "totalServices": "Szervizek összesen",
   "noRecordsFound": "Nincsenek rögzített számlák vagy szervizek a kiválasztott járművekhez.",
   "paidBadge": "Kifizetve",
-  "unpaidBadge": "Fizetendő"
+  "unpaidBadge": "Fizetendő",
+  "costAnalysis": "Költségelemzés",
+  "viewFleet": "Flotta Megtekintése",
+  "unassigned": "Nincs hozzárendelve",
+  "vehiclesInFleetAnalysis": "jármű a flottastatisztikában",
+  "totalExpenses": "Összes Kiadás",
+  "allCategories": "Összes",
+  "noRecordsForFilters": "Nincs bejegyzés a kiválasztott szűrőkhöz.",
+  "distributionByCategory": "Kategóriánkénti Megoszlás",
+  "tapForDetails": "Koppintson a részletekért",
+  "totalRecorded": "Összesen rögzítve",
+  "noExpensesRecorded": "Nincsenek rögzített kiadások.",
+  "tapToOpen": "Koppintson a megnyitáshoz",
+  "total": "Összesen",
+  "tap": "Koppintson"
 }

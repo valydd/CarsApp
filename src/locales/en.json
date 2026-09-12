@@ -274,5 +274,19 @@
   "totalServices": "Total services",
   "noRecordsFound": "No invoices or services recorded for the selected vehicles.",
   "paidBadge": "Paid",
-  "unpaidBadge": "Unpaid"
+  "unpaidBadge": "Unpaid",
+  "costAnalysis": "Cost Analysis",
+  "viewFleet": "View Fleet",
+  "unassigned": "Unassigned",
+  "vehiclesInFleetAnalysis": "vehicles in fleet analysis",
+  "totalExpenses": "Total Expenses",
+  "allCategories": "All",
+  "noRecordsForFilters": "No records found for the selected filters.",
+  "distributionByCategory": "Distribution by Category",
+  "tapForDetails": "Tap for details",
+  "totalRecorded": "Total recorded",
+  "noExpensesRecorded": "No expenses recorded.",
+  "tapToOpen": "Tap to open",
+  "total": "Total",
+  "tap": "Tap"
 }

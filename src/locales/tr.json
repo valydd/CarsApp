@@ -274,5 +274,19 @@
   "totalServices": "Toplam bakımlar",
   "noRecordsFound": "Seçilen araçlar için kayıtlı fatura veya müdahale yok.",
   "paidBadge": "Ödendi",
-  "unpaidBadge": "Ödenmedi"
+  "unpaidBadge": "Ödenmedi",
+  "costAnalysis": "Maliyet Analizi",
+  "viewFleet": "Filoyu Gör",
+  "unassigned": "Atanmamış",
+  "vehiclesInFleetAnalysis": "araç filo analizinde",
+  "totalExpenses": "Toplam Giderler",
+  "allCategories": "Tümü",
+  "noRecordsForFilters": "Seçilen filtreler için kayıt bulunamadı.",
+  "distributionByCategory": "Kategoriye Göre Dağılım",
+  "tapForDetails": "Ayrıntılar için dokunun",
+  "totalRecorded": "Toplam kaydedilen",
+  "noExpensesRecorded": "Kayıtlı harcama yok.",
+  "tapToOpen": "Açmak için dokunun",
+  "total": "Toplam",
+  "tap": "Dokun"
 }

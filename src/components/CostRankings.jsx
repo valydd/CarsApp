@@ -19,7 +19,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
   const [filterCategory, setFilterCategory] = useState('all');
   const [timePeriod, setTimePeriod] = useState('all');
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
 
   const activeVeh = selectedVehicleId ? vehicles.find(v => v.id === selectedVehicleId) : null;
   const targetVehicles = selectedVehicleId ? (activeVeh ? [activeVeh] : vehicles) : vehicles;
@@ -76,7 +76,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                  {selectedVehicleId && activeVeh ? `Analiză Costuri: ${activeVeh.plate}` : "Clasament & Analiză Costuri"}
+                  {selectedVehicleId && activeVeh ? `${t.costAnalysis || 'Analiză Costuri'}: ${activeVeh.plate}` : (t.rankingsTitle || "Clasament & Analiză Costuri")}
                 </h2>
                 {selectedVehicleId && activeVeh && (
                   <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
@@ -86,8 +86,8 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                 {selectedVehicleId && activeVeh 
-                  ? `Șofer: ${activeVeh.driver || "Neatribuit"} • ${activeVeh.currentKm ? `${activeVeh.currentKm.toLocaleString()} km` : ''}` 
-                  : `${targetVehicles.length} vehicule în analiză flotă`}
+                  ? `${t.driverLabel || "Șofer"}: ${activeVeh.driver || (t.unassigned || "Neatribuit")} • ${activeVeh.currentKm ? `${activeVeh.currentKm.toLocaleString()} km` : ''}` 
+                  : `${targetVehicles.length} ${t.vehiclesInFleetAnalysis || "vehicule în analiză flotă"}`}
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                 onClick={() => onSelectVehicle(null)}
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-[11px] font-black border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-100 transition-all cursor-pointer shrink-0"
               >
-                <span>👥 Vezi Flota</span>
+                <span>👥 {t.viewFleet || "Vezi Flota"}</span>
               </button>
             )}
 
@@ -120,7 +120,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
         <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-baseline justify-between gap-3">
           <div>
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
-              {selectedVehicleId && activeVeh ? `Total Cheltuieli ${activeVeh.plate}` : "Total Cheltuieli Flotă"}
+              {selectedVehicleId && activeVeh ? `${t.totalExpenses || "Total Cheltuieli"} ${activeVeh.plate}` : (t.totalFleetCost || "Total Cheltuieli Flotă")}
             </span>
             <div className="text-2xl sm:text-3xl font-mono font-black text-slate-900 dark:text-white tracking-tight flex items-baseline gap-1.5 mt-0.5">
               <span>{grandTotal.toLocaleString('ro-RO')}</span>
@@ -131,7 +131,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
           {filterCategory === 'repair' && (
             <div className="text-right">
               <span className="text-[10px] font-black uppercase tracking-wider text-rose-500 block">
-                Total Reparații
+                {t.totalRepairs || "Total Reparații"}
               </span>
               <div className="text-lg sm:text-xl font-mono font-black text-rose-600 dark:text-rose-400">
                 {grandRepairTotal.toLocaleString('ro-RO')} RON
@@ -147,12 +147,12 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
           className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 overscroll-x-contain"
         >
           {[
-            { key: 'all', label: '📊 Toate', activeClass: 'bg-emerald-500 text-slate-950 font-black' },
-            { key: 'repair', label: '🔧 Reparații', activeClass: 'bg-rose-500 text-white font-black' },
-            { key: 'service', label: '🛢️ Revizii', activeClass: 'bg-amber-500 text-slate-950 font-black' },
-            { key: 'tires', label: '🛞 Anvelope', activeClass: 'bg-cyan-500 text-slate-950 font-black' },
-            { key: 'fuel', label: '⛽ Carburant', activeClass: 'bg-sky-500 text-white font-black' },
-            { key: 'insurance', label: '📋 Asigurări', activeClass: 'bg-teal-500 text-white font-black' },
+            { key: 'all', label: `📊 ${t.allCategories || 'Toate'}`, activeClass: 'bg-emerald-500 text-slate-950 font-black' },
+            { key: 'repair', label: `🔧 ${t.repairsAndParts || 'Reparații'}`, activeClass: 'bg-rose-500 text-white font-black' },
+            { key: 'service', label: `🛢️ ${t.servicesAndOil || 'Revizii'}`, activeClass: 'bg-amber-500 text-slate-950 font-black' },
+            { key: 'tires', label: `🛞 ${t.tiresAndWheels || 'Anvelope'}`, activeClass: 'bg-cyan-500 text-slate-950 font-black' },
+            { key: 'fuel', label: `⛽ ${t.fuelConsumption || 'Carburant'}`, activeClass: 'bg-sky-500 text-white font-black' },
+            { key: 'insurance', label: `📋 ${t.mandatoryInsurance || 'Asigurări'}`, activeClass: 'bg-teal-500 text-white font-black' },
           ].map(btn => {
             const isActive = filterCategory === btn.key;
             return (
@@ -179,7 +179,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
         <div className="lg:col-span-2 space-y-3">
           {rankings.length === 0 ? (
             <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center text-slate-500 dark:text-slate-400 shadow-sm">
-              Nu există înregistrări pentru filtrele selectate.
+              {t.noRecordsForFilters || "Nu există înregistrări pentru filtrele selectate."}
             </div>
           ) : (
             rankings.map((item, index) => {
@@ -224,7 +224,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                           ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30'
                           : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30'
                       }`}>
-                        {percentage}% din total
+                        {percentage}% {t.percentageOfTotal || "din total"}
                       </span>
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                   {/* RÂNDUL 2: Detalii mașină (Șofer, km) */}
                   <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-0.5">
                     <span className="truncate">
-                      👤 Șofer: <strong className="text-slate-700 dark:text-slate-200">{vehicle.driver || "Neatribuit"}</strong>
+                      👤 {t.driverLabel || "Șofer"}: <strong className="text-slate-700 dark:text-slate-200">{vehicle.driver || (t.unassigned || "Neatribuit")}</strong>
                     </span>
                     {vehicle.currentKm ? (
                       <span className="shrink-0 font-mono text-[11px]">
@@ -259,27 +259,27 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                   <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[10.5px] text-slate-600 dark:text-slate-300">
                     {repairCost > 0 && (
                       <span className="bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2 py-0.5 rounded-md border border-rose-200 dark:border-rose-500/20 font-medium">
-                        🔧 Reparații: <strong>{repairCost.toLocaleString('ro-RO')} lei</strong>
+                        🔧 {t.repairsAndParts || "Reparații"}: <strong>{repairCost.toLocaleString('ro-RO')} lei</strong>
                       </span>
                     )}
                     {serviceCost > 0 && (
                       <span className="bg-amber-50 dark:bg-amber-500/10 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-500/20 font-medium">
-                        🛢️ Revizii: <strong>{serviceCost.toLocaleString('ro-RO')} lei</strong>
+                        🛢️ {t.servicesAndOil || "Revizii"}: <strong>{serviceCost.toLocaleString('ro-RO')} lei</strong>
                       </span>
                     )}
                     {tiresCost > 0 && (
                       <span className="bg-cyan-50 dark:bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 px-2 py-0.5 rounded-md border border-cyan-200 dark:border-cyan-500/20 font-medium">
-                        🛞 Anvelope: <strong>{tiresCost.toLocaleString('ro-RO')} lei</strong>
+                        🛞 {t.tiresAndWheels || "Anvelope"}: <strong>{tiresCost.toLocaleString('ro-RO')} lei</strong>
                       </span>
                     )}
                     {fuelCost > 0 && (
                       <span className="bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-300 px-2 py-0.5 rounded-md border border-sky-200 dark:border-sky-500/20 font-medium">
-                        ⛽ Carburant: <strong>{fuelCost.toLocaleString('ro-RO')} lei</strong>
+                        ⛽ {t.fuelConsumption || "Carburant"}: <strong>{fuelCost.toLocaleString('ro-RO')} lei</strong>
                       </span>
                     )}
                     {insuranceCost > 0 && (
                       <span className="bg-teal-50 dark:bg-teal-500/10 text-teal-800 dark:text-teal-300 px-2 py-0.5 rounded-md border border-teal-200 dark:border-teal-500/20 font-medium">
-                        📋 Asigurări: <strong>{insuranceCost.toLocaleString('ro-RO')} lei</strong>
+                        📋 {t.mandatoryInsurance || "Asigurări"}: <strong>{insuranceCost.toLocaleString('ro-RO')} lei</strong>
                       </span>
                     )}
                   </div>
@@ -307,7 +307,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                 {rankings[0].vehicle.makeModel}
               </p>
               <div className="mt-3 pt-3 border-t border-amber-200 dark:border-amber-500/20 flex items-center justify-between text-xs">
-                <span className="text-slate-500 dark:text-slate-400">Total înregistrat:</span>
+                <span className="text-slate-500 dark:text-slate-400">{t.totalRecorded || "Total înregistrat"}:</span>
                 <span className="font-mono font-bold text-amber-700 dark:text-amber-300 text-sm">
                   {rankings[0].totalCost.toLocaleString('ro-RO')} RON ({rankings[0].percentage}%)
                 </span>
@@ -320,21 +320,21 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <PieIcon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Distribuție pe Categorii</span>
+                <span>{t.distributionByCategory || "Distribuție pe Categorii"}</span>
               </h3>
               <span className="text-[10.5px] font-semibold text-slate-400 dark:text-slate-500">
-                Apasă pentru detalii
+                {t.tapForDetails || "Apasă pentru detalii"}
               </span>
             </div>
 
             {(() => {
               const categories = [
-                { key: 'repair', label: 'Reparații & Piese', amount: categoryTotals.repair, color: '#fb7185', bgClass: 'bg-rose-400' },
-                { key: 'fuel', label: 'Alimentări Combustibil', amount: categoryTotals.fuel, color: '#38bdf8', bgClass: 'bg-sky-400' },
-                { key: 'service', label: 'Revizii & Ulei', amount: categoryTotals.service, color: '#fbbf24', bgClass: 'bg-amber-400' },
-                { key: 'insurance', label: 'Asigurări (RCA/CASCO)', amount: categoryTotals.insurance, color: '#34d399', bgClass: 'bg-emerald-400' },
-                { key: 'tires', label: 'Anvelope', amount: categoryTotals.tires, color: '#22d3ee', bgClass: 'bg-cyan-400' },
-                { key: 'fine', label: 'Amenzi & Taxe', amount: categoryTotals.fine, color: '#fb923c', bgClass: 'bg-orange-400' }
+                { key: 'repair', label: t.repairsAndParts || 'Reparații & Piese', amount: categoryTotals.repair, color: '#fb7185', bgClass: 'bg-rose-400' },
+                { key: 'fuel', label: t.fuelConsumption || 'Alimentări Combustibil', amount: categoryTotals.fuel, color: '#38bdf8', bgClass: 'bg-sky-400' },
+                { key: 'service', label: t.servicesAndOil || 'Revizii & Ulei', amount: categoryTotals.service, color: '#fbbf24', bgClass: 'bg-amber-400' },
+                { key: 'insurance', label: t.mandatoryInsurance || 'Asigurări (RCA/CASCO)', amount: categoryTotals.insurance, color: '#34d399', bgClass: 'bg-emerald-400' },
+                { key: 'tires', label: t.tiresAndWheels || 'Anvelope', amount: categoryTotals.tires, color: '#22d3ee', bgClass: 'bg-cyan-400' },
+                { key: 'fine', label: t.fine || 'Amenzi & Taxe', amount: categoryTotals.fine, color: '#fb923c', bgClass: 'bg-orange-400' }
               ].filter(c => c.amount > 0);
 
               const chartTotal = categories.reduce((sum, c) => sum + c.amount, 0);
@@ -360,7 +360,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
               if (categories.length === 0 || chartTotal === 0) {
                 return (
                   <div className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
-                    Nu există cheltuieli înregistrate.
+                    {t.noExpensesRecorded || "Nu există cheltuieli înregistrate."}
                   </div>
                 );
               }
@@ -435,13 +435,13 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                             {hoveredCategory.amount.toLocaleString('ro-RO')}
                           </span>
                           <span className="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 block">
-                            {((hoveredCategory.amount / chartTotal) * 100).toFixed(1)}% • Apasă
+                            {((hoveredCategory.amount / chartTotal) * 100).toFixed(1)}% • {t.tap || "Apasă"}
                           </span>
                         </div>
                       ) : (
                         <div>
                           <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
-                            Total
+                            {t.total || "Total"}
                           </span>
                           <span className="text-base font-black text-slate-900 dark:text-white block font-mono">
                             {grandTotal.toLocaleString('ro-RO')}
@@ -472,7 +472,7 @@ export const CostRankings = ({ vehicles, records, onSelectVehicle, selectedVehic
                               ? 'bg-slate-100/90 dark:bg-slate-800 border-slate-300 dark:border-slate-700 shadow-xs'
                               : 'bg-slate-50/70 dark:bg-slate-950/40 border-slate-100 dark:border-slate-800/80 hover:bg-slate-100/70 dark:hover:bg-slate-800/60 hover:border-slate-200 dark:hover:border-slate-700'
                           }`}
-                          title={`Apasă pentru a deschide ${cat.label}`}
+                          title={`${t.tapToOpen || "Apasă pentru a deschide"} ${cat.label}`}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <span

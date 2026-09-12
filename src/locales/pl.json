@@ -274,5 +274,19 @@
   "totalServices": "Łącznie przeglądy",
   "noRecordsFound": "Brak zarejestrowanych faktur lub napraw dla wybranych pojazdów.",
   "paidBadge": "Opłacone",
-  "unpaidBadge": "Do Zapłaty"
+  "unpaidBadge": "Do Zapłaty",
+  "costAnalysis": "Analiza Kosztów",
+  "viewFleet": "Zobacz Flotę",
+  "unassigned": "Nieprzypisany",
+  "vehiclesInFleetAnalysis": "pojazdów w analizie floty",
+  "totalExpenses": "Łączne Wydatki",
+  "allCategories": "Wszystkie",
+  "noRecordsForFilters": "Brak wpisów dla wybranych filtrów.",
+  "distributionByCategory": "Podział według Kategorii",
+  "tapForDetails": "Dotknij, aby zobaczyć szczegóły",
+  "totalRecorded": "Łącznie zarejestrowano",
+  "noExpensesRecorded": "Brak zarejestrowanych wydatków.",
+  "tapToOpen": "Dotknij, aby otworzyć",
+  "total": "Łącznie",
+  "tap": "Dotknij"
 }

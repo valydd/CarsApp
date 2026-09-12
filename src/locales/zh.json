@@ -274,5 +274,19 @@
   "totalServices": "保养总额",
   "noRecordsFound": "所选车辆暂无发票或维保记录。",
   "paidBadge": "已结清",
-  "unpaidBadge": "未结清"
+  "unpaidBadge": "未结清",
+  "costAnalysis": "费用分析",
+  "viewFleet": "查看车队",
+  "unassigned": "未指派",
+  "vehiclesInFleetAnalysis": "辆车纳入车队分析",
+  "totalExpenses": "总支出",
+  "allCategories": "全部",
+  "noRecordsForFilters": "所选筛选条件下暂无记录。",
+  "distributionByCategory": "分类支出占比",
+  "tapForDetails": "点击查看详情",
+  "totalRecorded": "已记录总额",
+  "noExpensesRecorded": "暂无支出记录。",
+  "tapToOpen": "点击打开",
+  "total": "总计",
+  "tap": "点击"
 }
