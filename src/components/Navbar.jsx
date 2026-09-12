@@ -42,12 +42,12 @@ export const Navbar = ({
 
   return (
     <>
-      {/* Floating button at top center when in Immersive / Full Screen Mode */}
+      {/* Floating button at top right when in Immersive / Full Screen Mode */}
       {isImmersive && (
         <button
           type="button"
           onClick={onToggleImmersive}
-          className="fixed top-2.5 left-1/2 -translate-x-1/2 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 dark:bg-slate-900/90 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 dark:border-emerald-500/50 shadow-lg shadow-black/15 dark:shadow-black/40 backdrop-blur-md flex items-center justify-center cursor-pointer active:scale-90 hover:scale-105 transition-all animate-in fade-in slide-in-from-top-3 duration-200"
+          className="fixed top-2.5 right-3 sm:right-6 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 dark:bg-slate-900/90 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 dark:border-emerald-500/50 shadow-lg shadow-black/15 dark:shadow-black/40 backdrop-blur-md flex items-center justify-center cursor-pointer active:scale-90 hover:scale-105 transition-all animate-in fade-in slide-in-from-top-3 duration-200"
           title={lang === 'en' ? "Restore Header & Navigation" : "Afișează antetul și bara de jos"}
           aria-label="Restore Header & Navigation"
         >
