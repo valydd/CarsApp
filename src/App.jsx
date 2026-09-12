@@ -488,6 +488,7 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           activeVehicles={activeVehicles}
+          isImmersive={isImmersive}
           lang={lang}
         />
 

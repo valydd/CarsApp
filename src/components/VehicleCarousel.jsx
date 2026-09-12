@@ -30,6 +30,7 @@ export const VehicleCarousel = ({
   setIsOpen: externalSetIsOpen,
   onOpenAlertsTab,
   activeVehicles,
+  isImmersive = false,
   lang
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
@@ -47,7 +48,7 @@ export const VehicleCarousel = ({
   return (
     <section className="mb-3">
       {/* Rând Unificat: Număr Înmatriculare Aliniat la Stânga + Alertă Inline la Dreapta */}
-      <div className="flex items-center gap-2 px-0.5 w-full">
+      <div className={`flex items-center gap-2 px-0.5 w-full ${isImmersive ? 'pr-9 sm:pr-10' : ''}`}>
         {/* Stânga: Plăcuță de înmatriculare sau Indicator Selecție */}
         <div className="shrink-0 flex items-center">
           {/* Dacă exact o mașină este selectată: afișează plăcuța de înmatriculare */}

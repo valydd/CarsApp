@@ -47,11 +47,11 @@ export const Navbar = ({
         <button
           type="button"
           onClick={onToggleImmersive}
-          className="fixed top-2.5 right-3 sm:right-6 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 dark:bg-slate-900/90 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 dark:border-emerald-500/50 shadow-lg shadow-black/15 dark:shadow-black/40 backdrop-blur-md flex items-center justify-center cursor-pointer active:scale-90 hover:scale-105 transition-all animate-in fade-in slide-in-from-top-3 duration-200"
+          className="fixed top-2.5 sm:top-4 right-3 sm:right-6 z-50 w-8 h-8 rounded-full bg-white/95 dark:bg-slate-900/95 text-emerald-600 dark:text-emerald-400 border-2 border-emerald-500/85 dark:border-emerald-400/90 shadow-md shadow-emerald-500/20 dark:shadow-black/40 backdrop-blur-md flex items-center justify-center cursor-pointer active:scale-90 hover:scale-105 transition-all animate-in fade-in slide-in-from-top-3 duration-200"
           title={lang === 'en' ? "Restore Header & Navigation" : "Afișează antetul și bara de jos"}
           aria-label="Restore Header & Navigation"
         >
-          <Minimize2 className="w-4.5 h-4.5 stroke-[2.5]" />
+          <Minimize2 className="w-4 h-4 stroke-[2.8]" />
         </button>
       )}
 
