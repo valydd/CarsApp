@@ -311,5 +311,7 @@
   "mostEfficientCar": "Veículo mais económico",
   "highestCostPerKm": "Maior custo / km",
   "taxes": "Impostos & Taxas",
-  "fleetEfficiency": "Eficiência da frota & Custo / km"
+  "fleetEfficiency": "Eficiência da frota & Custo / km",
+  "weekendTrip": "Viagem de Fim de Semana",
+  "personalTrip": "Viagem Pessoal"
 }

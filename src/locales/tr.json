@@ -311,5 +311,7 @@
   "mostEfficientCar": "En Ekonomik Araç",
   "highestCostPerKm": "En Yüksek Maliyet / km",
   "taxes": "Vergiler ve Harçlar",
-  "fleetEfficiency": "Filo Verimliliği ve Maliyet / km"
+  "fleetEfficiency": "Filo Verimliliği ve Maliyet / km",
+  "weekendTrip": "Hafta Sonu Sürüşü",
+  "personalTrip": "Kişisel Sürüş"
 }

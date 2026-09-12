@@ -311,5 +311,7 @@
   "mostEfficientCar": "Cea Mai Economică Mașină",
   "highestCostPerKm": "Cel Mai Mare Cost / Km",
   "taxes": "Taxe",
-  "fleetEfficiency": "Eficiență Flotă & Cost / Km"
+  "fleetEfficiency": "Eficiență Flotă & Cost / Km",
+  "weekendTrip": "Cursă Weekend",
+  "personalTrip": "Cursă Personală"
 }

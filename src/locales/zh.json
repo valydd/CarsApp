@@ -311,5 +311,7 @@
   "mostEfficientCar": "最具成本效益车辆",
   "highestCostPerKm": "最高每公里成本",
   "taxes": "税费",
-  "fleetEfficiency": "车队能效与每公里成本"
+  "fleetEfficiency": "车队能效与每公里成本",
+  "weekendTrip": "周末用车",
+  "personalTrip": "个人用车"
 }

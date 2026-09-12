@@ -51,7 +51,7 @@ export const AddPersonalTripModal = ({
     }
     const disp = formatDateToDisplay(val);
     setTitle((prev) => {
-      const prefix = t.weekendTrips || "Cursă Weekend";
+      const prefix = t.weekendTrip || t.weekendTrips || "Cursă Weekend";
       if (!prev) {
         return `${prefix} (${disp})`;
       }
@@ -126,7 +126,7 @@ export const AddPersonalTripModal = ({
       setVehicleId(vId);
       const todayStr = new Date().toISOString().slice(0, 10);
       const formattedToday = formatDateToDisplay(todayStr);
-      const prefix = t.weekendTrips || "Cursă Weekend";
+      const prefix = t.weekendTrip || t.weekendTrips || "Cursă Weekend";
       setTitle(`${prefix} (${formattedToday})`);
       setStartDate(todayStr);
       setEndDate(todayStr);

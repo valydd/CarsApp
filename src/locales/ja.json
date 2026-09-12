@@ -311,5 +311,7 @@
   "mostEfficientCar": "最も経済的な車両",
   "highestCostPerKm": "最高コスト / km",
   "taxes": "税金・諸費用",
-  "fleetEfficiency": "フリート効率 & kmあたりコスト"
+  "fleetEfficiency": "フリート効率 & kmあたりコスト",
+  "weekendTrip": "週末走行",
+  "personalTrip": "個人走行"
 }

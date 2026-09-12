@@ -311,5 +311,7 @@
   "mostEfficientCar": "Najbardziej ekonomiczny pojazd",
   "highestCostPerKm": "Najwyższy koszt / km",
   "taxes": "Podatki i opłaty",
-  "fleetEfficiency": "Wydajność floty i koszt / km"
+  "fleetEfficiency": "Wydajność floty i koszt / km",
+  "weekendTrip": "Przejazd Weekendowy",
+  "personalTrip": "Przejazd Prywatny"
 }

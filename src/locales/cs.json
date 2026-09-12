@@ -311,5 +311,7 @@
   "mostEfficientCar": "Nejekonomičtější vozidlo",
   "highestCostPerKm": "Nejvyšší náklady / km",
   "taxes": "Daně a poplatky",
-  "fleetEfficiency": "Efektivita vozového parku a náklady / km"
+  "fleetEfficiency": "Efektivita vozového parku a náklady / km",
+  "weekendTrip": "Víkendová Jízda",
+  "personalTrip": "Osobní Jízda"
 }

@@ -106,6 +106,25 @@ export const PersonalTripsView = ({
     return '';
   };
 
+  // Helper for dynamic translation of trip title
+  const getLocalizedTripTitle = (trip) => {
+    if (!trip || !trip.title) return '';
+    const weekendPattern = /^(Cursă Weekend|Curse Weekend|Weekend Trip|Weekend Trips|Trajet Week-end|Trajets Week-end|Wochenendfahrt|Wochenendfahrten|Viaggio Weekend|Viaggi Weekend|Viaje Fin de Semana|Viajes Fin de Semana|Viagem de Fim de Semana|Viagens de Fim de Semana|Weekendrit|Weekendritten|Przejazd Weekendowy|Przejazdy Weekendowe|Hafta Sonu Sürüşü|Hafta Sonu Sürüşleri|Hétvégi Utazás|Hétvégi Utazások|Víkendová Jízda|Víkendové Jízdy|주말 운행|週末走行|周末用车)/i;
+    const personalPattern = /^(Cursă Personală|Curse Personale|Personal Trip|Personal Trips|Trajet Personnel|Trajets Personnels|Privatfahrt|Privatfahrten|Viaggio Personale|Viaggi Personali|Viaje Personal|Viajes Personales|Viagem Pessoal|Viagens Pessoais|Privérit|Privéritten|Przejazd Prywatny|Przejazdy Prywatne|Kişisel Sürüş|Kişisel Sürüşler|Személyes Utazás|Személyes Utazások|Osobní Jízda|Osobní Jízdy|개인 운행|個人走行|个人用车)/i;
+    
+    if (weekendPattern.test(trip.title)) {
+      const remainder = trip.title.replace(weekendPattern, '').trim();
+      const prefix = t.weekendTrip || t.weekendTrips || "Weekend Trip";
+      return remainder ? `${prefix} ${remainder}` : prefix;
+    }
+    if (personalPattern.test(trip.title)) {
+      const remainder = trip.title.replace(personalPattern, '').trim();
+      const prefix = t.personalTrip || t.personalTrips || "Personal Trip";
+      return remainder ? `${prefix} ${remainder}` : prefix;
+    }
+    return trip.title;
+  };
+
   // Confirmation warning before switching a PAID trip back to UNPAID
   const handleToggleTripPaidClick = (trip) => {
     if (trip.isPaid) {
@@ -316,7 +335,7 @@ export const PersonalTripsView = ({
                       )}
                       {trip.title && (
                         <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                          {trip.title}
+                          {getLocalizedTripTitle(trip)}
                         </span>
                       )}
                       {isOngoing && (

@@ -311,5 +311,7 @@
   "mostEfficientCar": "Leggazdaságosabb jármű",
   "highestCostPerKm": "Legmagasabb költség / km",
   "taxes": "Adók és illetékek",
-  "fleetEfficiency": "Flotta hatékonyság és költség / km"
+  "fleetEfficiency": "Flotta hatékonyság és költség / km",
+  "weekendTrip": "Hétvégi Utazás",
+  "personalTrip": "Személyes Utazás"
 }

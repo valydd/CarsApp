@@ -311,5 +311,7 @@
   "mostEfficientCar": "Meest zuinige voertuig",
   "highestCostPerKm": "Hoogste kosten / km",
   "taxes": "Belastingen & Kosten",
-  "fleetEfficiency": "Vlootefficiëntie & Kosten / km"
+  "fleetEfficiency": "Vlootefficiëntie & Kosten / km",
+  "weekendTrip": "Weekendrit",
+  "personalTrip": "Privérit"
 }

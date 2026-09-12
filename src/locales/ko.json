@@ -311,5 +311,7 @@
   "mostEfficientCar": "가장 경제적인 차량",
   "highestCostPerKm": "가장 높은 km당 비용",
   "taxes": "세금 및 수수료",
-  "fleetEfficiency": "플릿 효율성 & km당 비용"
+  "fleetEfficiency": "플릿 효율성 & km당 비용",
+  "weekendTrip": "주말 운행",
+  "personalTrip": "개인 운행"
 }
