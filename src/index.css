@@ -52,4 +52,37 @@
   background: #94a3b8;
 }
 
+/* Circular Iridescent Ripple Rings for Alert Icon */
+@keyframes alert-ripple-ring {
+  0% {
+    width: 26px;
+    height: 26px;
+    opacity: 0.9;
+    transform: scale(0.75);
+    box-shadow: 0 0 4px currentColor;
+  }
+  40% {
+    opacity: 0.55;
+  }
+  100% {
+    width: 26px;
+    height: 26px;
+    opacity: 0;
+    transform: scale(2.3);
+    box-shadow: 0 0 10px currentColor;
+  }
+}
 
+.ripple-ring-1 {
+  animation: alert-ripple-ring 2.2s cubic-bezier(0.1, 0.45, 0.65, 1) infinite;
+}
+
+.ripple-ring-2 {
+  animation: alert-ripple-ring 2.2s cubic-bezier(0.1, 0.45, 0.65, 1) infinite;
+  animation-delay: 0.7s;
+}
+
+.ripple-ring-3 {
+  animation: alert-ripple-ring 2.2s cubic-bezier(0.1, 0.45, 0.65, 1) infinite;
+  animation-delay: 1.4s;
+}

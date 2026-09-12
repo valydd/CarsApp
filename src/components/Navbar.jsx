@@ -5,6 +5,7 @@ import {
   Globe, 
   FileSpreadsheet, 
   ShieldAlert,
+  Shield,
   BarChart3,
   History,
   Sun,
@@ -110,33 +111,38 @@ export const Navbar = ({
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              totalAlertsCount > 0
-                ? (urgentAlertsCount > 0
-                    ? `bg-rose-500 text-white shadow-md shadow-rose-500/20 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
-                    : `bg-amber-500 text-white shadow-md shadow-amber-500/20 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
-                : (activeTab === 'alerts' 
-                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold'
+              activeTab === 'alerts' 
+                ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold'
+                : (totalAlertsCount > 0
+                    ? (urgentAlertsCount > 0
+                        ? 'text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 font-bold'
+                        : 'text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 font-bold')
                     : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50')
             }`}
           >
-            <ShieldAlert className="w-3.5 h-3.5" />
-            {t.alerts}
-            {totalAlertsCount > 0 && (
-              <span className="relative flex items-center justify-center ml-0.5">
-                {pulseAlerts && (
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
-                  }`} />
-                )}
-                <span className={`relative inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black text-white shadow-xs leading-none ${
-                  pulseAlerts ? 'animate-pulse' : ''
-                } ${
-                  urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'
+            <div className="relative w-5 h-5 flex items-center justify-center">
+              {totalAlertsCount > 0 && pulseAlerts && (
+                <div className={`absolute inset-0 pointer-events-none flex items-center justify-center ${
+                  urgentAlertsCount > 0 ? 'text-rose-500' : 'text-amber-500'
                 }`}>
-                  {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
-                </span>
-              </span>
-            )}
+                  <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-1" />
+                  <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-2" />
+                </div>
+              )}
+              {totalAlertsCount > 0 ? (
+                <div className={`relative flex items-center justify-center ${pulseAlerts ? 'animate-pulse' : ''} ${
+                  urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'
+                }`}>
+                  <Shield className="w-5 h-5 stroke-[2.4] fill-current/10" />
+                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black leading-none pt-0.5 text-current">
+                    {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
+                  </span>
+                </div>
+              ) : (
+                <ShieldAlert className="w-4 h-4" />
+              )}
+            </div>
+            <span>{t.alerts}</span>
           </button>
         </nav>
 
