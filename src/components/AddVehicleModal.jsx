@@ -61,7 +61,9 @@ export const AddVehicleModal = ({ isOpen, onClose, onAddVehicle, lang }) => {
               <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">
                 {t.addVehicle}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Înregistrează un autovehicul în flotă</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {t.registerVehicleDesc || "Înregistrează un autovehicul în flotă"}
+              </p>
             </div>
           </div>
           <button
@@ -127,11 +129,11 @@ export const AddVehicleModal = ({ isOpen, onClose, onAddVehicle, lang }) => {
                 onChange={(e) => setFuelType(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
               >
-                <option value="diesel">Motorină (Diesel)</option>
-                <option value="petrol">Benzină</option>
-                <option value="gpl">GPL / Hibrid Gaz</option>
-                <option value="hybrid">Hibrid</option>
-                <option value="electric">Electric</option>
+                <option value="diesel">{t.diesel || "Diesel"}</option>
+                <option value="petrol">{t.petrol || "Benzină"}</option>
+                <option value="gpl">{t.gpl || "GPL"}</option>
+                <option value="hybrid">{t.hybrid || "Hibrid"}</option>
+                <option value="electric">{t.electric || "Electric"}</option>
               </select>
             </div>
             <div>
@@ -180,7 +182,7 @@ export const AddVehicleModal = ({ isOpen, onClose, onAddVehicle, lang }) => {
                 type="text"
                 value={vin}
                 onChange={(e) => setVin(e.target.value)}
-                placeholder="Serie șasiu 17 caractere"
+                placeholder="Serie VIN"
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-900 dark:text-white outline-none focus:border-emerald-500 uppercase"
               />
             </div>
@@ -189,7 +191,7 @@ export const AddVehicleModal = ({ isOpen, onClose, onAddVehicle, lang }) => {
           {/* Expiration Dates for Alerts */}
           <div className="bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block">
-              Scadențe Inițiale pentru Alerte
+              {t.initialAlertDeadlines || "Scadențe Inițiale pentru Alerte"}
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>

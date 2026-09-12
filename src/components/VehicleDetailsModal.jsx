@@ -172,7 +172,7 @@ export const VehicleDetailsModal = ({
                 {vehicle.makeModel}
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                {vehicle.driver ? `Șofer: ${vehicle.driver}` : "Neatribuit"} • {vehicle.year || ''}
+                {vehicle.driver ? `${t.driver || "Șofer"}: ${vehicle.driver}` : (t.unassigned || "Neatribuit")} • {vehicle.year || ''}
               </p>
             </div>
           </div>
@@ -215,17 +215,17 @@ export const VehicleDetailsModal = ({
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-3 gap-2.5 bg-slate-50 dark:bg-slate-950/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
             <div className="text-center">
-              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block">Kilometraj</span>
+              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block">{t.mileage || t.km || "Kilometraj"}</span>
               <span className="font-mono font-black text-sm text-slate-900 dark:text-white">{(vehicle.currentKm || 0).toLocaleString()} km</span>
             </div>
             <div className="text-center border-x border-slate-200 dark:border-slate-800">
-              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block">Consum Mediu</span>
+              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block">{t.avgConsumption || "Consum Mediu"}</span>
               <span className="font-mono font-black text-sm text-blue-600 dark:text-blue-400">
                 {consumptionStats.avgLitersPer100Km ? `${consumptionStats.avgLitersPer100Km} L/100` : '—'}
               </span>
             </div>
             <div className="text-center">
-              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block">Cost / Km</span>
+              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block">{t.costPerKm || "Cost / Km"}</span>
               <span className="font-mono font-black text-sm text-emerald-600 dark:text-emerald-400">
                 {consumptionStats.costPerKm ? `${consumptionStats.costPerKm} lei/km` : '—'}
               </span>
@@ -238,7 +238,7 @@ export const VehicleDetailsModal = ({
               {/* Section 1: Identificare */}
               <div className="bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                  Identificare Vehicul
+                  {t.vehicleIdentification || "Identificare Vehicul"}
                 </span>
                 
                 <div className="grid grid-cols-2 gap-3">
@@ -253,7 +253,7 @@ export const VehicleDetailsModal = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">{t.currentKm} (Corectează bord) *</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">{t.currentKm} ({t.correctDashboard || "Corectează bord"}) *</label>
                     <input
                       type="number"
                       value={formData.currentKm}
@@ -293,11 +293,11 @@ export const VehicleDetailsModal = ({
                       onChange={(e) => setFormData({ ...formData, fuelType: e.target.value })}
                       className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-1.5 text-xs text-slate-900 dark:text-white"
                     >
-                      <option value="diesel">Diesel</option>
-                      <option value="petrol">Benzină</option>
-                      <option value="gpl">GPL</option>
-                      <option value="hybrid">Hibrid</option>
-                      <option value="electric">Electric</option>
+                      <option value="diesel">{t.diesel || "Diesel"}</option>
+                      <option value="petrol">{t.petrol || "Benzină"}</option>
+                      <option value="gpl">{t.gpl || "GPL"}</option>
+                      <option value="hybrid">{t.hybrid || "Hibrid"}</option>
+                      <option value="electric">{t.electric || "Electric"}</option>
                     </select>
                   </div>
                   <div>
@@ -326,7 +326,7 @@ export const VehicleDetailsModal = ({
               {/* Section 2: Revizie & Schimb Ulei */}
               <div className="bg-amber-50/50 dark:bg-amber-950/20 p-3.5 rounded-2xl border border-amber-200/80 dark:border-amber-900/40 space-y-3">
                 <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-400 block">
-                  Revizie & Schimb Ulei
+                  {t.servicesAndOil || "Revizie & Schimb Ulei"}
                 </span>
                 
                 <div className="grid grid-cols-2 gap-3">
@@ -378,7 +378,7 @@ export const VehicleDetailsModal = ({
               {/* Section 3: Valabilitate & Acte */}
               <div className="bg-purple-50/50 dark:bg-purple-950/20 p-3.5 rounded-2xl border border-purple-200/80 dark:border-purple-900/40 space-y-3">
                 <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-400 block">
-                  Scadențe & Asigurări
+                  {t.deadlinesAndInsurances || "Scadențe & Asigurări"}
                 </span>
                 
                 <div className="grid grid-cols-2 gap-3">
@@ -427,24 +427,24 @@ export const VehicleDetailsModal = ({
               {/* Section 4: Anvelope & Roți */}
               <div className="bg-cyan-50/50 dark:bg-cyan-950/20 p-3.5 rounded-2xl border border-cyan-200/80 dark:border-cyan-900/40 space-y-3">
                 <span className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-400 block">
-                  Anvelope & Roți
+                  {t.tiresAndWheels || "Anvelope & Roți"}
                 </span>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Tip Anvelope</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">{t.tireType || "Tip Anvelope"}</label>
                     <select
                       value={formData.tireType}
                       onChange={(e) => setFormData({ ...formData, tireType: e.target.value })}
                       className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-900 dark:text-white font-bold"
                     >
-                      <option value="summer">☀️ Vară</option>
-                      <option value="winter">❄️ Iarnă</option>
-                      <option value="allseason">🍂 All-Season</option>
+                      <option value="summer">☀️ {t.summerTires || "Vară"}</option>
+                      <option value="winter">❄️ {t.winterTires || "Iarnă"}</option>
+                      <option value="allseason">🍂 {t.allSeasonTires || "All-Season"}</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Dimensiune Anvelope</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">{t.tireSize || "Dimensiune Anvelope"}</label>
                     <input
                       type="text"
                       value={formData.tireSize}
@@ -457,7 +457,7 @@ export const VehicleDetailsModal = ({
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Marcă & Model</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">{t.tireBrandModel || t.brandAndModel || "Marcă & Model"}</label>
                     <input
                       type="text"
                       value={formData.tireBrand}
@@ -467,7 +467,7 @@ export const VehicleDetailsModal = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">DOT (An fabricație)</label>
+                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">{t.tireDotYear || "DOT (An fabricație)"}</label>
                     <input
                       type="text"
                       value={formData.tireDot}
@@ -507,8 +507,8 @@ export const VehicleDetailsModal = ({
                   <span className="font-mono font-bold text-amber-700 dark:text-amber-300">{vehicle.oilType || '5W-30'}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-200 dark:border-slate-800/60">
-                  <span className="text-slate-500 dark:text-slate-400">Marcă Ulei Recomandată</span>
-                  <span className="text-slate-800 dark:text-slate-200">{vehicle.oilBrand || 'Standard'}</span>
+                  <span className="text-slate-500 dark:text-slate-400">{t.recommendedOilBrand || "Marcă Ulei Recomandată"}</span>
+                  <span className="text-slate-800 dark:text-slate-200">{vehicle.oilBrand || (t.standardValue || "Standard")}</span>
                 </div>
                 <div className="flex justify-between py-1">
                   <span className="text-slate-500 dark:text-slate-400">{t.nextServiceAtKm}</span>
@@ -535,24 +535,24 @@ export const VehicleDetailsModal = ({
 
               <div className="bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
                 <span className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400 block mb-1">
-                  Anvelope & Roți
+                  {t.tiresAndWheels || "Anvelope & Roți"}
                 </span>
                 <div className="flex justify-between py-1 border-b border-slate-200 dark:border-slate-800/60">
-                  <span className="text-slate-500 dark:text-slate-400">Tip Anvelope</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200 capitalize">
-                    {vehicle.tires?.type === 'summer' ? '☀️ Vară' : vehicle.tires?.type === 'winter' ? '❄️ Iarnă' : '🍂 All-Season'}
+                  <span className="text-slate-500 dark:text-slate-400">{t.tireType || "Tip Anvelope"}</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">
+                    {vehicle.tires?.type === 'summer' ? `☀️ ${t.summerTires || 'Vară'}` : vehicle.tires?.type === 'winter' ? `❄️ ${t.winterTires || 'Iarnă'}` : `🍂 ${t.allSeasonTires || 'All-Season'}`}
                   </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-200 dark:border-slate-800/60">
-                  <span className="text-slate-500 dark:text-slate-400">Dimensiune</span>
-                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{vehicle.tires?.size || 'Nespecificat'}</span>
+                  <span className="text-slate-500 dark:text-slate-400">{t.tireSize || "Dimensiune"}</span>
+                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{vehicle.tires?.size || (t.unspecified || 'Nespecificat')}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-200 dark:border-slate-800/60">
-                  <span className="text-slate-500 dark:text-slate-400">Marcă & Model</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{vehicle.tires?.brand || 'Nespecificat'}</span>
+                  <span className="text-slate-500 dark:text-slate-400">{t.tireBrandModel || t.brandAndModel || "Marcă & Model"}</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{vehicle.tires?.brand || (t.unspecified || 'Nespecificat')}</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-slate-500 dark:text-slate-400">DOT</span>
+                  <span className="text-slate-500 dark:text-slate-400">{t.tireDotYear || "DOT"}</span>
                   <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{vehicle.tires?.dot ? `DOT ${vehicle.tires.dot}` : '—'}</span>
                 </div>
               </div>
@@ -571,13 +571,13 @@ export const VehicleDetailsModal = ({
               className="flex items-center gap-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 p-2 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>{t.delete} vehicul</span>
+              <span>{t.deleteVehicle || `${t.delete} vehicul`}</span>
             </button>
             <button
               onClick={onClose}
               className="px-4 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300"
             >
-              Închide
+              {t.closeBtn || t.cancel || "Închide"}
             </button>
           </div>
 
