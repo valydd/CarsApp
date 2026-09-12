@@ -41,7 +41,8 @@ export const Navbar = ({
   const t = translations[lang];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-3 sm:px-6 py-2.5 transition-colors">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-3 sm:px-6 py-2.5 transition-colors">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
         
         {/* Row 1 on Mobile / Left side on Desktop: Brand + Language Switcher (Hidden in Immersive Mode) */}
@@ -239,5 +240,16 @@ export const Navbar = ({
         </div>
       </div>
     </header>
-  );
+
+    {/* Dynamic spacer behind fixed navbar so content flows right below it */}
+    <div 
+      aria-hidden="true" 
+      className={`pointer-events-none transition-all duration-200 shrink-0 ${
+        isImmersive 
+          ? 'h-[52px] sm:h-[58px]' 
+          : 'h-[94px] sm:h-[60px]'
+      }`} 
+    />
+  </>
+);
 };
