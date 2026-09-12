@@ -24,9 +24,9 @@ export const ExportModal = ({
   personalTrips = [],
   onDataRestored,
   onOpenConnect,
-  lang
+  lang = 'ro'
 }) => {
-  const t = translations[lang];
+  const t = translations[lang] || translations.ro;
   const fileInputRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [showPasteArea, setShowPasteArea] = useState(false);
@@ -82,7 +82,7 @@ export const ExportModal = ({
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } else {
-      alert("Nu s-a putut copia automat. Folosește opțiunea «Trimite Backup (WhatsApp / Drive)»");
+      alert(t.cannotCopyAlert || "Nu s-a putut copia automat. Folosește opțiunea «Trimite Backup (WhatsApp / Drive)»");
     }
   };
 
@@ -105,13 +105,13 @@ export const ExportModal = ({
         const parsed = parseBackupData(text);
         if (parsed && Array.isArray(parsed.vehicles) && parsed.vehicles.length > 0) {
           onDataRestored(parsed.vehicles, parsed.records || [], parsed.personalTrips || []);
-          alert(`Datele au fost restaurate cu succes! (${parsed.vehicles.length} mașini, ${(parsed.records || []).length} înregistrări, ${(parsed.personalTrips || []).length} curse)`);
+          alert(t.restoreSuccessAlert || `Datele au fost restaurate cu succes!`);
           onClose();
         } else {
-          alert("Fișierul JSON nu a putut fi recunoscut ca un backup valid CarsApp. Verifică fișierul selectat.");
+          alert(t.invalidJsonBackupAlert || "Fișierul JSON nu a putut fi recunoscut ca un backup valid CarsApp. Verifică fișierul selectat.");
         }
       } catch (err) {
-        alert("Eroare la citirea fișierului JSON.");
+        alert(t.jsonReadErrorAlert || "Eroare la citirea fișierului JSON.");
       }
     };
     reader.readAsText(file);
@@ -126,21 +126,21 @@ export const ExportModal = ({
       const parsed = parseBackupData(pastedText);
       if (parsed && Array.isArray(parsed.vehicles) && parsed.vehicles.length > 0) {
         onDataRestored(parsed.vehicles, parsed.records || [], parsed.personalTrips || []);
-        alert(`Datele au fost restaurate cu succes! (${parsed.vehicles.length} mașini, ${(parsed.records || []).length} înregistrări, ${(parsed.personalTrips || []).length} curse)`);
+        alert(t.restoreSuccessAlert || `Datele au fost restaurate cu succes!`);
         onClose();
       } else {
-        alert("Textul introdus nu conține o structură validă CarsApp (lipsesc vehiculele).");
+        alert(t.invalidJsonTextAlert || "Textul introdus nu conține o structură validă CarsApp (lipsesc vehiculele).");
       }
     } catch (e) {
-      alert("Format JSON invalid. Verifică dacă ai copiat întregul text al fișierului de backup.");
+      alert(t.invalidJsonFormatAlert || "Format JSON invalid. Verifică dacă ai copiat întregul text al fișierului de backup.");
     }
   };
 
   const handleReset = () => {
-    if (window.confirm("Ești sigur că vrei să resetezi aplicația la datele demo inițiale?")) {
+    if (window.confirm(t.resetConfirmAlert || "Ești sigur că vrei să resetezi aplicația la datele demo inițiale?")) {
       const reset = resetToDefaultData();
       onDataRestored(reset.vehicles, reset.records);
-      alert("Aplicația a fost resetată la datele demo!");
+      alert(t.resetSuccessAlert || "Aplicația a fost resetată la datele demo!");
       onClose();
     }
   };
@@ -159,9 +159,11 @@ export const ExportModal = ({
             </div>
             <div>
               <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-                Export & Import Date (Backup)
+                {t.backupModalTitle || "Export & Import Date (Backup)"}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Transferă datele între telefon și laptop</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {t.backupModalDesc || "Transferă datele între telefon și laptop"}
+              </p>
             </div>
           </div>
           <button
@@ -178,7 +180,7 @@ export const ExportModal = ({
           {/* SECTION: EXPORT DATA */}
           <div className="space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block px-1">
-              Exportă Date (Salvare / Trimitere)
+              {t.exportSectionTitle || "Exportă Date (Salvare / Trimitere)"}
             </span>
 
             {/* 1. Share / Send directly (WhatsApp, Drive, Bluetooth, Email) */}
@@ -192,12 +194,16 @@ export const ExportModal = ({
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-black text-slate-900 dark:text-white">Trimite Backup (WhatsApp / Drive / Mail)</h4>
+                    <h4 className="text-xs font-black text-slate-900 dark:text-white">
+                      {t.sendBackupTitle || "Trimite Backup (WhatsApp / Drive / Mail)"}
+                    </h4>
                     <span className="text-[9px] uppercase font-black bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded-md">
-                      Recomandat
+                      {t.recommendedBadge || "Recomandat"}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400">Trimite datele pe WhatsApp sau e-mail către laptop</p>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                    {t.sendBackupDesc || "Trimite datele pe WhatsApp sau e-mail către laptop"}
+                  </p>
                 </div>
               </div>
               <Share2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform shrink-0" />
@@ -213,8 +219,12 @@ export const ExportModal = ({
                   <Download className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">Descarcă Fișier Backup (JSON)</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Salvează fișierul pe dispozitiv pentru transfer</p>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    {t.downloadBackupTitle || "Descarcă Fișier Backup (JSON)"}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {t.downloadBackupDesc || "Salvează fișierul pe dispozitiv pentru transfer"}
+                  </p>
                 </div>
               </div>
               <Download className="w-4 h-4 text-slate-400 group-hover:text-blue-500 shrink-0" />
@@ -231,9 +241,11 @@ export const ExportModal = ({
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                    {copied ? "Copiat în memorie!" : "Copiază Textul Backup (Clipboard)"}
+                    {copied ? (t.copiedToMemory || "Copiat în memorie!") : (t.copyBackupTitle || "Copiază Textul Backup (Clipboard)")}
                   </h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Copiază datele și lipește-le direct pe laptop</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {t.copyBackupDesc || "Copiază datele și lipește-le direct pe laptop"}
+                  </p>
                 </div>
               </div>
               <Copy className="w-4 h-4 text-slate-400 group-hover:text-amber-500 shrink-0" />
@@ -249,8 +261,12 @@ export const ExportModal = ({
                   <FileSpreadsheet className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">Export Tabel Excel / CSV</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Toate cheltuielile pentru contabilitate</p>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    {t.exportCsvTitle || "Export Tabel Excel / CSV"}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {t.exportCsvDesc || "Toate cheltuielile pentru contabilitate"}
+                  </p>
                 </div>
               </div>
               <Download className="w-4 h-4 text-slate-400 group-hover:text-slate-700 dark:group-hover:text-white shrink-0" />
@@ -260,7 +276,7 @@ export const ExportModal = ({
           {/* SECTION: IMPORT DATA */}
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block px-1">
-              Importă Date (Restaurare)
+              {t.importSectionTitle || "Importă Date (Restaurare)"}
             </span>
 
             {/* File Upload */}
@@ -281,8 +297,12 @@ export const ExportModal = ({
                     <Upload className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-black text-slate-900 dark:text-white">Încarcă Fișier Backup (JSON)</h4>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Selectează fișierul trimis de pe telefon</p>
+                    <h4 className="text-xs font-black text-slate-900 dark:text-white">
+                      {t.uploadBackupTitle || "Încarcă Fișier Backup (JSON)"}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      {t.uploadBackupDesc || "Selectează fișierul trimis de pe telefon"}
+                    </p>
                   </div>
                 </div>
                 <Upload className="w-4 h-4 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform shrink-0" />
@@ -296,10 +316,10 @@ export const ExportModal = ({
             >
               <div className="flex items-center gap-2">
                 <ClipboardPaste className="w-4 h-4 text-slate-400" />
-                <span>Sau lipește textul copiat direct</span>
+                <span>{t.pasteDirectToggle || "Sau lipește textul copiat direct"}</span>
               </div>
               <span className="text-[10px] text-emerald-600 dark:text-emerald-400">
-                {showPasteArea ? "Ascunde" : "Deschide"}
+                {showPasteArea ? (t.hideText || "Ascunde") : (t.openText || "Deschide")}
               </span>
             </button>
 
@@ -308,7 +328,7 @@ export const ExportModal = ({
                 <textarea
                   value={pastedText}
                   onChange={(e) => setPastedText(e.target.value)}
-                  placeholder="Lipește aici textul backup-ului JSON primit..."
+                  placeholder={t.pastePlaceholder || "Lipește aici textul backup-ului JSON primit..."}
                   className="w-full h-24 p-2 text-xs font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-emerald-500 text-slate-900 dark:text-white resize-none"
                 />
                 <button
@@ -316,7 +336,7 @@ export const ExportModal = ({
                   disabled={!pastedText.trim()}
                   className="w-full py-2 bg-emerald-500 disabled:opacity-50 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl shadow-xs transition-colors"
                 >
-                  Restaurează Datele din Text
+                  {t.restoreFromTextBtn || "Restaurează Datele din Text"}
                 </button>
               </div>
             )}
@@ -329,7 +349,7 @@ export const ExportModal = ({
               className="w-full p-2 rounded-xl border border-rose-200 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Resetează la datele demonstrative inițiale</span>
+              <span>{t.resetDemoBtn || "Resetează la datele demonstrative inițiale"}</span>
             </button>
           </div>
 
