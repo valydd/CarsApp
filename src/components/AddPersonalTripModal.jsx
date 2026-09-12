@@ -145,6 +145,9 @@ export const AddPersonalTripModal = ({
       return;
     }
 
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
     const tripData = {
       id: tripToEdit ? tripToEdit.id : `trip_${Date.now()}`,
       vehicleId,
@@ -161,7 +164,9 @@ export const AddPersonalTripModal = ({
       tripCost: calculatedCost,
       isPaid: Boolean(isPaid),
       notes: notes.trim(),
-      updatedAt: new Date().toISOString()
+      time: tripToEdit?.time || timeStr,
+      createdAt: tripToEdit?.createdAt || now.toISOString(),
+      updatedAt: now.toISOString()
     };
 
     onSaveTrip(tripData);

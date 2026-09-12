@@ -76,6 +76,51 @@ export const PersonalTripsView = ({
     return `${sD}.${sM}–${eD}.${eM}.${eY}`;
   };
 
+  // Helper for automatic time extraction
+  const getTripTime = (trip) => {
+    if (trip.time) return trip.time;
+    if (trip.createdAt) {
+      try {
+        const d = new Date(trip.createdAt);
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+        }
+      } catch (e) {}
+    }
+    if (trip.updatedAt) {
+      try {
+        const d = new Date(trip.updatedAt);
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+        }
+      } catch (e) {}
+    }
+    if (trip.id && String(trip.id).startsWith('trip_')) {
+      const rawTs = String(trip.id).replace('trip_', '');
+      const ts = parseInt(rawTs, 10);
+      if (!isNaN(ts) && ts > 1000000000000) {
+        const d = new Date(ts);
+        return d.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+      }
+    }
+    return '';
+  };
+
+  // Confirmation warning before switching a PAID trip back to UNPAID
+  const handleToggleTripPaidClick = (trip) => {
+    if (trip.isPaid) {
+      const warningMessage = lang === 'en'
+        ? "Warning: This trip is currently marked as PAID.\n\nAre you sure you want to mark it as UNPAID again?"
+        : "Atenție: Această cursă este marcată ca ACHITATĂ.\n\nSigur dorești să o treci din nou în starea NEACHITATĂ?";
+      if (!window.confirm(warningMessage)) {
+        return;
+      }
+    }
+    if (onToggleTripPaid) {
+      onToggleTripPaid(trip.id);
+    }
+  };
+
   return (
     <div className="space-y-4 animate-in fade-in duration-200">
       
@@ -253,6 +298,7 @@ export const PersonalTripsView = ({
               const veh = vehicles.find(v => v.id === trip.vehicleId);
               const isPaid = Boolean(trip.isPaid);
               const isOngoing = !trip.endKm || trip.isOngoing;
+              const tripTime = getTripTime(trip);
 
               return (
                 <div
@@ -330,9 +376,17 @@ export const PersonalTripsView = ({
                         </button>
                       </div>
 
-                      <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>Începută la: <strong>{formatTripDateRange(trip.startDate, trip.startDate)}</strong></span>
+                      <div className="flex flex-col gap-0.5">
+                        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          <span>Începută la: <strong>{formatTripDateRange(trip.startDate, trip.startDate)}</strong></span>
+                        </div>
+                        {tripTime && (
+                          <div className="text-[10px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1 pl-4.5">
+                            <Clock className="w-2.5 h-2.5 text-amber-500 shrink-0" />
+                            <span>ora {tripTime}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -369,16 +423,24 @@ export const PersonalTripsView = ({
                         </span>
                       </div>
 
-                      {/* RÂNDUL 5: Data pe stânga ÎN LINIE CU Butonul De Achitat / Achitat pe dreapta */}
+                      {/* RÂNDUL 5: Data și Ora sub dată pe stânga ÎN LINIE CU Butonul De Achitat / Achitat pe dreapta */}
                       <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/40 dark:border-slate-800/40">
-                        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span className="whitespace-nowrap font-semibold">{formatTripDateRange(trip.startDate, trip.endDate)}</span>
+                        <div className="flex flex-col">
+                          <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span className="whitespace-nowrap font-semibold">{formatTripDateRange(trip.startDate, trip.endDate)}</span>
+                          </div>
+                          {tripTime && (
+                            <div className="text-[10px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1 pl-4.5 mt-0.5">
+                              <Clock className="w-3 h-3 text-purple-400 shrink-0" />
+                              <span>ora {tripTime}</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* Buton De Achitat / Achitat aliniat cu data */}
                         <button
-                          onClick={() => onToggleTripPaid && onToggleTripPaid(trip.id)}
+                          onClick={() => handleToggleTripPaidClick(trip)}
                           className={`whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black border transition-all cursor-pointer shadow-2xs active:scale-95 ${
                             isPaid
                               ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25'
