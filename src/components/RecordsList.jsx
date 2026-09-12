@@ -116,7 +116,7 @@ export const RecordsList = ({
       </div>
 
       {/* Records Timeline List */}
-      <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
+      <div className="space-y-2.5">
         {filtered.length === 0 ? (
           <div className="py-12 text-center text-slate-400 text-xs">
             Nicio înregistrare găsită conform filtrelor aplicate.
@@ -132,100 +132,110 @@ export const RecordsList = ({
             return (
               <div
                 key={rec.id}
-                className="py-3 sm:py-3.5 px-2.5 sm:px-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/30 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60 transition-all group"
+                className="p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col gap-2 group"
               >
                 {/* Main Header Block: Title & Icon on Left, Amount on Right */}
-                <div className="flex items-start justify-between gap-3 mb-1.5">
-                  {/* Left: Category Icon + Title + Plate + Date */}
-                  <div className="flex items-start gap-2.5 min-w-0 flex-1">
-                    <div className={`p-2 rounded-xl border shrink-0 mt-0.5 ${meta.color}`}>
+                <div className="flex items-center justify-between gap-3">
+                  {/* Left: Category Icon + Title + Plate */}
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div className={`p-2 rounded-xl border shrink-0 ${meta.color}`}>
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate leading-snug">
                         {rec.title}
                       </h4>
-                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <div className="flex items-center gap-2 mt-0.5">
                         <span className="whitespace-nowrap shrink-0 inline-flex items-center font-mono text-[10.5px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700 shadow-2xs">
                           <span className="text-[8px] text-blue-500 font-bold mr-1 leading-none">RO</span>
                           <span className="leading-none">{veh?.plate || '—'}</span>
                         </span>
-                        <span className="text-[11px] text-slate-400 dark:text-slate-500 inline-flex items-center gap-1">
-                          <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
-                          {rec.date}
-                        </span>
-                        {recTime && (
-                          <span className="text-[10.5px] font-mono text-slate-500 dark:text-slate-400 inline-flex items-center gap-0.5 bg-slate-100 dark:bg-slate-950 px-1.5 py-0.2 rounded border border-slate-200 dark:border-slate-800">
-                            <Clock className="w-2.5 h-2.5 text-slate-400 shrink-0" />
-                            <span>ora {recTime}</span>
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Right: Amount in top row & Edit/Delete in bottom row */}
-                  <div className="flex flex-col items-end shrink-0 pl-1">
-                    <div className="text-right whitespace-nowrap">
-                      <span className="font-mono font-black text-sm sm:text-base text-slate-900 dark:text-white">
-                        {rec.amount?.toLocaleString('ro-RO')}
-                      </span>
-                      <span className="text-[10px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 ml-1">RON</span>
-                    </div>
-
-                    <div className="flex items-center gap-0.5 mt-1">
-                      {onEditRecord && (
-                        <button
-                          onClick={() => onEditRecord(rec)}
-                          className="p-1 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 rounded hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors"
-                          title={t.edit || "Editează"}
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                      <button
-                        onClick={() => {
-                          if (window.confirm(t.confirmDelete)) {
-                            onDeleteRecord(rec.id);
-                          }
-                        }}
-                        className="p-1 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors"
-                        title={t.delete || "Șterge"}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                  {/* Right: Amount */}
+                  <div className="text-right whitespace-nowrap shrink-0">
+                    <span className="font-mono font-black text-sm sm:text-base text-slate-900 dark:text-white">
+                      {rec.amount?.toLocaleString('ro-RO')}
+                    </span>
+                    <span className="text-[10px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 ml-1">RON</span>
                   </div>
                 </div>
 
-                {/* Bottom Row: Metadata details chips */}
-                <div className="flex flex-wrap items-center gap-2 pl-9 text-[11px] text-slate-500 dark:text-slate-400">
+                {/* Middle Row: Date, Time (without 'ora'), and KM on same line */}
+                <div className="flex items-center gap-2 flex-wrap pl-0.5">
+                  <div className="inline-flex items-center gap-2 bg-slate-100/90 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 px-2 py-0.5 rounded-lg text-[11px] font-mono text-slate-600 dark:text-slate-400 shadow-2xs">
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
+                      <span>{rec.date}</span>
+                    </span>
+                    {recTime && (
+                      <>
+                        <span className="text-slate-300 dark:text-slate-700">•</span>
+                        <span className="inline-flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
+                          <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                          <span>{recTime}</span>
+                        </span>
+                      </>
+                    )}
+                  </div>
+
                   {rec.km > 0 && (
-                    <span className="inline-flex items-center gap-1 font-mono font-semibold bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-800">
-                      <Gauge className="w-3 h-3 text-slate-400" />
-                      {rec.km.toLocaleString()} km
+                    <span className="inline-flex items-center gap-1 font-mono font-semibold bg-slate-100/90 dark:bg-slate-950/80 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 shadow-2xs">
+                      <Gauge className="w-3 h-3 text-slate-400 shrink-0" />
+                      <span>{rec.km.toLocaleString()} km</span>
                     </span>
                   )}
-                  {rec.category === 'fuel' && rec.details?.liters && (
-                    <span className="text-blue-600 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-500/20">
-                      ⛽ {rec.details.liters} L {rec.details.fullTank ? '(Plin)' : ''}
-                    </span>
-                  )}
-                  {rec.category === 'service' && rec.details?.oilType && (
-                    <span className="text-amber-700 dark:text-amber-300 font-mono font-semibold bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-500/20">
-                      🛢️ {rec.details.oilType}
-                    </span>
-                  )}
-                  {rec.details?.workshop && (
-                    <span className="text-slate-600 dark:text-slate-300 truncate">
-                      📍 {rec.details.workshop}
-                    </span>
-                  )}
-                  {rec.notes && (
-                    <span className="text-slate-500 dark:text-slate-400 italic truncate max-w-xs">
-                      "{rec.notes}"
-                    </span>
-                  )}
+                </div>
+
+                {/* Bottom Row: Metadata details chips on Left, Edit & Delete buttons on Right */}
+                <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-100 dark:border-slate-800/60 mt-0.5">
+                  <div className="flex flex-wrap items-center gap-1.5 min-w-0 flex-1 text-[11px] text-slate-500 dark:text-slate-400">
+                    {rec.category === 'fuel' && rec.details?.liters && (
+                      <span className="text-blue-600 dark:text-blue-300 font-semibold bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-lg border border-blue-200 dark:border-blue-500/20">
+                        ⛽ {rec.details.liters} L {rec.details.fullTank ? '(Plin)' : ''}
+                      </span>
+                    )}
+                    {rec.category === 'service' && rec.details?.oilType && (
+                      <span className="text-amber-700 dark:text-amber-300 font-mono font-semibold bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-500/20">
+                        🛢️ {rec.details.oilType}
+                      </span>
+                    )}
+                    {rec.details?.workshop && (
+                      <span className="text-slate-600 dark:text-slate-300 truncate">
+                        📍 {rec.details.workshop}
+                      </span>
+                    )}
+                    {rec.notes && (
+                      <span className="text-slate-500 dark:text-slate-400 italic truncate max-w-xs">
+                        "{rec.notes}"
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1 shrink-0 ml-auto">
+                    {onEditRecord && (
+                      <button
+                        onClick={() => onEditRecord(rec)}
+                        className="p-1.5 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800/40"
+                        title={t.edit || "Editează"}
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => {
+                        if (window.confirm(t.confirmDelete)) {
+                          onDeleteRecord(rec.id);
+                        }
+                      }}
+                      className="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors border border-transparent hover:border-rose-200 dark:hover:border-rose-800/40"
+                      title={t.delete || "Șterge"}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             );
