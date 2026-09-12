@@ -610,15 +610,15 @@ export function App() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span>{lang === 'en' ? "Pulsing & Circular Ripples" : "Pulsare și Irizații Alerte"}</span>
+                    <span>{lang === 'en' ? "Alert Button Pulsing" : "Pulsare Buton Alerte"}</span>
                     <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${pulseAlerts ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
                       {pulseAlerts ? (lang === 'en' ? "ACTIVE" : "ACTIV") : (lang === 'en' ? "STOPPED" : "OPRIT")}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                     {pulseAlerts 
-                      ? (lang === 'en' ? "Icon pulses with circular iridescent rings when alerts exist" : "Iconul și irizațiile în cerc pulsează când există atenționări") 
-                      : (lang === 'en' ? "Pulsing and circular ripple effects are disabled" : "Pulsarea și efectul de irizații în cerc sunt oprite")}
+                      ? (lang === 'en' ? "Button pulses with visible rectangular ripples" : "Butonul pulsează cu irizații vizibile în forma butonului") 
+                      : (lang === 'en' ? "Pulsing stopped (button remains colored for active alerts)" : "Pulsarea este oprită (butonul rămâne colorat dacă există alerte)")}
                   </p>
                 </div>
               </div>
@@ -900,32 +900,32 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'instant' });
           }}
           className={`relative flex flex-col items-center py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none ${
-            activeTab === 'alerts' 
-              ? 'text-emerald-600 dark:text-emerald-400 font-bold' 
-              : (totalAlertsCount > 0
-                  ? (urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-amber-500 dark:text-amber-400 font-bold')
-                  : 'text-slate-500 dark:text-slate-400')
+            totalAlertsCount > 0
+              ? (urgentAlertsCount > 0
+                  ? `text-rose-600 dark:text-rose-400 bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
+                  : `text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/50 shadow-xs font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
+              : (activeTab === 'alerts' 
+                  ? 'text-emerald-600 dark:text-emerald-400 font-bold border border-transparent' 
+                  : 'text-slate-500 dark:text-slate-400 border border-transparent')
           }`}
         >
-          <div className="relative w-7 h-7 flex items-center justify-center my-0.5">
-            {totalAlertsCount > 0 && pulseAlerts && (
-              <div className={`absolute inset-0 pointer-events-none flex items-center justify-center ${
-                urgentAlertsCount > 0 ? 'text-rose-500' : 'text-amber-500'
-              }`}>
-                <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-1" />
-                <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-2" />
-                <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-3" />
-              </div>
-            )}
+          {/* Button-shaped Ripple Rings (exact rounded-xl outline of the button) */}
+          {totalAlertsCount > 0 && pulseAlerts && (
+            <div className="absolute inset-0 pointer-events-none overflow-visible">
+              <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-1 ${
+                urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
+              }`} />
+              <span className={`absolute inset-0 rounded-xl border-2 btn-ripple-2 ${
+                urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
+              }`} />
+            </div>
+          )}
 
+          <div className="relative w-5 h-5 flex items-center justify-center">
             {totalAlertsCount > 0 ? (
-              <div className={`relative w-7 h-7 flex items-center justify-center ${
-                pulseAlerts ? 'animate-pulse' : ''
-              } ${
-                urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'
-              }`}>
-                <Shield className="w-7 h-7 stroke-[2.4] fill-current/10" />
-                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-black leading-none pt-0.5 text-current">
+              <div className="relative w-5 h-5 flex items-center justify-center">
+                <Shield className="w-5 h-5 stroke-[2.2] fill-current/15" />
+                <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black leading-none pt-0.5 text-current">
                   {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                 </span>
               </div>
@@ -933,7 +933,7 @@ export function App() {
               <ShieldAlert className="w-5 h-5" />
             )}
           </div>
-          <span className="text-[10px] mt-0.5 leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>
+          <span className="text-[10px] mt-1 leading-tight">{lang === 'en' ? "Alerts" : "Alerte"}</span>
         </button>
       </div>
 

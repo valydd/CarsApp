@@ -112,34 +112,31 @@ export const Navbar = ({
             }}
             className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'alerts' 
-                ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold'
+                ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20 font-bold border border-transparent'
                 : (totalAlertsCount > 0
                     ? (urgentAlertsCount > 0
-                        ? 'text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 font-bold'
-                        : 'text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 font-bold')
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50')
+                        ? `text-rose-600 dark:text-rose-400 bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/50 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`
+                        : `text-amber-600 dark:text-amber-400 bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/50 font-bold ${pulseAlerts ? 'animate-pulse' : ''}`)
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/50 border border-transparent')
             }`}
           >
-            <div className="relative w-5 h-5 flex items-center justify-center">
-              {totalAlertsCount > 0 && pulseAlerts && (
-                <div className={`absolute inset-0 pointer-events-none flex items-center justify-center ${
-                  urgentAlertsCount > 0 ? 'text-rose-500' : 'text-amber-500'
-                }`}>
-                  <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-1" />
-                  <span className="absolute rounded-full border border-current bg-current/10 ripple-ring-2" />
-                </div>
-              )}
+            {totalAlertsCount > 0 && pulseAlerts && (
+              <div className="absolute inset-0 pointer-events-none overflow-visible">
+                <span className={`absolute inset-0 rounded-lg border-2 btn-ripple-1 ${
+                  urgentAlertsCount > 0 ? 'border-rose-500 text-rose-500' : 'border-amber-500 text-amber-500'
+                }`} />
+              </div>
+            )}
+            <div className="relative w-4 h-4 flex items-center justify-center">
               {totalAlertsCount > 0 ? (
-                <div className={`relative flex items-center justify-center ${pulseAlerts ? 'animate-pulse' : ''} ${
-                  urgentAlertsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'
-                }`}>
-                  <Shield className="w-5 h-5 stroke-[2.4] fill-current/10" />
-                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black leading-none pt-0.5 text-current">
+                <div className="relative w-4 h-4 flex items-center justify-center">
+                  <Shield className="w-4 h-4 stroke-[2.2] fill-current/15" />
+                  <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none pt-0.5 text-current">
                     {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                   </span>
                 </div>
               ) : (
-                <ShieldAlert className="w-4 h-4" />
+                <ShieldAlert className="w-3.5 h-3.5" />
               )}
             </div>
             <span>{t.alerts}</span>
