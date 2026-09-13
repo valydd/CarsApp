@@ -92,32 +92,32 @@
   animation-delay: 1.3s;
 }
 
-/* Compact radar ring and subtle glow pulsation for alert badge (never obscures icon) */
+/* Compact radar ring and dynamic glow pulsation for alert badge (greater difference between min and max diameter) */
 @keyframes alert-badge-pulse-rose {
   0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5);
+    transform: scale(0.80);
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0);
   }
   50% {
     transform: scale(1.08);
-    box-shadow: 0 0 5px 1px rgba(225, 29, 72, 0.75);
+    box-shadow: 0 0 6px 1.5px rgba(225, 29, 72, 0.75);
   }
 }
 
 @keyframes alert-badge-pulse-amber {
   0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
+    transform: scale(0.80);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
   }
   50% {
     transform: scale(1.08);
-    box-shadow: 0 0 5px 1px rgba(245, 158, 11, 0.75);
+    box-shadow: 0 0 6px 1.5px rgba(245, 158, 11, 0.75);
   }
 }
 
 @keyframes alert-radar-wave {
   0% {
-    transform: scale(0.95);
+    transform: scale(0.80);
     opacity: 0.75;
   }
   100% {
