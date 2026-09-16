@@ -52,6 +52,44 @@ export const Navbar = ({
   const [isAppMenuOpen, setIsAppMenuOpen] = useState(false);
   const appMenuRef = useRef(null);
   const logoBtnRef = useRef(null);
+  const justClosedMenuRef = useRef(false);
+
+  // Global blocker for ghost clicks (touch tap-through) after dismissing menu
+  useEffect(() => {
+    const blockGhostClick = (e) => {
+      if (justClosedMenuRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) {
+          e.stopImmediatePropagation();
+        }
+      }
+    };
+
+    window.addEventListener('click', blockGhostClick, true);
+    window.addEventListener('pointerdown', blockGhostClick, true);
+    window.addEventListener('pointerup', blockGhostClick, true);
+    window.addEventListener('touchend', blockGhostClick, true);
+
+    return () => {
+      window.removeEventListener('click', blockGhostClick, true);
+      window.removeEventListener('pointerdown', blockGhostClick, true);
+      window.removeEventListener('pointerup', blockGhostClick, true);
+      window.removeEventListener('touchend', blockGhostClick, true);
+    };
+  }, []);
+
+  const handleDismissMenu = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    justClosedMenuRef.current = true;
+    setIsAppMenuOpen(false);
+    setTimeout(() => {
+      justClosedMenuRef.current = false;
+    }, 450);
+  };
 
   useEffect(() => {
     if (!isAppMenuOpen) return;
@@ -66,10 +104,7 @@ export const Navbar = ({
         return;
       }
 
-      // Block underlying cards/buttons from being selected or activated
-      e.preventDefault();
-      e.stopPropagation();
-      setIsAppMenuOpen(false);
+      handleDismissMenu(e);
     };
 
     document.addEventListener('pointerdown', interceptOutsideEvent, true);
@@ -151,21 +186,9 @@ export const Navbar = ({
       {isAppMenuOpen && !isImmersive && (
         <div 
           className="fixed inset-0 z-[48] bg-black/25 dark:bg-black/50 backdrop-blur-xs cursor-pointer select-none animate-in fade-in duration-150" 
-          onPointerDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsAppMenuOpen(false);
-          }}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsAppMenuOpen(false);
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsAppMenuOpen(false);
-          }}
+          onPointerDown={handleDismissMenu}
+          onTouchStart={handleDismissMenu}
+          onClick={handleDismissMenu}
         />
       )}
 
