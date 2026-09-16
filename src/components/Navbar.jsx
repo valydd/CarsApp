@@ -56,15 +56,30 @@ export const Navbar = ({
   useEffect(() => {
     if (!isAppMenuOpen) return;
 
-    const handlePointerDown = (e) => {
-      if (appMenuRef.current && appMenuRef.current.contains(e.target)) return;
-      if (logoBtnRef.current && logoBtnRef.current.contains(e.target)) return;
+    const interceptOutsideEvent = (e) => {
+      // Allow clicks/touches inside the menu
+      if (appMenuRef.current && appMenuRef.current.contains(e.target)) {
+        return;
+      }
+      // Allow clicks/touches on the logo button
+      if (logoBtnRef.current && logoBtnRef.current.contains(e.target)) {
+        return;
+      }
+
+      // Block underlying cards/buttons from being selected or activated
+      e.preventDefault();
+      e.stopPropagation();
       setIsAppMenuOpen(false);
     };
 
-    document.addEventListener('pointerdown', handlePointerDown, true);
+    document.addEventListener('pointerdown', interceptOutsideEvent, true);
+    document.addEventListener('touchstart', interceptOutsideEvent, { capture: true, passive: false });
+    document.addEventListener('click', interceptOutsideEvent, true);
+
     return () => {
-      document.removeEventListener('pointerdown', handlePointerDown, true);
+      document.removeEventListener('pointerdown', interceptOutsideEvent, true);
+      document.removeEventListener('touchstart', interceptOutsideEvent, { capture: true, passive: false });
+      document.removeEventListener('click', interceptOutsideEvent, true);
     };
   }, [isAppMenuOpen]);
 
@@ -135,9 +150,22 @@ export const Navbar = ({
       {/* Fullscreen Backdrop when App Menu is open */}
       {isAppMenuOpen && !isImmersive && (
         <div 
-          className="fixed inset-0 z-45 bg-black/25 dark:bg-black/50 backdrop-blur-xs cursor-pointer animate-in fade-in duration-150" 
-          onClick={() => setIsAppMenuOpen(false)}
-          onTouchStart={() => setIsAppMenuOpen(false)}
+          className="fixed inset-0 z-[48] bg-black/25 dark:bg-black/50 backdrop-blur-xs cursor-pointer select-none animate-in fade-in duration-150" 
+          onPointerDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsAppMenuOpen(false);
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsAppMenuOpen(false);
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsAppMenuOpen(false);
+          }}
         />
       )}
 
