@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Car, 
   Plus, 
@@ -50,6 +50,24 @@ export const Navbar = ({
   onToggleImmersive
 }) => {
   const [isAppMenuOpen, setIsAppMenuOpen] = useState(false);
+  const appMenuRef = useRef(null);
+  const logoBtnRef = useRef(null);
+
+  useEffect(() => {
+    if (!isAppMenuOpen) return;
+
+    const handlePointerDown = (e) => {
+      if (appMenuRef.current && appMenuRef.current.contains(e.target)) return;
+      if (logoBtnRef.current && logoBtnRef.current.contains(e.target)) return;
+      setIsAppMenuOpen(false);
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown, true);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown, true);
+    };
+  }, [isAppMenuOpen]);
+
   const t = translations[lang] || translations.ro;
   const currentLangConfig = getLanguageConfig(lang);
 
@@ -114,9 +132,18 @@ export const Navbar = ({
         </button>
       )}
 
+      {/* Fullscreen Backdrop when App Menu is open */}
+      {isAppMenuOpen && !isImmersive && (
+        <div 
+          className="fixed inset-0 z-45 bg-black/25 dark:bg-black/50 backdrop-blur-xs cursor-pointer animate-in fade-in duration-150" 
+          onClick={() => setIsAppMenuOpen(false)}
+          onTouchStart={() => setIsAppMenuOpen(false)}
+        />
+      )}
+
       {/* Main Top Header (Hidden in Immersive Mode) */}
       {!isImmersive && (
-        <header className="fixed top-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-3 sm:px-6 py-2.5 transition-colors">
+        <header className={`fixed top-0 left-0 right-0 ${isAppMenuOpen ? 'z-50' : 'z-40'} bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-3 sm:px-6 py-2.5 transition-colors`}>
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
             
             {/* Row 1 on Mobile / Left side on Desktop: Brand (with App Menu) + Alert Button */}
@@ -124,6 +151,7 @@ export const Navbar = ({
               {/* Logo + Name + Version (Logo opens dropdown menu with Theme, QR, Backup, Fullscreen, Language) */}
               <div className="relative flex items-center gap-2">
                 <button
+                  ref={logoBtnRef}
                   type="button"
                   onClick={() => setIsAppMenuOpen(prev => !prev)}
                   className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-md shadow-emerald-500/20 text-slate-950 font-black text-base sm:text-lg shrink-0 cursor-pointer active:scale-90 hover:scale-105 transition-all"
@@ -141,43 +169,42 @@ export const Navbar = ({
 
                 {/* Dropdown Menu when clicking 🚗 icon */}
                 {isAppMenuOpen && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-40 bg-black/15 dark:bg-black/40 backdrop-blur-2xs" 
-                      onClick={() => setIsAppMenuOpen(false)} 
-                    />
-                    <div className="absolute top-full left-0 mt-2 z-50 w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-1.5 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-150">
-                      
-                      {/* 1. Language Selector */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsAppMenuOpen(false);
-                          onOpenLanguageModal && onOpenLanguageModal();
-                        }}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-left transition-colors cursor-pointer group"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="text-base leading-none">{currentLangConfig.flag}</span>
-                          <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                            {t.selectLanguage || "Schimbă limba"}
-                          </span>
-                        </div>
-                        <span className="text-[10px] font-mono font-black text-slate-500 uppercase bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/80">
-                          {currentLangConfig.code}
+                  <div 
+                    ref={appMenuRef}
+                    className="absolute top-full left-0 mt-2 z-50 w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-1.5 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-150"
+                  >
+                    
+                    {/* 1. Language Selector */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAppMenuOpen(false);
+                        onOpenLanguageModal && onOpenLanguageModal();
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-left transition-colors cursor-pointer group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="text-base leading-none">{currentLangConfig.flag}</span>
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                          {t.selectLanguage || "Schimbă limba"}
                         </span>
-                      </button>
+                      </div>
+                      <span className="text-[10px] font-mono font-black text-slate-500 uppercase bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/80">
+                        {currentLangConfig.code}
+                      </span>
+                    </button>
 
-                      <div className="h-px bg-slate-200/80 dark:bg-slate-800/80 my-0.5 mx-1" />
+                    <div className="h-px bg-slate-200/80 dark:bg-slate-800/80 my-0.5 mx-1" />
 
-                      {/* 2. Theme Toggle */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setTheme(theme === 'dark' ? 'light' : 'dark');
-                        }}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-left transition-colors cursor-pointer"
-                      >
+                    {/* 2. Theme Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAppMenuOpen(false);
+                        setTheme(theme === 'dark' ? 'light' : 'dark');
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-left transition-colors cursor-pointer"
+                    >
                         <div className="flex items-center gap-2.5">
                           <div className="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-500 flex items-center justify-center">
                             {theme === 'dark' ? (
@@ -250,7 +277,6 @@ export const Navbar = ({
                         </span>
                       </button>
                     </div>
-                  </>
                 )}
               </div>
 
