@@ -10,13 +10,10 @@ import {
   X,
   ArrowLeft,
   Settings,
-  Trash2,
-  QrCode,
-  CloudUpload
+  Trash2
 } from 'lucide-react';
 import { translations } from '../i18n';
 import { getVehicleAlerts } from '../utils/calculations';
-import { AlertsBanner } from './AlertsBanner';
 
 export const VehicleCarousel = ({
   vehicles,
@@ -41,82 +38,10 @@ export const VehicleCarousel = ({
 
   const t = translations[lang] || translations.ro;
 
-  const isAllSelected = !selectedVehicleIds || selectedVehicleIds.length === vehicles.length;
-  const selectedVehicles = vehicles.filter(v => selectedVehicleIds?.includes(v.id));
-  const singleVehicle = selectedVehicles.length === 1 ? selectedVehicles[0] : null;
+  if (!isOpen && !vehicleToDelete) return null;
 
   return (
-    <section className="mb-3">
-      {/* Rând Unificat: Număr Înmatriculare Aliniat la Stânga + Alertă Inline la Dreapta */}
-      <div className={`flex items-center gap-2 px-0.5 w-full ${isImmersive ? 'pr-9 sm:pr-10' : ''}`}>
-        {/* Stânga: Plăcuță de înmatriculare sau Indicator Selecție */}
-        <div className="shrink-0 flex items-center">
-          {/* Dacă exact o mașină este selectată: afișează plăcuța de înmatriculare */}
-          {singleVehicle && (
-            <div className="h-8 inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 border border-slate-700 dark:border-slate-500 px-2.5 rounded-xl text-[11px] font-mono font-black text-slate-900 dark:text-slate-100 shadow-2xs whitespace-nowrap">
-              <span className="text-[8.5px] text-blue-500 font-bold leading-none">RO</span>
-              <span className="leading-none tracking-tight">{singleVehicle.plate}</span>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectAllVehicles && onSelectAllVehicles(true);
-                }}
-                className="text-slate-400 hover:text-rose-500 p-0.5 rounded-md transition-colors ml-0.5 cursor-pointer"
-                title={t.selectAll || "Selectează toate vehiculele"}
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
-          )}
-
-          {/* Dacă toate vehiculele sunt selectate */}
-          {isAllSelected && !singleVehicle && (
-            <button 
-              type="button"
-              onClick={() => setIsOpen(true)}
-              className="h-8 inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 px-2.5 rounded-xl text-[11px] font-extrabold text-slate-800 dark:text-slate-200 shadow-2xs cursor-pointer whitespace-nowrap active:scale-95 transition-all"
-              title={t.filterVehicles || "Filtrează mașinile"}
-            >
-              <Car className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>{t.allVehiclesFilter || "Toate"} ({vehicles.length})</span>
-            </button>
-          )}
-
-          {/* Dacă mai multe mașini sunt selectate (dar nu toate) */}
-          {!isAllSelected && !singleVehicle && (
-            <div className="h-8 inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/40 px-2.5 rounded-xl text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300 shadow-2xs whitespace-nowrap">
-              <span>
-                {selectedVehicleIds.length} / {vehicles.length}
-              </span>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectAllVehicles && onSelectAllVehicles(true);
-                }}
-                className="text-emerald-600 dark:text-emerald-400 hover:text-rose-500 p-0.5 rounded-md transition-colors ml-0.5 cursor-pointer"
-                title={t.selectAll || "Selectează toate"}
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Dreapta: Alertă mutată în linie cu numărul de înmatriculare */}
-        <div className="flex-1 min-w-0">
-          <AlertsBanner
-            vehicles={activeVehicles || selectedVehicles}
-            onSelectVehicle={(vId) => {
-              onToggleVehicle && onToggleVehicle(vId);
-            }}
-            onOpenAlertsTab={onOpenAlertsTab}
-            lang={lang}
-            inline={true}
-          />
-        </div>
-      </div>
+    <>
 
       {/* FULL-SCREEN VEHICLE SELECTION MODAL WITH CHECKBOXES (BIFE) */}
       {isOpen && (
@@ -374,6 +299,6 @@ export const VehicleCarousel = ({
           </div>
         </div>
       )}
-    </section>
+    </>
   );
 };

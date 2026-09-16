@@ -469,6 +469,14 @@ export function App() {
         totalAlertsCount={totalAlertsCount}
         pulseAlerts={pulseAlerts}
         vehiclesCount={vehicles.length}
+        vehicles={vehicles}
+        selectedVehicleIds={selectedVehicleIds}
+        activeVehicles={activeVehicles}
+        onSelectAllVehicles={handleSelectAllVehicles}
+        onOpenAlertsTab={() => {
+          setActiveTab('alerts');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         isImmersive={isImmersive}
         onToggleImmersive={handleToggleImmersive}
       />
