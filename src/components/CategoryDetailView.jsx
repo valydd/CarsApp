@@ -18,7 +18,7 @@ import {
   Save
 } from 'lucide-react';
 import { translations } from '../i18n';
-import { getDaysRemaining, formatDateRo } from '../utils/calculations';
+import { getDaysRemaining, formatDateRo, extendExpiryDate } from '../utils/calculations';
 
 export const CategoryDetailView = ({
   category = 'repair',
@@ -38,6 +38,20 @@ export const CategoryDetailView = ({
   // State for editing vehicle technical data
   const [editingVehicleId, setEditingVehicleId] = useState(null);
   const [vehEditData, setVehEditData] = useState({});
+
+  const handleQuickExtendField = (veh, field, months) => {
+    const baseDate = (editingVehicleId === veh.id && vehEditData[field]) ? vehEditData[field] : veh[field];
+    const newDate = extendExpiryDate(baseDate, months);
+    if (editingVehicleId === veh.id) {
+      setVehEditData(prev => ({ ...prev, [field]: newDate }));
+    }
+    if (onUpdateVehicle) {
+      onUpdateVehicle({
+        ...veh,
+        [field]: newDate
+      });
+    }
+  };
 
   // Category Configuration
   const categoryConfig = {
@@ -473,6 +487,29 @@ export const CategoryDetailView = ({
                           onChange={(e) => setVehEditData({ ...vehEditData, rcaExpiry: e.target.value })}
                           className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-blue-500"
                         />
+                        <div className="flex items-center gap-1 mt-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setVehEditData(prev => ({ ...prev, rcaExpiry: extendExpiryDate(prev.rcaExpiry, 6) }))}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-[10px] font-extrabold border border-blue-200/60 dark:border-blue-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                          >
+                            +6 luni
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setVehEditData(prev => ({ ...prev, rcaExpiry: extendExpiryDate(prev.rcaExpiry, 12) }))}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-[10px] font-extrabold border border-blue-200/60 dark:border-blue-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                          >
+                            +1 an
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setVehEditData(prev => ({ ...prev, rcaExpiry: extendExpiryDate(prev.rcaExpiry, 24) }))}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-[10px] font-extrabold border border-blue-200/60 dark:border-blue-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                          >
+                            +2 ani
+                          </button>
+                        </div>
                       </div>
 
                       <div>
@@ -500,6 +537,29 @@ export const CategoryDetailView = ({
                         onChange={(e) => setVehEditData({ ...vehEditData, itpExpiry: e.target.value })}
                         className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-500"
                       />
+                      <div className="flex items-center gap-1 mt-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setVehEditData(prev => ({ ...prev, itpExpiry: extendExpiryDate(prev.itpExpiry, 6) }))}
+                          className="flex-1 py-1 px-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-[10px] font-extrabold border border-indigo-200/60 dark:border-indigo-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                        >
+                          +6 luni
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setVehEditData(prev => ({ ...prev, itpExpiry: extendExpiryDate(prev.itpExpiry, 12) }))}
+                          className="flex-1 py-1 px-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-[10px] font-extrabold border border-indigo-200/60 dark:border-indigo-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                        >
+                          +1 an
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setVehEditData(prev => ({ ...prev, itpExpiry: extendExpiryDate(prev.itpExpiry, 24) }))}
+                          className="flex-1 py-1 px-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/50 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-[10px] font-extrabold border border-indigo-200/60 dark:border-indigo-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                        >
+                          +2 ani
+                        </button>
+                      </div>
                     </div>
                   )}
 
@@ -514,6 +574,29 @@ export const CategoryDetailView = ({
                         onChange={(e) => setVehEditData({ ...vehEditData, rovinietaExpiry: e.target.value })}
                         className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
                       />
+                      <div className="flex items-center gap-1 mt-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setVehEditData(prev => ({ ...prev, rovinietaExpiry: extendExpiryDate(prev.rovinietaExpiry, 6) }))}
+                          className="flex-1 py-1 px-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold border border-emerald-200/60 dark:border-emerald-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                        >
+                          +6 luni
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setVehEditData(prev => ({ ...prev, rovinietaExpiry: extendExpiryDate(prev.rovinietaExpiry, 12) }))}
+                          className="flex-1 py-1 px-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold border border-emerald-200/60 dark:border-emerald-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                        >
+                          +1 an
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setVehEditData(prev => ({ ...prev, rovinietaExpiry: extendExpiryDate(prev.rovinietaExpiry, 24) }))}
+                          className="flex-1 py-1 px-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold border border-emerald-200/60 dark:border-emerald-800/60 transition-all active:scale-95 cursor-pointer shadow-2xs text-center"
+                        >
+                          +2 ani
+                        </button>
+                      </div>
                     </div>
                   )}
 
@@ -623,38 +706,187 @@ export const CategoryDetailView = ({
                   {/* C. INSURANCE (RCA & CASCO) */}
                   {category === 'insurance' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                      <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
-                        <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.rcaBadge || "Poliță RCA"}:</span>
-                        <span className={`font-mono font-bold ${getExpiryStatus(veh.rcaExpiry).color}`}>
-                          {getExpiryStatus(veh.rcaExpiry).text}
-                        </span>
+                      <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[10px] text-slate-400 font-semibold block">{t.rcaBadge || "Poliță RCA"}</span>
+                            {veh.rcaExpiry && (
+                              <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-[11px]">
+                                {formatDateRo(veh.rcaExpiry)}
+                              </span>
+                            )}
+                          </div>
+                          <p className={`text-xs ${getExpiryStatus(veh.rcaExpiry).color}`}>
+                            {getExpiryStatus(veh.rcaExpiry).text}
+                          </p>
+                        </div>
+
+                        {/* Quick Extension Buttons */}
+                        <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleQuickExtendField(veh, 'rcaExpiry', 6)}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                            title="Prelungește RCA cu 6 luni"
+                          >
+                            +6 luni
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickExtendField(veh, 'rcaExpiry', 12)}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                            title="Prelungește RCA cu 1 an"
+                          >
+                            +1 an
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickExtendField(veh, 'rcaExpiry', 24)}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                            title="Prelungește RCA cu 2 ani"
+                          >
+                            +2 ani
+                          </button>
+                        </div>
                       </div>
-                      <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between">
-                        <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.cascoBadge || "Poliță CASCO"}:</span>
-                        <span className={`font-mono font-bold ${getExpiryStatus(veh.cascoExpiry).color}`}>
-                          {getExpiryStatus(veh.cascoExpiry).text}
-                        </span>
+
+                      <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[10px] text-slate-400 font-semibold block">{t.cascoBadge || "Poliță CASCO"}</span>
+                            {veh.cascoExpiry && (
+                              <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-[11px]">
+                                {formatDateRo(veh.cascoExpiry)}
+                              </span>
+                            )}
+                          </div>
+                          <p className={`text-xs ${getExpiryStatus(veh.cascoExpiry).color}`}>
+                            {getExpiryStatus(veh.cascoExpiry).text}
+                          </p>
+                        </div>
+
+                        {/* Quick Extension Buttons */}
+                        <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleQuickExtendField(veh, 'cascoExpiry', 6)}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                            title="Prelungește CASCO cu 6 luni"
+                          >
+                            +6 luni
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickExtendField(veh, 'cascoExpiry', 12)}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                            title="Prelungește CASCO cu 1 an"
+                          >
+                            +1 an
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickExtendField(veh, 'cascoExpiry', 24)}
+                            className="flex-1 py-1 px-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                            title="Prelungește CASCO cu 2 ani"
+                          >
+                            +2 ani
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
 
                   {/* D. ITP */}
                   {category === 'itp' && (
-                    <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs flex items-center justify-between">
-                      <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.itpBadge || "Inspecție Tehnică Periodică (ITP)"}:</span>
-                      <span className={`font-mono font-bold ${getExpiryStatus(veh.itpExpiry).color}`}>
-                        {getExpiryStatus(veh.itpExpiry).text}
-                      </span>
+                    <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] text-slate-400 font-semibold block">{t.itpBadge || "Inspecție Tehnică Periodică (ITP)"}</span>
+                          {veh.itpExpiry && (
+                            <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 text-[11px]">
+                              {formatDateRo(veh.itpExpiry)}
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-xs ${getExpiryStatus(veh.itpExpiry).color}`}>
+                          {getExpiryStatus(veh.itpExpiry).text}
+                        </p>
+                      </div>
+
+                      {/* Quick Extension Buttons */}
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleQuickExtendField(veh, 'itpExpiry', 6)}
+                          className="flex-1 py-1 px-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 text-[10px] font-extrabold text-indigo-700 dark:text-indigo-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                          title="Prelungește ITP cu 6 luni"
+                        >
+                          +6 luni
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickExtendField(veh, 'itpExpiry', 12)}
+                          className="flex-1 py-1 px-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 text-[10px] font-extrabold text-indigo-700 dark:text-indigo-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                          title="Prelungește ITP cu 1 an"
+                        >
+                          +1 an
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickExtendField(veh, 'itpExpiry', 24)}
+                          className="flex-1 py-1 px-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 text-[10px] font-extrabold text-indigo-700 dark:text-indigo-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                          title="Prelungește ITP cu 2 ani"
+                        >
+                          +2 ani
+                        </button>
+                      </div>
                     </div>
                   )}
 
                   {/* E. ROVINIETA */}
                   {category === 'rovinieta' && (
-                    <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs flex items-center justify-between">
-                      <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.rovinietaBadge || "Valabilitate Rovinietă"}:</span>
-                      <span className={`font-mono font-bold ${getExpiryStatus(veh.rovinietaExpiry).color}`}>
-                        {getExpiryStatus(veh.rovinietaExpiry).text}
-                      </span>
+                    <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800/60 text-xs flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] text-slate-400 font-semibold block">{t.rovinietaBadge || "Valabilitate Rovinietă"}</span>
+                          {veh.rovinietaExpiry && (
+                            <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-[11px]">
+                              {formatDateRo(veh.rovinietaExpiry)}
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-xs ${getExpiryStatus(veh.rovinietaExpiry).color}`}>
+                          {getExpiryStatus(veh.rovinietaExpiry).text}
+                        </p>
+                      </div>
+
+                      {/* Quick Extension Buttons */}
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleQuickExtendField(veh, 'rovinietaExpiry', 6)}
+                          className="flex-1 py-1 px-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                          title="Prelungește Rovinieta cu 6 luni"
+                        >
+                          +6 luni
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickExtendField(veh, 'rovinietaExpiry', 12)}
+                          className="flex-1 py-1 px-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                          title="Prelungește Rovinieta cu 1 an"
+                        >
+                          +1 an
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickExtendField(veh, 'rovinietaExpiry', 24)}
+                          className="flex-1 py-1 px-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
+                          title="Prelungește Rovinieta cu 2 ani"
+                        >
+                          +2 ani
+                        </button>
+                      </div>
                     </div>
                   )}
 
