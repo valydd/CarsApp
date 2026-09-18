@@ -174,7 +174,7 @@ export const DashboardStats = ({
         {/* 1. Total Cheltuieli */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rankings')}
-          className="bg-emerald-50/75 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-emerald-50/75 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii costuri"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -209,7 +209,7 @@ export const DashboardStats = ({
         {/* 2. Consum Mediu -> Deschide ecranul dedicat carburant */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('fuel')}
-          className="bg-sky-50/75 dark:bg-sky-950/30 border border-sky-200/80 dark:border-sky-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-sky-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-sky-50/75 dark:bg-sky-950/30 border border-sky-200/80 dark:border-sky-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-sky-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -245,7 +245,7 @@ export const DashboardStats = ({
         {/* 3. Cost / Km -> Deschide ecranul dedicat Cost / Kilometru */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('costPerKm')}
-          className="bg-purple-50/75 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-purple-50/75 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.costPerKmTitle || "Apasă pentru analiză detaliată Cost / Km"}
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -283,7 +283,7 @@ export const DashboardStats = ({
         {/* 4. Curse Weekend & Personal (DOAR SUMELE NEACHITATE) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('personal')}
-          className="bg-fuchsia-50/75 dark:bg-fuchsia-950/30 border border-fuchsia-200/80 dark:border-fuchsia-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-fuchsia-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-fuchsia-50/75 dark:bg-fuchsia-950/30 border border-fuchsia-200/80 dark:border-fuchsia-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-fuchsia-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.personalTripsTitle || "Apasă pentru evidență consum & decontare curse personale"}
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -332,7 +332,7 @@ export const DashboardStats = ({
         {/* 1. Reparații */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('repairs')}
-          className="bg-amber-50/75 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-amber-50/75 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii reparații"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -358,7 +358,7 @@ export const DashboardStats = ({
         {/* 2. Revizii & Service */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('service')}
-          className="bg-teal-50/75 dark:bg-teal-950/30 border border-teal-200/80 dark:border-teal-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-teal-50/75 dark:bg-teal-950/30 border border-teal-200/80 dark:border-teal-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii revizii"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -386,7 +386,7 @@ export const DashboardStats = ({
         {/* 3. Anvelope & Roți */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('tires')}
-          className="bg-cyan-50/75 dark:bg-cyan-950/30 border border-cyan-200/80 dark:border-cyan-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-cyan-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-cyan-50/75 dark:bg-cyan-950/30 border border-cyan-200/80 dark:border-cyan-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-cyan-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii anvelope"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -422,7 +422,7 @@ export const DashboardStats = ({
         {/* 4. Asigurare RCA */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('insurance')}
-          className="bg-blue-50/75 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-blue-50/75 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii asigurare RCA"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -451,7 +451,7 @@ export const DashboardStats = ({
         {/* 5. ITP */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('itp')}
-          className="bg-indigo-50/75 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-indigo-50/75 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii ITP"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -480,7 +480,7 @@ export const DashboardStats = ({
         {/* 6. Rovinietă & Taxe */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rovinieta')}
-          className="bg-lime-50/75 dark:bg-lime-950/30 border border-lime-200/80 dark:border-lime-800/50 rounded-2xl flex flex-col justify-between min-h-[101px] sm:min-h-[106px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-lime-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-lime-50/75 dark:bg-lime-950/30 border border-lime-200/80 dark:border-lime-800/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-lime-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii Rovinietă"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -511,7 +511,7 @@ export const DashboardStats = ({
       {/* RÂNDUL 3: Atenționări Urgente (Card orizontal complet) */}
       <div 
         onClick={() => onNavigateTab && onNavigateTab('alerts')}
-        className={`mt-5 sm:mt-6 border rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group transition-all shadow-xs cursor-pointer active:scale-[0.99] flex items-center justify-between gap-3 ${
+        className={`mt-6 sm:mt-7 border rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group transition-all shadow-xs cursor-pointer active:scale-[0.99] flex items-center justify-between gap-3 ${
           activeAlertsCount > 0 
             ? 'bg-rose-50/80 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/40 hover:border-rose-500/50' 
             : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800/80 hover:border-emerald-500/50'
