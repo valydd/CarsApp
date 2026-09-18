@@ -380,5 +380,11 @@
   "rankingImpact": "计入排行榜",
   "validityAndExpiry": "有效期与提醒截止日",
   "itpStation": "年检站",
-  "insuranceCompany": "保险公司"
+  "insuranceCompany": "保险公司",
+  "upToDate": "最新 ✓",
+  "overdueSingularShort": "逾期",
+  "overduePluralShort": "逾期",
+  "warningSingularShort": "即将到期",
+  "warningPluralShort": "即将到期",
+  "expiredByFeminine": "已过期"
 }

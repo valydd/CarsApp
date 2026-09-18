@@ -380,5 +380,11 @@
   "rankingImpact": "ランキングに反映",
   "validityAndExpiry": "有効期限＆アラート期限",
   "itpStation": "車検場",
-  "insuranceCompany": "保険会社"
+  "insuranceCompany": "保険会社",
+  "upToDate": "最新 ✓",
+  "overdueSingularShort": "期限切れ",
+  "overduePluralShort": "期限切れ",
+  "warningSingularShort": "まもなく期限",
+  "warningPluralShort": "まもなく期限",
+  "expiredByFeminine": "期限切れ"
 }

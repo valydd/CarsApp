@@ -380,5 +380,11 @@
   "rankingImpact": "Impacto en la clasificación",
   "validityAndExpiry": "Validez y vencimiento de alerta",
   "itpStation": "Estación ITV",
-  "insuranceCompany": "Compañía de seguros"
+  "insuranceCompany": "Compañía de seguros",
+  "upToDate": "Al día ✓",
+  "overdueSingularShort": "vencimiento",
+  "overduePluralShort": "vencimientos",
+  "warningSingularShort": "por vencer",
+  "warningPluralShort": "por vencer",
+  "expiredByFeminine": "Vencida hace"
 }

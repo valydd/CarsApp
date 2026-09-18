@@ -380,5 +380,11 @@
   "rankingImpact": "순위 반영",
   "validityAndExpiry": "유효 기간 및 알림 마감일",
   "itpStation": "정기검사소",
-  "insuranceCompany": "보험사"
+  "insuranceCompany": "보험사",
+  "upToDate": "최신 상태 ✓",
+  "overdueSingularShort": "기한 초과",
+  "overduePluralShort": "기한 초과",
+  "warningSingularShort": "임박",
+  "warningPluralShort": "임박",
+  "expiredByFeminine": "만료됨"
 }

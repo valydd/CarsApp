@@ -380,5 +380,11 @@
   "rankingImpact": "Rangsorra gyakorolt hatás",
   "validityAndExpiry": "Érvényesség és értesítési határidő",
   "itpStation": "Műszaki vizsgaállomás",
-  "insuranceCompany": "Biztosítótársaság"
+  "insuranceCompany": "Biztosítótársaság",
+  "upToDate": "Naprakész ✓",
+  "overdueSingularShort": "lejárt",
+  "overduePluralShort": "lejárt",
+  "warningSingularShort": "hamarosan",
+  "warningPluralShort": "hamarosan",
+  "expiredByFeminine": "Lejárt"
 }

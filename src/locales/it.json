@@ -380,5 +380,11 @@
   "rankingImpact": "Impatto sulla classifica",
   "validityAndExpiry": "Validità & Scadenza Avviso",
   "itpStation": "Centro Revisioni",
-  "insuranceCompany": "Compagnia Assicurativa"
+  "insuranceCompany": "Compagnia Assicurativa",
+  "upToDate": "Aggiornato ✓",
+  "overdueSingularShort": "scadenza",
+  "overduePluralShort": "scadenze",
+  "warningSingularShort": "in scadenza",
+  "warningPluralShort": "in scadenza",
+  "expiredByFeminine": "Scaduta da"
 }

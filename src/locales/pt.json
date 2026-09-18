@@ -380,5 +380,11 @@
   "rankingImpact": "Impacto na classificação",
   "validityAndExpiry": "Validade e prazo de alerta",
   "itpStation": "Centro IPO",
-  "insuranceCompany": "Companhia de Seguros"
+  "insuranceCompany": "Companhia de Seguros",
+  "upToDate": "Em dia ✓",
+  "overdueSingularShort": "vencimento",
+  "overduePluralShort": "vencimentos",
+  "warningSingularShort": "a vencer",
+  "warningPluralShort": "a vencer",
+  "expiredByFeminine": "Vencida há"
 }

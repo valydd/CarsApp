@@ -144,15 +144,17 @@ export const CategoryDetailView = ({
   const totalAmount = categoryRecords.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
 
   // Helper for expiry dates
-  const getExpiryStatus = (dateStr) => {
+  const getExpiryStatus = (dateStr, isFeminine = true) => {
     if (!dateStr) return { text: t.notSet || "Nespecificat", color: "text-slate-400", isExpired: false, days: null };
     const diffDays = getDaysRemaining(dateStr);
     if (diffDays === null) return { text: t.notSet || "Nespecificat", color: "text-slate-400", isExpired: false, days: null };
     const formatted = formatDateRo(dateStr);
+    const validWord = isFeminine ? (t.validFeminine || t.valid || "Validă") : (t.valid || "Valabil");
+    const expiredByWord = isFeminine ? (t.expiredByFeminine || t.expiredBy || "Expirată de") : (t.expiredBy || "Expirat de");
     if (diffDays < 0) {
       const absDays = Math.abs(diffDays);
       return { 
-        text: `${t.expiredBy || "Expirat de"} ${absDays} ${t.days || "zile"} (${formatted})`, 
+        text: `${expiredByWord} ${absDays} ${t.days || "zile"} (${formatted})`, 
         color: "text-rose-600 dark:text-rose-400 font-bold", 
         isExpired: true,
         days: diffDays
@@ -166,7 +168,7 @@ export const CategoryDetailView = ({
       };
     } else {
       return { 
-        text: `${t.valid || "Valabil"} (${formatted})`, 
+        text: `${validWord} (${formatted})`, 
         color: "text-emerald-600 dark:text-emerald-400 font-semibold", 
         isExpired: false,
         days: diffDays

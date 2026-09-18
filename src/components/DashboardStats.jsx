@@ -98,7 +98,7 @@ export const DashboardStats = ({
     if (selectedVehicle.itpExpiry) {
       const diffDays = getDaysRemaining(selectedVehicle.itpExpiry);
       if (diffDays < 0) {
-        itpStatusText = t.expired || "Expirat!";
+        itpStatusText = t.expiredFeminine || t.expired || "Expirată!";
         itpStatusColor = "text-rose-600 dark:text-rose-400";
         itpSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
       } else if (diffDays <= 30) {
@@ -106,7 +106,7 @@ export const DashboardStats = ({
         itpStatusColor = "text-amber-600 dark:text-amber-400";
         itpSubText = t.expiresSoon || "Expiră în curând";
       } else {
-        itpStatusText = t.valid || "Valid";
+        itpStatusText = t.validFeminine || t.valid || "Validă";
         itpStatusColor = "text-emerald-600 dark:text-emerald-400";
         itpSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
       }

@@ -380,5 +380,11 @@
   "rankingImpact": "Impact op ranglijst",
   "validityAndExpiry": "Geldigheid & Vervaldatum waarschuwing",
   "itpStation": "APK-keuringsstation",
-  "insuranceCompany": "Verzekeringsmaatschappij"
+  "insuranceCompany": "Verzekeringsmaatschappij",
+  "upToDate": "Up-to-date ✓",
+  "overdueSingularShort": "vervallen",
+  "overduePluralShort": "vervallen",
+  "warningSingularShort": "binnenkort",
+  "warningPluralShort": "binnenkort",
+  "expiredByFeminine": "Verlopen sinds"
 }

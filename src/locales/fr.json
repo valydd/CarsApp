@@ -380,5 +380,11 @@
   "rankingImpact": "Impact sur le classement",
   "validityAndExpiry": "Validité & Échéance d'alerte",
   "itpStation": "Centre de contrôle technique",
-  "insuranceCompany": "Compagnie d'assurance"
+  "insuranceCompany": "Compagnie d'assurance",
+  "upToDate": "À jour ✓",
+  "overdueSingularShort": "échéance",
+  "overduePluralShort": "échéances",
+  "warningSingularShort": "à venir",
+  "warningPluralShort": "à venir",
+  "expiredByFeminine": "Expirée depuis"
 }

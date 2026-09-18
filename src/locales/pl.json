@@ -380,5 +380,11 @@
   "rankingImpact": "Wpływ na ranking",
   "validityAndExpiry": "Ważność i termin alertu",
   "itpStation": "Stacja kontroli pojazdów",
-  "insuranceCompany": "Firma ubezpieczeniowa"
+  "insuranceCompany": "Firma ubezpieczeniowa",
+  "upToDate": "Aktualne ✓",
+  "overdueSingularShort": "termin",
+  "overduePluralShort": "terminy",
+  "warningSingularShort": "wkrótce",
+  "warningPluralShort": "wkrótce",
+  "expiredByFeminine": "Wygasła od"
 }

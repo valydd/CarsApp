@@ -380,5 +380,11 @@
   "rankingImpact": "Auswirkung auf Rangliste",
   "validityAndExpiry": "Gültigkeit & Warnungsfrist",
   "itpStation": "TÜV / Prüfstelle",
-  "insuranceCompany": "Versicherungsgesellschaft"
+  "insuranceCompany": "Versicherungsgesellschaft",
+  "upToDate": "Aktuell ✓",
+  "overdueSingularShort": "überfällig",
+  "overduePluralShort": "überfällig",
+  "warningSingularShort": "bald fällig",
+  "warningPluralShort": "bald fällig",
+  "expiredByFeminine": "Abgelaufen seit"
 }

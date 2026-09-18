@@ -380,5 +380,11 @@
   "rankingImpact": "Dopad na žebříček",
   "validityAndExpiry": "Platnost a termín upozornění",
   "itpStation": "Stanice STK",
-  "insuranceCompany": "Pojišťovna"
+  "insuranceCompany": "Pojišťovna",
+  "upToDate": "Aktuální ✓",
+  "overdueSingularShort": "po termínu",
+  "overduePluralShort": "po termínu",
+  "warningSingularShort": "brzy vyprší",
+  "warningPluralShort": "brzy vyprší",
+  "expiredByFeminine": "Vypršela před"
 }

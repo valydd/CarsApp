@@ -380,5 +380,11 @@
   "rankingImpact": "Sıralama Etkisi",
   "validityAndExpiry": "Geçerlilik ve Uyarı Son Tarihi",
   "itpStation": "Muayene İstasyonu",
-  "insuranceCompany": "Sigorta Şirketi"
+  "insuranceCompany": "Sigorta Şirketi",
+  "upToDate": "Güncel ✓",
+  "overdueSingularShort": "gecikmiş",
+  "overduePluralShort": "gecikmiş",
+  "warningSingularShort": "yaklaşan",
+  "warningPluralShort": "yaklaşan",
+  "expiredByFeminine": "Süresi doldu"
 }
