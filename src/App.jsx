@@ -37,7 +37,7 @@ import {
   setStoredImmersiveMode,
   initNativeDatabase
 } from './storage';
-import { calculateVehicleConsumption, calculateFleetConsumption, getVehicleAlerts, calculateCostRankings } from './utils/calculations';
+import { calculateVehicleConsumption, calculateFleetConsumption, getVehicleAlerts, calculateCostRankings, extendExpiryDate, formatDateRo } from './utils/calculations';
 import { translations } from './i18n';
 
 import { 
@@ -55,7 +55,8 @@ import {
   ArrowLeft,
   AlertTriangle,
   Bell,
-  BellOff
+  BellOff,
+  CheckCircle2
 } from 'lucide-react';
 
 export function App() {
@@ -234,6 +235,26 @@ export function App() {
 
   const handleUpdateVehicle = (updatedVeh) => {
     setVehicles(prev => prev.map(v => v.id === updatedVeh.id ? updatedVeh : v));
+  };
+
+  const [toastMessage, setToastMessage] = useState('');
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3500);
+  };
+
+  const handleQuickExtendExpiry = (vehicleId, field, months, label = '') => {
+    const targetVeh = vehicles.find(v => v.id === vehicleId);
+    if (!targetVeh) return;
+
+    const newDate = extendExpiryDate(targetVeh[field], months);
+    const updatedVeh = {
+      ...targetVeh,
+      [field]: newDate
+    };
+
+    handleUpdateVehicle(updatedVeh);
+    showToast(`✓ ${label || 'Valabilitate'} [${targetVeh.plate}] prelungit(ă) până la ${formatDateRo(newDate)}!`);
   };
 
   const handleDeleteVehicle = (vehId) => {
@@ -533,6 +554,7 @@ export function App() {
               records={filteredRecords}
               vehicles={vehicles}
               personalTrips={personalTrips}
+              onQuickExtend={handleQuickExtendExpiry}
               lang={lang}
             />
 
@@ -1110,6 +1132,14 @@ export function App() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* TOAST NOTIFICATION FOR ACTIONS */}
+      {toastMessage && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 dark:bg-slate-800/95 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-xl border border-emerald-500/40 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200 pointer-events-none">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
         </div>
       )}
 

@@ -369,3 +369,53 @@ export const calculateCostRankings = (vehicles, records, filterCategory = 'all',
     filteredRecords: filtered
   };
 };
+
+/**
+ * Extends an expiry date string (YYYY-MM-DD) by a given number of months (6, 12, 24).
+ * If the current date is in the future, adds to that future date.
+ * If the date is expired or missing/invalid, adds to today's date.
+ */
+export function extendExpiryDate(currentDateStr, monthsToAdd) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let baseDate = new Date(today.getTime());
+
+  if (currentDateStr) {
+    const parsed = new Date(currentDateStr);
+    if (!isNaN(parsed.getTime())) {
+      parsed.setHours(0, 0, 0, 0);
+      if (parsed > today) {
+        baseDate = parsed;
+      }
+    }
+  }
+
+  const result = new Date(baseDate.getTime());
+  result.setMonth(result.getMonth() + Number(monthsToAdd));
+
+  const year = result.getFullYear();
+  const month = String(result.getMonth() + 1).padStart(2, '0');
+  const day = String(result.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+export function formatDateRo(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  } catch (_) {
+    return dateStr;
+  }
+}
+
