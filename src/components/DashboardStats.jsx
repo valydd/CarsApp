@@ -174,18 +174,18 @@ export const DashboardStats = ({
         {/* 1. Total Cheltuieli */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rankings')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-emerald-50/75 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii costuri"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {selectedVehicle 
                 ? `${t.cost || 'Cost'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
                   ? `${t.cost || 'Cost'} (${selectedCount} ${t.checkedVehicles || 'mașini'})`
                   : t.totalFleetCost}
             </span>
-            <div className="p-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 group-hover:bg-emerald-500/25 transition-colors shrink-0">
               <DollarSign className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -207,32 +207,32 @@ export const DashboardStats = ({
         {/* 2. Consum Mediu -> Deschide ecranul dedicat carburant */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('fuel')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-sky-50/75 dark:bg-sky-950/30 border border-sky-200/80 dark:border-sky-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-sky-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {selectedVehicle 
                 ? `${t.consumption || 'Consum'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
                   ? `${t.consumption || 'Consum'} (${selectedCount})`
                   : t.avgFleetConsumption}
             </span>
-            <div className="p-1 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-sky-500/15 text-sky-700 dark:text-sky-400 group-hover:bg-sky-500/25 transition-colors shrink-0">
               <Fuel className="w-3.5 h-3.5" />
             </div>
           </div>
           <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
             {avgConsumption ? (
               <>
-                {avgConsumption} <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">L/100</span>
+                {avgConsumption} <span className="text-[10px] font-bold text-sky-600 dark:text-sky-400">L/100</span>
               </>
             ) : (
               <span className="text-sm font-bold text-slate-400 dark:text-slate-500">—</span>
             )}
           </div>
           <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-            <span className="truncate text-blue-600 dark:text-blue-400 font-semibold">
+            <span className="truncate text-sky-600 dark:text-sky-400 font-semibold">
               {t.viewLogs || 'Vezi alimentări →'}
             </span>
           </div>
@@ -241,18 +241,18 @@ export const DashboardStats = ({
         {/* 3. Cost / Km -> Deschide ecranul dedicat Cost / Kilometru */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('costPerKm')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-purple-50/75 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.costPerKmTitle || "Apasă pentru analiză detaliată Cost / Km"}
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {selectedVehicle 
                 ? `${t.costPerKm || 'Cost / Km'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
                   ? `${t.costPerKm || 'Cost / Km'} (${selectedCount})`
                   : t.costPerKm}
             </span>
-            <div className="p-1 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:bg-purple-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-purple-500/15 text-purple-700 dark:text-purple-400 group-hover:bg-purple-500/25 transition-colors shrink-0">
               <Gauge className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -277,14 +277,14 @@ export const DashboardStats = ({
         {/* 4. Curse Weekend & Personal (DOAR SUMELE NEACHITATE) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('personal')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-fuchsia-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-fuchsia-50/75 dark:bg-fuchsia-950/30 border border-fuchsia-200/80 dark:border-fuchsia-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-fuchsia-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.personalTripsTitle || "Apasă pentru evidență consum & decontare curse personale"}
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.weekendTrips || t.personalTrips || "Curse Weekend"}
             </span>
-            <div className="p-1 rounded-xl bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400 group-hover:bg-fuchsia-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-400 group-hover:bg-fuchsia-500/25 transition-colors shrink-0">
               <Navigation className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -326,14 +326,14 @@ export const DashboardStats = ({
         {/* 1. Reparații */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('repairs')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-amber-50/75 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii reparații"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.repairsAndParts || "Reparații & Piese"}
             </span>
-            <div className="p-1 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-400 group-hover:bg-amber-500/25 transition-colors shrink-0">
               <Wrench className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -350,14 +350,14 @@ export const DashboardStats = ({
         {/* 2. Revizii & Service */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('service')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-teal-50/75 dark:bg-teal-950/30 border border-teal-200/80 dark:border-teal-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii revizii"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.servicesAndOil || "Revizii & Service"}
             </span>
-            <div className="p-1 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-teal-500/15 text-teal-700 dark:text-teal-400 group-hover:bg-teal-500/25 transition-colors shrink-0">
               <Sparkles className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -376,14 +376,14 @@ export const DashboardStats = ({
         {/* 3. Anvelope & Roți */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('tires')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-cyan-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-cyan-50/75 dark:bg-cyan-950/30 border border-cyan-200/80 dark:border-cyan-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-cyan-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii anvelope"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.tiresAndWheels || "Anvelope & Roți"}
             </span>
-            <div className="p-1 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 group-hover:bg-cyan-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-cyan-500/15 text-cyan-700 dark:text-cyan-400 group-hover:bg-cyan-500/25 transition-colors shrink-0">
               <Disc className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -410,14 +410,14 @@ export const DashboardStats = ({
         {/* 4. Asigurare RCA */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('insurance')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-blue-50/75 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii asigurare RCA"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.mandatoryInsurance || "Asigurare RCA"}
             </span>
-            <div className="p-1 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-blue-500/15 text-blue-700 dark:text-blue-400 group-hover:bg-blue-500/25 transition-colors shrink-0">
               <FileText className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -437,14 +437,14 @@ export const DashboardStats = ({
         {/* 5. ITP */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('itp')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-indigo-50/75 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii ITP"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.itpInspection || "Inspecție ITP"}
             </span>
-            <div className="p-1 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 group-hover:bg-indigo-500/25 transition-colors shrink-0">
               <CheckSquare className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -464,14 +464,14 @@ export const DashboardStats = ({
         {/* 6. Rovinietă & Taxe */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rovinieta')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-lime-50/75 dark:bg-lime-950/30 border border-lime-200/80 dark:border-lime-800/50 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-lime-500/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii Rovinietă"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.vignetteAndTaxes || "Rovinietă & Taxe"}
             </span>
-            <div className="p-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-lime-500/15 text-lime-700 dark:text-lime-400 group-hover:bg-lime-500/25 transition-colors shrink-0">
               <MapPin className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -481,7 +481,7 @@ export const DashboardStats = ({
           <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
             <span className="truncate">{rovSubText}</span>
             {selectedVehicle?.rovinietaExpiry && (
-              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0 ml-1">
+              <span className="font-mono font-bold text-lime-700 dark:text-lime-400 shrink-0 ml-1">
                 {formatDateRo(selectedVehicle.rovinietaExpiry)}
               </span>
             )}
