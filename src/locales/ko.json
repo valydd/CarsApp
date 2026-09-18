@@ -246,7 +246,7 @@
   "updateTrip": "운행 정보 업데이트",
   "finishAndSave": "🏁 완료 및 저장",
   "editPersonalTrip": "개인 운행 수정",
-  "addPersonalTripModalTitle": "새 개인 / 주말 운행",
+  "addPersonalTripModalTitle": "새 주말 운행",
   "addPersonalTripSubtitle": "개인 유류비 및 소모량 계산",
   "viewLogs": "주유 기록 보기 →",
   "viewDetails": "상세보기 >",

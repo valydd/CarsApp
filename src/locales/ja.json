@@ -246,7 +246,7 @@
   "updateTrip": "走行情報の更新",
   "finishAndSave": "🏁 完了して保存",
   "editPersonalTrip": "個人利用走行の編集",
-  "addPersonalTripModalTitle": "個人・週末利用の新規追加",
+  "addPersonalTripModalTitle": "新規週末走行",
   "addPersonalTripSubtitle": "個人燃料消費量と費用を計算",
   "viewLogs": "給油記録を見る →",
   "viewDetails": "詳細を見る >",

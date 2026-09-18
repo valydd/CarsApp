@@ -200,7 +200,7 @@ export const AddPersonalTripModal = ({
               <h2 className="text-base font-black text-slate-900 dark:text-white">
                 {tripToEdit 
                   ? (t.editPersonalTrip || "Editează Cursă Personală")
-                  : (t.addPersonalTripModalTitle || "Cursă Nouă Personală / Weekend")}
+                  : (t.addPersonalTripModalTitle || "Cursă Nouă Weekend")}
               </h2>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 {t.addPersonalTripSubtitle || "Calculează consumul și costul carburantului"}

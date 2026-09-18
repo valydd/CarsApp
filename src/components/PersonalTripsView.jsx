@@ -157,7 +157,7 @@ export const PersonalTripsView = ({
             className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
-            <span>{t.addPersonalTripModalTitle || "Cursă Personală"}</span>
+            <span>{t.addPersonalTripModalTitle || "Cursă Nouă Weekend"}</span>
           </button>
         )}
       </div>
