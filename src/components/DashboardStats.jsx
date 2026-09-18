@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { DollarSign, Fuel, Gauge, TrendingUp, AlertTriangle, ShieldCheck, Wrench, Sparkles, FileText, CheckSquare, Navigation, Disc, MapPin, Plus, X } from 'lucide-react';
+import React from 'react';
+import { DollarSign, Fuel, Gauge, TrendingUp, AlertTriangle, ShieldCheck, Wrench, Sparkles, FileText, CheckSquare, Navigation, Disc, MapPin, Plus } from 'lucide-react';
 import { translations } from '../i18n';
 import { getDaysRemaining, formatDateRo } from '../utils/calculations';
 
@@ -14,25 +14,12 @@ export const DashboardStats = ({
   totalVehiclesCount,
   onNavigateTab,
   onOpenAddPersonalTrip,
-  onQuickExtend,
   records = [],
   vehicles = [],
   personalTrips = [],
   lang = 'ro'
 }) => {
-  const [vehiclePickerData, setVehiclePickerData] = useState(null);
   const t = translations[lang] || translations.ro;
-
-  const handleExtendButtonClick = (field, months, label) => {
-    const targetVeh = selectedVehicle || (vehicles.length === 1 ? vehicles[0] : null);
-    if (targetVeh) {
-      if (onQuickExtend) {
-        onQuickExtend(targetVeh.id, field, months, label);
-      }
-    } else {
-      setVehiclePickerData({ field, months, label });
-    }
-  };
 
   const isMultiSelection = !selectedVehicle && selectedCount && totalVehiclesCount && selectedCount < totalVehiclesCount;
 
@@ -400,13 +387,15 @@ export const DashboardStats = ({
               <Disc className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+          <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight truncate">
             {tiresTotal > 0 ? (
               <>
                 {tiresTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400">RON</span>
               </>
             ) : (
-              selectedVehicle?.tires?.size || t.configured || "Configurate"
+              <span className="truncate text-sm sm:text-base font-black">
+                {selectedVehicle?.tires?.size || t.configured || "Configurate"}
+              </span>
             )}
           </div>
           <div className="mt-1 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
@@ -421,207 +410,81 @@ export const DashboardStats = ({
         {/* 4. Asigurare RCA */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('insurance')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98] flex flex-col justify-between"
+          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-blue-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii asigurare RCA"
         >
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-                {t.mandatoryInsurance || "Asigurare RCA"}
-              </span>
-              <div className="p-1 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors shrink-0">
-                <FileText className="w-3.5 h-3.5" />
-              </div>
-            </div>
-            <div className={`text-base sm:text-lg font-black tracking-tight ${rcaStatusColor}`}>
-              {rcaStatusText}
-            </div>
-            <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span className="truncate">{rcaSubText}</span>
-              {selectedVehicle?.rcaExpiry && (
-                <span className="font-mono font-bold text-blue-600 dark:text-blue-400 shrink-0 ml-1">
-                  {formatDateRo(selectedVehicle.rcaExpiry)}
-                </span>
-              )}
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+              {t.mandatoryInsurance || "Asigurare RCA"}
+            </span>
+            <div className="p-1 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500/20 transition-colors shrink-0">
+              <FileText className="w-3.5 h-3.5" />
             </div>
           </div>
-
-          {/* Quick Extend Buttons: +6 luni, +1 an, +2 ani */}
-          <div 
-            className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('rcaExpiry', 6, t.mandatoryInsurance || "Asigurare RCA");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește RCA cu 6 luni"
-            >
-              +6 luni
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('rcaExpiry', 12, t.mandatoryInsurance || "Asigurare RCA");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește RCA cu 1 an"
-            >
-              +1 an
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('rcaExpiry', 24, t.mandatoryInsurance || "Asigurare RCA");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 text-[10px] font-extrabold text-blue-700 dark:text-blue-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește RCA cu 2 ani"
-            >
-              +2 ani
-            </button>
+          <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rcaStatusColor}`}>
+            {rcaStatusText}
+          </div>
+          <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
+            <span className="truncate">{rcaSubText}</span>
+            {selectedVehicle?.rcaExpiry && (
+              <span className="font-mono font-bold text-blue-600 dark:text-blue-400 shrink-0 ml-1">
+                {formatDateRo(selectedVehicle.rcaExpiry)}
+              </span>
+            )}
           </div>
         </div>
 
         {/* 5. ITP */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('itp')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98] flex flex-col justify-between"
+          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii ITP"
         >
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-                {t.itpInspection || "Inspecție ITP"}
-              </span>
-              <div className="p-1 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors shrink-0">
-                <CheckSquare className="w-3.5 h-3.5" />
-              </div>
-            </div>
-            <div className={`text-base sm:text-lg font-black tracking-tight ${itpStatusColor}`}>
-              {itpStatusText}
-            </div>
-            <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span className="truncate">{itpSubText}</span>
-              {selectedVehicle?.itpExpiry && (
-                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 shrink-0 ml-1">
-                  {formatDateRo(selectedVehicle.itpExpiry)}
-                </span>
-              )}
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+              {t.itpInspection || "Inspecție ITP"}
+            </span>
+            <div className="p-1 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors shrink-0">
+              <CheckSquare className="w-3.5 h-3.5" />
             </div>
           </div>
-
-          {/* Quick Extend Buttons: +6 luni, +1 an, +2 ani */}
-          <div 
-            className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('itpExpiry', 6, t.itpInspection || "Inspecție ITP");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 text-[10px] font-extrabold text-indigo-700 dark:text-indigo-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește ITP cu 6 luni"
-            >
-              +6 luni
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('itpExpiry', 12, t.itpInspection || "Inspecție ITP");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 text-[10px] font-extrabold text-indigo-700 dark:text-indigo-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește ITP cu 1 an"
-            >
-              +1 an
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('itpExpiry', 24, t.itpInspection || "Inspecție ITP");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 text-[10px] font-extrabold text-indigo-700 dark:text-indigo-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește ITP cu 2 ani"
-            >
-              +2 ani
-            </button>
+          <div className={`text-base sm:text-lg font-black tracking-tight truncate ${itpStatusColor}`}>
+            {itpStatusText}
+          </div>
+          <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
+            <span className="truncate">{itpSubText}</span>
+            {selectedVehicle?.itpExpiry && (
+              <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 shrink-0 ml-1">
+                {formatDateRo(selectedVehicle.itpExpiry)}
+              </span>
+            )}
           </div>
         </div>
 
         {/* 6. Rovinietă & Taxe */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rovinieta')}
-          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98] flex flex-col justify-between"
+          className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-500/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii Rovinietă"
         >
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-                {t.vignetteAndTaxes || "Rovinietă & Taxe"}
-              </span>
-              <div className="p-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
-                <MapPin className="w-3.5 h-3.5" />
-              </div>
-            </div>
-            <div className={`text-base sm:text-lg font-black tracking-tight ${rovStatusColor}`}>
-              {rovStatusText}
-            </div>
-            <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span className="truncate">{rovSubText}</span>
-              {selectedVehicle?.rovinietaExpiry && (
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0 ml-1">
-                  {formatDateRo(selectedVehicle.rovinietaExpiry)}
-                </span>
-              )}
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
+              {t.vignetteAndTaxes || "Rovinietă & Taxe"}
+            </span>
+            <div className="p-1 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
+              <MapPin className="w-3.5 h-3.5" />
             </div>
           </div>
-
-          {/* Quick Extend Buttons: +6 luni, +1 an, +2 ani */}
-          <div 
-            className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('rovinietaExpiry', 6, t.vignetteAndTaxes || "Rovinietă & Taxe");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește Rovinieta cu 6 luni"
-            >
-              +6 luni
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('rovinietaExpiry', 12, t.vignetteAndTaxes || "Rovinietă & Taxe");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește Rovinieta cu 1 an"
-            >
-              +1 an
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExtendButtonClick('rovinietaExpiry', 24, t.vignetteAndTaxes || "Rovinietă & Taxe");
-              }}
-              className="flex-1 py-1 px-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 text-center transition-all active:scale-95 cursor-pointer shadow-2xs whitespace-nowrap"
-              title="Prelungește Rovinieta cu 2 ani"
-            >
-              +2 ani
-            </button>
+          <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rovStatusColor}`}>
+            {rovStatusText}
+          </div>
+          <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
+            <span className="truncate">{rovSubText}</span>
+            {selectedVehicle?.rovinietaExpiry && (
+              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0 ml-1">
+                {formatDateRo(selectedVehicle.rovinietaExpiry)}
+              </span>
+            )}
           </div>
         </div>
 
@@ -666,70 +529,6 @@ export const DashboardStats = ({
           {t.viewDetails || 'Vezi >'}
         </span>
       </div>
-
-      {/* Modal alegere vehicul pentru prelungire rapidă când sunt selectate mai multe vehicule */}
-      {vehiclePickerData && (
-        <div 
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
-          onClick={() => setVehiclePickerData(null)}
-        >
-          <div 
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-sm p-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                Prelungire {vehiclePickerData.label} (+{vehiclePickerData.months < 12 ? `${vehiclePickerData.months} luni` : `${vehiclePickerData.months / 12} ${vehiclePickerData.months === 12 ? 'an' : 'ani'}`})
-              </h4>
-              <button 
-                type="button" 
-                onClick={() => setVehiclePickerData(null)}
-                className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-lg cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 mb-3">
-              Alege vehiculul pentru care dorești să prelungești valabilitatea:
-            </p>
-            <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
-              {vehicles.map((v) => {
-                const currentVal = v[vehiclePickerData.field];
-                return (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => {
-                      if (onQuickExtend) {
-                        onQuickExtend(v.id, vehiclePickerData.field, vehiclePickerData.months, vehiclePickerData.label);
-                      }
-                      setVehiclePickerData(null);
-                    }}
-                    className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/70 text-left transition-colors cursor-pointer group"
-                  >
-                    <div className="min-w-0 flex-1 pr-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-[10px] font-mono font-black text-slate-900 dark:text-white">
-                          {v.plate}
-                        </span>
-                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                          {v.makeModel}
-                        </span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 mt-0.5 block">
-                        Actual: {currentVal ? formatDateRo(currentVal) : 'Nespecificat'}
-                      </span>
-                    </div>
-                    <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 shrink-0">
-                      Prelungește &gt;
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );

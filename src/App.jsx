@@ -554,7 +554,6 @@ export function App() {
               records={filteredRecords}
               vehicles={vehicles}
               personalTrips={personalTrips}
-              onQuickExtend={handleQuickExtendExpiry}
               lang={lang}
             />
 
