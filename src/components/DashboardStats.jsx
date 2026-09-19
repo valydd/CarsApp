@@ -66,7 +66,7 @@ export const DashboardStats = ({
     </svg>
   );
 
-  // Helper to render main value: exact format of amounts displayed in other cards
+  // Helper to render main value: exact format of tire code in tire card (text-sm sm:text-base font-black)
   const renderDocumentMainValue = (expiryDate, expiredCount, totalCount) => {
     if (selectedVehicle) {
       if (expiryDate) {
@@ -77,22 +77,22 @@ export const DashboardStats = ({
               ? "text-amber-600 dark:text-amber-400" 
               : "text-slate-900 dark:text-white");
         return (
-          <div className={`text-base sm:text-lg font-black tracking-tight truncate ${colorClass}`}>
+          <div className={`text-sm sm:text-base font-black tracking-tight truncate ${colorClass}`}>
             {formatDateRo(expiryDate)}
           </div>
         );
       }
-      return <div className="text-base sm:text-lg font-black text-slate-400 dark:text-slate-500 tracking-tight">—</div>;
+      return <div className="text-sm sm:text-base font-black text-slate-400 dark:text-slate-500 tracking-tight">—</div>;
     } else {
       if (expiredCount > 0) {
         return (
-          <div className="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 tracking-tight truncate">
+          <div className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 tracking-tight truncate">
             {expiredCount} {t.expired || "expirate"}
           </div>
         );
       } else {
         return (
-          <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight truncate">
+          <div className="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight truncate">
             {totalCount} {t.allValid || "Valide"}
           </div>
         );
