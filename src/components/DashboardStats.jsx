@@ -174,7 +174,7 @@ export const DashboardStats = ({
         {/* 1. Total Cheltuieli - Pale Emerald (Col 1, Rând 1) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rankings')}
-          className="bg-emerald-50/35 dark:bg-emerald-950/20 border border-emerald-200/40 dark:border-emerald-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-300/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-emerald-50/35 dark:bg-emerald-950/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii costuri"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -209,7 +209,7 @@ export const DashboardStats = ({
         {/* 2. Cost / Km - Pale Purple (Col 2, Rând 1) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('costPerKm')}
-          className="bg-purple-50/40 dark:bg-purple-950/20 border border-purple-200/40 dark:border-purple-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-300/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-purple-50/40 dark:bg-purple-950/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.costPerKmTitle || "Apasă pentru analiză detaliată Cost / Km"}
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -244,23 +244,23 @@ export const DashboardStats = ({
           </div>
         </div>
 
-        {/* 3. Reparații - Pale Amber (Col 1, Rând 2) */}
+        {/* 3. Reparații - Pale Red (Col 1, Rând 2) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('repairs')}
-          className="bg-amber-50/35 dark:bg-amber-950/20 border border-amber-200/40 dark:border-amber-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-300/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-red-50/40 dark:bg-red-950/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii reparații"
         >
           <div className="flex items-center justify-between mb-0.5">
             <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
               {t.repairsAndParts || "Reparații & Piese"}
             </span>
-            <div className="p-1 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 group-hover:bg-red-500/20 transition-colors shrink-0">
               <Wrench className="w-3.5 h-3.5" />
             </div>
           </div>
           <div>
             <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-              {repairTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">RON</span>
+              {repairTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-red-600 dark:text-red-400">RON</span>
             </div>
             <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
               <span className="truncate">
@@ -273,7 +273,7 @@ export const DashboardStats = ({
         {/* 4. Revizii & Service - Pale Teal (Col 2, Rând 2) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('service')}
-          className="bg-teal-50/35 dark:bg-teal-950/20 border border-teal-200/40 dark:border-teal-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-300/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-teal-50/35 dark:bg-teal-950/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii revizii"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -301,7 +301,7 @@ export const DashboardStats = ({
         {/* 5. Inspecție ITP - Pale Indigo (Col 1, Rând 3) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('itp')}
-          className="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-200/40 dark:border-indigo-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-300/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-indigo-50/40 dark:bg-indigo-950/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii ITP"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -327,21 +327,21 @@ export const DashboardStats = ({
           </div>
         </div>
 
-        {/* 6. Consum Mediu - Sky (Col 2, Rând 3) */}
+        {/* 6. Consum Mediu - Deeper Blue (Un ton în plus) (Col 2, Rând 3) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('fuel')}
-          className="bg-sky-50/60 dark:bg-sky-950/25 border border-sky-200/55 dark:border-sky-800/45 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-sky-300/70 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-blue-100/75 dark:bg-blue-900/40 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
         >
           <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 truncate">
               {selectedVehicle 
                 ? `${t.consumption || 'Consum'} ${selectedVehicle.plate}` 
                 : isMultiSelection 
                   ? `${t.consumption || 'Consum'} (${selectedCount})`
                   : t.avgFleetConsumption}
             </span>
-            <div className="p-1 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-blue-500/15 text-blue-700 dark:text-blue-300 group-hover:bg-blue-500/25 transition-colors shrink-0">
               <Fuel className="w-3.5 h-3.5" />
             </div>
           </div>
@@ -349,14 +349,14 @@ export const DashboardStats = ({
             <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
               {avgConsumption ? (
                 <>
-                  {avgConsumption} <span className="text-[10px] font-bold text-sky-600 dark:text-sky-400">L/100</span>
+                  {avgConsumption} <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300">L/100</span>
                 </>
               ) : (
                 <span className="text-sm font-bold text-slate-400 dark:text-slate-500">—</span>
               )}
             </div>
             <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate text-sky-600 dark:text-sky-400 font-medium">
+              <span className="truncate text-blue-700 dark:text-blue-300 font-semibold">
                 {t.viewLogs || 'Vezi alimentări →'}
               </span>
             </div>
@@ -366,7 +366,7 @@ export const DashboardStats = ({
         {/* 7. Asigurare RCA - Pale Orange (Col 1, Rând 4) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('insurance')}
-          className="bg-orange-50/35 dark:bg-orange-950/20 border border-orange-200/40 dark:border-orange-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-orange-300/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-orange-50/35 dark:bg-orange-950/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii asigurare RCA"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -392,27 +392,27 @@ export const DashboardStats = ({
           </div>
         </div>
 
-        {/* 8. Curse Weekend & Personal - Rose (Col 2, Rând 4) */}
+        {/* 8. Curse Weekend & Personal - Rose (Un ton în plus) (Col 2, Rând 4) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('personal')}
-          className="bg-rose-50/60 dark:bg-rose-950/25 border border-rose-200/55 dark:border-rose-800/45 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-rose-300/70 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-rose-100/75 dark:bg-rose-900/40 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.personalTripsTitle || "Apasă pentru evidență consum & decontare curse personale"}
         >
           <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 truncate">
               {t.weekendTrips || t.personalTrips || "Curse Weekend"}
             </span>
-            <div className="p-1 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500/20 transition-colors shrink-0">
+            <div className="p-1 rounded-xl bg-rose-500/15 text-rose-700 dark:text-rose-300 group-hover:bg-rose-500/25 transition-colors shrink-0">
               <Navigation className="w-3.5 h-3.5" />
             </div>
           </div>
           <div className="flex items-end justify-between gap-1.5 mt-auto">
             <div className="min-w-0 flex-1">
               <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                {unpaidPersonalCost.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400">RON</span>
+                {unpaidPersonalCost.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-rose-700 dark:text-rose-300">RON</span>
               </div>
               <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                <span className="truncate text-rose-600 dark:text-rose-400 font-medium">
+                <span className="truncate text-rose-700 dark:text-rose-300 font-semibold">
                   {unpaidPersonalCost > 0 
                     ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length} ${unpaidTrips.length === 1 ? (t.trip || 'cursă') : (t.trips || 'curse')})` 
                     : (totalPersonalCost > 0 ? (t.allSettled || "Toate achitate ✓") : (t.noTrips || "0 curse"))}
@@ -427,7 +427,7 @@ export const DashboardStats = ({
                   e.stopPropagation();
                   onOpenAddPersonalTrip();
                 }}
-                className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full bg-rose-100/80 hover:bg-rose-200 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/60 shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0 mb-0.5"
+                className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full bg-rose-200/90 hover:bg-rose-300 text-rose-800 dark:bg-rose-900/80 dark:hover:bg-rose-800 dark:text-rose-200 border border-slate-300/80 dark:border-slate-700 shadow-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center shrink-0 mb-0.5"
                 title={t.addPersonalTrip || "Adaugă rapid cursă personală"}
               >
                 <Plus className="w-4 h-4 stroke-[2.6]" />
@@ -439,7 +439,7 @@ export const DashboardStats = ({
         {/* 9. Rovinietă & Taxe - Pale Lime (Col 1, Rând 5) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rovinieta')}
-          className="bg-lime-50/25 dark:bg-lime-950/15 border border-lime-200/35 dark:border-lime-800/30 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-lime-300/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-lime-50/25 dark:bg-lime-950/15 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii Rovinietă"
         >
           <div className="flex items-center justify-between mb-0.5">
@@ -468,7 +468,7 @@ export const DashboardStats = ({
         {/* 10. Anvelope & Roți - Pale Slate / Silver (Col 2, Rând 5) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('tires')}
-          className="bg-slate-100/40 dark:bg-slate-800/20 border border-slate-200/50 dark:border-slate-700/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-300/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-slate-100/40 dark:bg-slate-800/20 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title="Apasă pentru detalii anvelope"
         >
           <div className="flex items-center justify-between mb-0.5">
