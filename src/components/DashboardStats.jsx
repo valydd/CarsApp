@@ -108,19 +108,19 @@ export const DashboardStats = ({
         if (diffDays < 0) {
           return (
             <span 
-              className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
+              className="w-[26px] h-[26px] sm:w-7 sm:h-7 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
               title="Expirat"
             >
-              <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-rose-600 dark:text-rose-400 stroke-[2.8]" />
+              <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600 dark:text-rose-400 stroke-[2.6]" />
             </span>
           );
         }
         return (
           <span 
-            className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
+            className="w-[26px] h-[26px] sm:w-7 sm:h-7 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
             title="Valid"
           >
-            <ArchedCheck className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-600 dark:text-emerald-400 stroke-[2.8]" />
+            <ArchedCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 dark:text-emerald-400 stroke-[2.6]" />
           </span>
         );
       }
@@ -129,19 +129,19 @@ export const DashboardStats = ({
       if (expiredCount > 0) {
         return (
           <span 
-            className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
+            className="w-[26px] h-[26px] sm:w-7 sm:h-7 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
             title="Atenție: expirate"
           >
-            <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-rose-600 dark:text-rose-400 stroke-[2.8]" />
+            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600 dark:text-rose-400 stroke-[2.6]" />
           </span>
         );
       }
       return (
         <span 
-          className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
+          className="w-[26px] h-[26px] sm:w-7 sm:h-7 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
           title="Toate valide"
         >
-          <ArchedCheck className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-600 dark:text-emerald-400 stroke-[2.8]" />
+          <ArchedCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 dark:text-emerald-400 stroke-[2.6]" />
         </span>
       );
     }
@@ -343,7 +343,7 @@ export const DashboardStats = ({
         {/* 6. Consum Mediu - Deeper Blue (Un ton în plus) (Col 2, Rând 3) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('fuel')}
-          className="bg-blue-100/75 dark:bg-blue-900/40 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-blue-200/75 dark:bg-blue-900/60 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
         >
           <div className="flex items-center justify-between mb-0.5">
