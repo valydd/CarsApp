@@ -30,7 +30,8 @@ export const QuickAddModal = ({
   onSaveRecord,
   recordToEdit = null,
   defaultCategory = 'fuel',
-  lang = 'ro'
+  lang = 'ro',
+  initialScannedData = null
 }) => {
   const t = translations[lang] || translations.ro;
 
@@ -208,7 +209,11 @@ export const QuickAddModal = ({
       setExpiryDate('');
       setPolicyOrStation('');
     }
-  }, [isOpen, recordToEdit, selectedVehicleId, vehicles, defaultCategory]);
+
+    if (initialScannedData) {
+      handleApplyReceiptData(initialScannedData);
+    }
+  }, [isOpen, recordToEdit, selectedVehicleId, vehicles, defaultCategory, initialScannedData]);
 
   const handleVehicleChange = (vId) => {
     setVehicleId(vId);

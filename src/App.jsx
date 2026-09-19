@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { App as CapApp } from '@capacitor/app';
 import { Navbar } from './components/Navbar';
 import { VehicleCarousel } from './components/VehicleCarousel';
@@ -17,6 +17,7 @@ import { CategoryDetailView } from './components/CategoryDetailView';
 import { CostPerKmView } from './components/CostPerKmView';
 import { ConnectModal } from './components/ConnectModal';
 import { LanguageModal } from './components/LanguageModal';
+import { ReceiptScanModal } from './components/ReceiptScanModal';
 
 import { 
   getStoredVehicles, 
@@ -96,6 +97,8 @@ export function App() {
   const [isConnectOpen, setIsConnectOpen] = useState(false);
   const [isVehiclesModalOpen, setIsVehiclesModalOpen] = useState(false);
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
+  const [isReceiptScanOpen, setIsReceiptScanOpen] = useState(false);
+  const [prefilledScannedData, setPrefilledScannedData] = useState(null);
 
   // Personal Trips State
   const [personalTrips, setPersonalTrips] = useState(getStoredPersonalTrips);
@@ -310,6 +313,18 @@ export function App() {
 
   // Centralized Go-Back Function (for swipe, back button, etc.)
   const goBack = () => {
+    if (isReceiptScanOpen) {
+      setIsReceiptScanOpen(false);
+      return;
+    }
+    if (ongoingTripAlert) {
+      setOngoingTripAlert(null);
+      return;
+    }
+    if (isVehiclesModalOpen) {
+      setIsVehiclesModalOpen(false);
+      return;
+    }
     if (isPersonalModalOpen) {
       setIsPersonalModalOpen(false);
       setTripToEdit(null);
@@ -318,6 +333,7 @@ export function App() {
     if (isQuickAddOpen) {
       setIsQuickAddOpen(false);
       setRecordToEdit(null);
+      setPrefilledScannedData(null);
       return;
     }
     if (isAddVehicleOpen) {
@@ -326,6 +342,7 @@ export function App() {
     }
     if (selectedVehicleForDetails) {
       setSelectedVehicleForDetails(null);
+      setIsVehicleDetailsInEdit(false);
       return;
     }
     if (isExportOpen) {
@@ -347,21 +364,47 @@ export function App() {
     }
   };
 
-  // Touch Swipe Right gesture detection
-  const [touchStartPos, setTouchStartPos] = useState(null);
+  const MAIN_TABS = ['dashboard', 'rankings', 'records', 'alerts'];
+
+  const isAnyModalOpen = Boolean(
+    isReceiptScanOpen ||
+    ongoingTripAlert ||
+    isPersonalModalOpen ||
+    isQuickAddOpen ||
+    isAddVehicleOpen ||
+    selectedVehicleForDetails ||
+    isVehiclesModalOpen ||
+    isExportOpen ||
+    isConnectOpen ||
+    isLanguageModalOpen
+  );
+
+  // Keep live references to prevent stale closures in window touch listeners
+  const navStateRef = useRef({ activeTab, isAnyModalOpen });
+  useEffect(() => {
+    navStateRef.current = { activeTab, isAnyModalOpen };
+  }, [activeTab, isAnyModalOpen]);
+
+  const goBackRef = useRef(goBack);
+  useEffect(() => {
+    goBackRef.current = goBack;
+  }, [goBack]);
+
+  // Touch Swipe gesture detection (swipe left or right across all pages / modals)
+  const touchStartRef = useRef(null);
 
   const handleTouchStart = (e) => {
     if (!e.touches || e.touches.length !== 1) {
-      setTouchStartPos(null);
+      touchStartRef.current = null;
       return;
     }
 
     const target = e.target;
     if (target && target.closest) {
-      // Ignore horizontal scrolling containers or explicit no-swipe elements
-      const noSwipeEl = target.closest('.overflow-x-auto, .overflow-x-scroll, [data-no-swipe]');
+      // Ignore horizontal scrolling containers, range sliders, or explicit no-swipe elements
+      const noSwipeEl = target.closest('input[type="range"], .overflow-x-auto, .overflow-x-scroll, [data-no-swipe]');
       if (noSwipeEl) {
-        setTouchStartPos(null);
+        touchStartRef.current = null;
         return;
       }
 
@@ -372,7 +415,7 @@ export function App() {
           try {
             const style = window.getComputedStyle(el);
             if (style.overflowX === 'auto' || style.overflowX === 'scroll') {
-              setTouchStartPos(null);
+              touchStartRef.current = null;
               return;
             }
           } catch (_) {}
@@ -381,45 +424,74 @@ export function App() {
       }
     }
 
-    // Edge swipe only: swipe-to-back must start near the left edge of the screen (<= 30px)
-    if (e.touches[0].clientX > 30) {
-      setTouchStartPos(null);
-      return;
-    }
-
-    setTouchStartPos({
+    touchStartRef.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
       time: Date.now()
-    });
+    };
   };
 
   const handleTouchEnd = (e) => {
-    if (!touchStartPos || !e.changedTouches || e.changedTouches.length === 0) {
-      setTouchStartPos(null);
+    if (!touchStartRef.current || !e.changedTouches || e.changedTouches.length === 0) {
+      touchStartRef.current = null;
       return;
     }
-    const diffX = e.changedTouches[0].clientX - touchStartPos.x;
-    const diffY = e.changedTouches[0].clientY - touchStartPos.y;
-    const elapsed = Date.now() - touchStartPos.time;
+    const diffX = e.changedTouches[0].clientX - touchStartRef.current.x;
+    const diffY = e.changedTouches[0].clientY - touchStartRef.current.y;
+    const elapsed = Date.now() - touchStartRef.current.time;
 
-    // Swipe Right: moved at least 65px right, mostly horizontal (|diffY| < 65px), within 500ms
-    if (diffX > 65 && Math.abs(diffY) < 65 && elapsed < 500) {
-      goBack();
+    // Horizontal swipe: moved at least 60px horizontally in either direction (left or right),
+    // mostly horizontal (|diffY| < 55px), within 650ms
+    if (Math.abs(diffX) > 60 && Math.abs(diffY) < 55 && elapsed < 650) {
+      const current = navStateRef.current;
+      if (current.isAnyModalOpen || !MAIN_TABS.includes(current.activeTab)) {
+        goBackRef.current();
+      } else {
+        setIsReceiptScanOpen(true);
+      }
     }
-    setTouchStartPos(null);
+    touchStartRef.current = null;
   };
 
   const handleTouchCancel = () => {
-    setTouchStartPos(null);
+    touchStartRef.current = null;
   };
+
+  // Global window touch listeners to reliably detect swipe from left or right across the entire viewport
+  useEffect(() => {
+    const onTouchStart = (e) => handleTouchStart(e);
+    const onTouchEnd = (e) => handleTouchEnd(e);
+    const onTouchCancel = () => handleTouchCancel();
+
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', onTouchCancel, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchCancel);
+    };
+  }, []);
 
   // Android Back Button handler
   useEffect(() => {
     let backListener = null;
     try {
       CapApp.addListener('backButton', () => {
-        if (activeTab !== 'dashboard' || isQuickAddOpen || isPersonalModalOpen || isAddVehicleOpen || selectedVehicleForDetails || isExportOpen || isConnectOpen) {
+        if (
+          isReceiptScanOpen ||
+          isVehiclesModalOpen ||
+          ongoingTripAlert ||
+          isQuickAddOpen ||
+          isPersonalModalOpen ||
+          isAddVehicleOpen ||
+          selectedVehicleForDetails ||
+          isExportOpen ||
+          isConnectOpen ||
+          isLanguageModalOpen ||
+          activeTab !== 'dashboard'
+        ) {
           goBack();
         } else {
           CapApp.exitApp();
@@ -436,7 +508,19 @@ export function App() {
         backListener.remove();
       }
     };
-  }, [activeTab, isQuickAddOpen, isPersonalModalOpen, isAddVehicleOpen, selectedVehicleForDetails, isExportOpen, isConnectOpen]);
+  }, [
+    activeTab,
+    isReceiptScanOpen,
+    isVehiclesModalOpen,
+    ongoingTripAlert,
+    isQuickAddOpen,
+    isPersonalModalOpen,
+    isAddVehicleOpen,
+    selectedVehicleForDetails,
+    isExportOpen,
+    isConnectOpen,
+    isLanguageModalOpen
+  ]);
 
   const isAllSelected = selectedVehicleIds.length === vehicles.length;
   const activeVehicles = vehicles.filter(v => selectedVehicleIds.includes(v.id));
@@ -503,9 +587,6 @@ export function App() {
 
   return (
     <div 
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchCancel}
       className={`min-h-screen bg-slate-100 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 ${
         isImmersive ? 'pb-4 md:pb-6' : 'pb-20 md:pb-12'
       } selection:bg-emerald-500 selection:text-slate-950 font-sans transition-colors duration-200 overflow-x-clip w-full max-w-full`}
@@ -1038,18 +1119,35 @@ export function App() {
       )}
 
       {/* MODALS */}
+      {isReceiptScanOpen && (
+        <ReceiptScanModal
+          isOpen={isReceiptScanOpen}
+          onClose={() => setIsReceiptScanOpen(false)}
+          onApplyData={(scannedData) => {
+            setIsReceiptScanOpen(false);
+            setPrefilledScannedData(scannedData);
+            setQuickAddCategory('fuel');
+            setIsQuickAddOpen(true);
+          }}
+          initialFuelType={activeVehicle?.fuelType || 'petrol'}
+          lang={lang}
+        />
+      )}
+
       {isQuickAddOpen && (
         <QuickAddModal
           isOpen={isQuickAddOpen}
           onClose={() => {
             setIsQuickAddOpen(false);
             setRecordToEdit(null);
+            setPrefilledScannedData(null);
           }}
           onSaveRecord={handleSaveRecord}
           vehicles={vehicles}
           defaultVehicleId={activeVehicle ? activeVehicle.id : (activeVehicles[0]?.id || (vehicles[0]?.id || ''))}
           initialCategory={quickAddCategory}
           recordToEdit={recordToEdit}
+          initialScannedData={prefilledScannedData}
           lang={lang}
         />
       )}
