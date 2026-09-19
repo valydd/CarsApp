@@ -343,7 +343,7 @@ export const DashboardStats = ({
         {/* 6. Consum Mediu - Deeper Blue (Un ton în plus) (Col 2, Rând 3) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('fuel')}
-          className="bg-blue-200/75 dark:bg-blue-900/60 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          className="bg-blue-200/50 dark:bg-blue-900/50 border border-slate-300/80 dark:border-slate-700/80 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/80 dark:hover:border-slate-600 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
           title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
         >
           <div className="flex items-center justify-between mb-0.5">
