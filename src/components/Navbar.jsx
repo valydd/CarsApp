@@ -39,6 +39,7 @@ export const Navbar = ({
   onOpenVehicles,
   urgentAlertsCount = 0,
   totalAlertsCount = 0,
+  hasUnfinishedTrip = false,
   pulseAlerts = true,
   vehiclesCount = 0,
   vehicles = [],
@@ -141,10 +142,16 @@ export const Navbar = ({
       {urgentAlertsCount > 0 ? (
         <>
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600" />
+            {pulseAlerts && (
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
+                hasUnfinishedTrip ? 'bg-rose-400' : 'bg-rose-400'
+              } opacity-75`} />
+            )}
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${
+              hasUnfinishedTrip ? 'bg-rose-400 dark:bg-rose-500 ring-1 ring-rose-300' : 'bg-rose-600'
+            }`} />
           </span>
-          <AlertCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
+          <AlertCircle className={`w-3.5 h-3.5 ${hasUnfinishedTrip ? 'text-rose-500 dark:text-rose-400' : 'text-rose-600 dark:text-rose-400'} shrink-0`} />
           <span className="truncate">
             {urgentAlertsCount} {urgentAlertsCount === 1 ? (t.overdueSingularShort || 'scadență') : (t.overduePluralShort || 'scadențe')}
           </span>

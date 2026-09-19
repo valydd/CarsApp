@@ -386,5 +386,11 @@
   "overduePluralShort": "po termínu",
   "warningSingularShort": "brzy vyprší",
   "warningPluralShort": "brzy vyprší",
-  "expiredByFeminine": "Vypršela před"
+  "expiredByFeminine": "Vypršela před",
+  "unfinishedTripAlertTitle": "Nedokončená víkendová jízda",
+  "unfinishedTripAlertDetail": "Máte probíhající víkendovou jízdu bez konečného stavu tachometru. Klepnutím ji dokončíte.",
+  "unfinishedTripBadge": "🚗 VÍKEND",
+  "unfinishedTripCardDesc": "Máte nedokončenou víkendovou jízdu, kterou je třeba dokončit",
+  "finishTripButton": "Dokončit",
+  "unfinishedUpper": "NEDOKONČENÁ"
 }

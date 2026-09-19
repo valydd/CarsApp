@@ -386,5 +386,11 @@
   "overduePluralShort": "逾期",
   "warningSingularShort": "即将到期",
   "warningPluralShort": "即将到期",
-  "expiredByFeminine": "已过期"
+  "expiredByFeminine": "已过期",
+  "unfinishedTripAlertTitle": "未完成的周末行程",
+  "unfinishedTripAlertDetail": "您有尚未输入结束里程的周末行程。点击以完成它。",
+  "unfinishedTripBadge": "🚗 周末行程",
+  "unfinishedTripCardDesc": "您有需要完成的未结束周末行程",
+  "finishTripButton": "完成",
+  "unfinishedUpper": "未完成"
 }

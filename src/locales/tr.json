@@ -386,5 +386,11 @@
   "overduePluralShort": "gecikmiş",
   "warningSingularShort": "yaklaşan",
   "warningPluralShort": "yaklaşan",
-  "expiredByFeminine": "Süresi doldu"
+  "expiredByFeminine": "Süresi doldu",
+  "unfinishedTripAlertTitle": "Tamamlanmamış hafta sonu seyahati",
+  "unfinishedTripAlertDetail": "Bitiş kilometresi girilmemiş bir hafta sonu seyahatiniz var. Tamamlamak için dokunun.",
+  "unfinishedTripBadge": "🚗 HAFTA SONU",
+  "unfinishedTripCardDesc": "Tamamlanması gereken bir hafta sonu seyahatiniz var",
+  "finishTripButton": "Tamamla",
+  "unfinishedUpper": "TAMAMLANMAMIŞ"
 }

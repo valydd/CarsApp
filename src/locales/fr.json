@@ -386,5 +386,11 @@
   "overduePluralShort": "échéances",
   "warningSingularShort": "à venir",
   "warningPluralShort": "à venir",
-  "expiredByFeminine": "Expirée depuis"
+  "expiredByFeminine": "Expirée depuis",
+  "unfinishedTripAlertTitle": "Trajet de week-end inachevé",
+  "unfinishedTripAlertDetail": "Vous avez un trajet de week-end en cours sans kilométrage de fin. Appuyez pour le terminer.",
+  "unfinishedTripBadge": "🚗 WEEK-END",
+  "unfinishedTripCardDesc": "Vous avez un trajet de week-end inachevé à finaliser",
+  "finishTripButton": "Terminer",
+  "unfinishedUpper": "INACHEVÉ"
 }

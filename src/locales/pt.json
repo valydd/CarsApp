@@ -386,5 +386,11 @@
   "overduePluralShort": "vencimentos",
   "warningSingularShort": "a vencer",
   "warningPluralShort": "a vencer",
-  "expiredByFeminine": "Vencida há"
+  "expiredByFeminine": "Vencida há",
+  "unfinishedTripAlertTitle": "Viagem de fim de semana não finalizada",
+  "unfinishedTripAlertDetail": "Tem uma viagem de fim de semana em curso sem quilometragem final. Toque para finalizá-la.",
+  "unfinishedTripBadge": "🚗 FIM DE SEMANA",
+  "unfinishedTripCardDesc": "Tem uma viagem de fim de semana não finalizada que precisa de ser concluída",
+  "finishTripButton": "Finalizar",
+  "unfinishedUpper": "NÃO FINALIZADA"
 }

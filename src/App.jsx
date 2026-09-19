@@ -451,12 +451,51 @@ export function App() {
     : calculateFleetConsumption(activeVehicles, filteredRecords);
 
   const targetAlertVehicles = (activeVehicles && activeVehicles.length > 0) ? activeVehicles : vehicles;
+  const targetVehicleIds = (targetAlertVehicles || []).map(v => v.id);
+
+  // Check unfinished weekend / personal trips
+  const unfinishedTrips = (personalTrips || []).filter(t => {
+    if (!t) return false;
+    const isOngoing = !t.endKm || t.isOngoing;
+    if (!isOngoing) return false;
+    if (targetVehicleIds.length > 0) {
+      return targetVehicleIds.includes(t.vehicleId);
+    }
+    return true;
+  });
+  const hasUnfinishedTrip = unfinishedTrips.length > 0;
+
   const allAlerts = [];
   (targetAlertVehicles || []).forEach(v => {
     if (!v) return;
     const alerts = getVehicleAlerts(v);
     (alerts || []).forEach(a => allAlerts.push(a));
   });
+
+  // Add unfinished weekend trips to allAlerts
+  unfinishedTrips.forEach(trip => {
+    const veh = (vehicles || []).find(v => v.id === trip.vehicleId) || { id: trip.vehicleId, plate: trip.vehiclePlate || '—', makeModel: '' };
+    allAlerts.push({
+      id: `unfinished-trip-${trip.id}`,
+      vehicleId: trip.vehicleId,
+      vehicle: veh,
+      plate: veh.plate || trip.vehiclePlate || '—',
+      type: 'unfinishedTrip',
+      categoryKey: 'weekendTrip',
+      categoryBadgeRo: 'Curse Weekend',
+      severity: 'critical',
+      isPersonalTrip: true,
+      trip: trip,
+      startDate: trip.date || trip.startDate,
+      startKm: trip.startKm,
+      titleRo: 'Cursă weekend neterminată',
+      titleEn: 'Unfinished weekend trip',
+      detailRo: `Cursă începută la ${Number(trip.startKm || 0).toLocaleString('ro-RO')} km fără kilometraj de final`,
+      detailEn: `Trip started at ${Number(trip.startKm || 0).toLocaleString()} km without end odometer`,
+      daysLeft: -1
+    });
+  });
+
   const urgentAlertsCount = allAlerts.filter(a => a && a.severity === 'critical').length;
   const warningAlertsCount = allAlerts.filter(a => a && a.severity === 'warning').length;
   const totalAlertsCount = allAlerts.length;
@@ -488,6 +527,7 @@ export function App() {
         onOpenVehicles={() => setIsVehiclesModalOpen(true)}
         urgentAlertsCount={urgentAlertsCount}
         totalAlertsCount={totalAlertsCount}
+        hasUnfinishedTrip={hasUnfinishedTrip}
         pulseAlerts={pulseAlerts}
         vehiclesCount={vehicles.length}
         vehicles={vehicles}
@@ -554,6 +594,7 @@ export function App() {
               records={filteredRecords}
               vehicles={vehicles}
               personalTrips={personalTrips}
+              hasUnfinishedTrip={hasUnfinishedTrip}
               lang={lang}
             />
 
@@ -690,6 +731,8 @@ export function App() {
 
             <AlertsBanner
               vehicles={activeVehicles.length > 0 ? activeVehicles : vehicles}
+              personalTrips={personalTrips}
+              onOpenPersonalTrip={handleEditPersonalTrip}
               onSelectVehicle={(vId) => setSelectedVehicleIds([vId])}
               lang={lang}
             />
@@ -967,14 +1010,20 @@ export function App() {
                     {/* Unda compacta de pulsare radar */}
                     {pulseAlerts && (
                       <span className={`alert-wave-1 absolute inline-flex h-full w-full rounded-full opacity-60 ${
-                        urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500'
+                        hasUnfinishedTrip 
+                          ? 'bg-rose-400' 
+                          : (urgentAlertsCount > 0 ? 'bg-rose-500' : 'bg-amber-500')
                       }`} />
                     )}
                     {/* Bulină vizibilă cu numărul de alerte */}
                     <span className={`relative inline-flex items-center justify-center min-w-[19px] h-[19px] px-1 rounded-full text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-900 leading-none select-none ${
                       pulseAlerts 
-                        ? (urgentAlertsCount > 0 ? 'alert-pulse-rose bg-rose-600' : 'alert-pulse-amber bg-amber-500')
-                        : (urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500')
+                        ? (hasUnfinishedTrip 
+                            ? 'alert-pulse-weekend bg-rose-400 dark:bg-rose-500' 
+                            : (urgentAlertsCount > 0 ? 'alert-pulse-rose bg-rose-600' : 'alert-pulse-amber bg-amber-500'))
+                        : (hasUnfinishedTrip 
+                            ? 'bg-rose-400 dark:bg-rose-500' 
+                            : (urgentAlertsCount > 0 ? 'bg-rose-600' : 'bg-amber-500'))
                     }`}>
                       {totalAlertsCount > 99 ? '99+' : totalAlertsCount}
                     </span>

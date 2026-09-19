@@ -386,5 +386,11 @@
   "overduePluralShort": "기한 초과",
   "warningSingularShort": "임박",
   "warningPluralShort": "임박",
-  "expiredByFeminine": "만료됨"
+  "expiredByFeminine": "만료됨",
+  "unfinishedTripAlertTitle": "완료되지 않은 주말 주행",
+  "unfinishedTripAlertDetail": "종료 주행 거리가 입력되지 않은 주말 주행이 있습니다. 탭하여 완료하세요.",
+  "unfinishedTripBadge": "🚗 주말 주행",
+  "unfinishedTripCardDesc": "완료해야 하는 주말 주행이 있습니다",
+  "finishTripButton": "완료",
+  "unfinishedUpper": "미완료"
 }

@@ -16,6 +16,7 @@ export const DashboardStats = ({
   records = [],
   vehicles = [],
   personalTrips = [],
+  hasUnfinishedTrip = false,
   lang = 'ro'
 }) => {
   const t = translations[lang] || translations.ro;
@@ -549,7 +550,9 @@ export const DashboardStats = ({
             </div>
             <p className="text-[10.5px] text-slate-500 dark:text-slate-400 truncate">
               {activeAlertsCount > 0 
-                ? (t.inspectDeadlines || 'Apasă pentru a vedea scadențele depășite sau apropiate')
+                ? (hasUnfinishedTrip 
+                    ? (t.unfinishedTripCardDesc || 'Ai o cursă de weekend neterminată ce necesită finalizare')
+                    : (t.inspectDeadlines || 'Apasă pentru a vedea scadențele depășite sau apropiate'))
                 : (t.allCompliant || 'Toate inspecțiile, reviziile și actele vehiculelor sunt conforme')}
             </p>
           </div>

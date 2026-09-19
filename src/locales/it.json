@@ -386,5 +386,11 @@
   "overduePluralShort": "scadenze",
   "warningSingularShort": "in scadenza",
   "warningPluralShort": "in scadenza",
-  "expiredByFeminine": "Scaduta da"
+  "expiredByFeminine": "Scaduta da",
+  "unfinishedTripAlertTitle": "Viaggio weekend non completato",
+  "unfinishedTripAlertDetail": "Hai un viaggio di fine settimana in corso senza chilometraggio finale. Tocca per completarlo.",
+  "unfinishedTripBadge": "🚗 WEEKEND",
+  "unfinishedTripCardDesc": "Hai un viaggio di fine settimana non completato da finalizzare",
+  "finishTripButton": "Completa",
+  "unfinishedUpper": "INCOMPLETO"
 }

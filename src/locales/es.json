@@ -386,5 +386,11 @@
   "overduePluralShort": "vencimientos",
   "warningSingularShort": "por vencer",
   "warningPluralShort": "por vencer",
-  "expiredByFeminine": "Vencida hace"
+  "expiredByFeminine": "Vencida hace",
+  "unfinishedTripAlertTitle": "Viaje de fin de semana sin terminar",
+  "unfinishedTripAlertDetail": "Tienes un viaje de fin de semana en curso sin kilometraje final. Toca para completarlo.",
+  "unfinishedTripBadge": "🚗 FIN DE SEMANA",
+  "unfinishedTripCardDesc": "Tienes un viaje de fin de semana sin terminar que debe completarse",
+  "finishTripButton": "Completar",
+  "unfinishedUpper": "SIN TERMINAR"
 }

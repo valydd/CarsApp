@@ -386,5 +386,11 @@
   "overduePluralShort": "überfällig",
   "warningSingularShort": "bald fällig",
   "warningPluralShort": "bald fällig",
-  "expiredByFeminine": "Abgelaufen seit"
+  "expiredByFeminine": "Abgelaufen seit",
+  "unfinishedTripAlertTitle": "Unvollendete Wochenendfahrt",
+  "unfinishedTripAlertDetail": "Sie haben eine laufende Wochenendfahrt ohne Endkilometerstand. Tippen Sie, um sie abzuschließen.",
+  "unfinishedTripBadge": "🚗 WOCHENENDE",
+  "unfinishedTripCardDesc": "Sie haben eine unvollendete Wochenendfahrt, die abgeschlossen werden muss",
+  "finishTripButton": "Abschließen",
+  "unfinishedUpper": "UNVOLLENDET"
 }

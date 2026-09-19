@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { AlertCircle, AlertTriangle, ChevronDown, ChevronUp, Clock, Calendar, Gauge, Wrench, ShieldAlert, ChevronRight, Disc } from 'lucide-react';
+import { AlertCircle, AlertTriangle, ChevronDown, ChevronUp, Clock, Calendar, Gauge, Wrench, ShieldAlert, ChevronRight, Disc, Navigation } from 'lucide-react';
 import { translations } from '../i18n';
 import { getVehicleAlerts } from '../utils/calculations';
 
-export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang, inline = false }) => {
+export const AlertsBanner = ({ vehicles, personalTrips = [], onSelectVehicle, onOpenAlertsTab, onOpenPersonalTrip, lang, inline = false }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const t = translations[lang] || translations.ro;
 
@@ -15,7 +15,43 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
     });
   });
 
+  const targetVehicleIds = (vehicles || []).map(v => v.id);
+  const unfinishedTrips = (personalTrips || []).filter(t => {
+    if (!t) return false;
+    const isOngoing = !t.endKm || t.isOngoing;
+    if (!isOngoing) return false;
+    if (targetVehicleIds.length > 0) {
+      return targetVehicleIds.includes(t.vehicleId);
+    }
+    return true;
+  });
+
+  unfinishedTrips.forEach(trip => {
+    const veh = (vehicles || []).find(v => v.id === trip.vehicleId) || { id: trip.vehicleId, plate: trip.vehiclePlate || '—', makeModel: '' };
+    allAlerts.push({
+      id: `unfinished-trip-${trip.id}`,
+      vehicleId: trip.vehicleId,
+      vehicle: veh,
+      plate: veh.plate || trip.vehiclePlate || '—',
+      type: 'unfinishedTrip',
+      categoryKey: 'weekendTrip',
+      categoryBadgeRo: 'Curse Weekend',
+      severity: 'critical',
+      isPersonalTrip: true,
+      trip: trip,
+      startDate: trip.date || trip.startDate,
+      startKm: trip.startKm,
+      titleRo: 'Cursă weekend neterminată',
+      titleEn: 'Unfinished weekend trip',
+      detailRo: `Cursă începută la ${Number(trip.startKm || 0).toLocaleString('ro-RO')} km fără kilometraj de final`,
+      detailEn: `Trip started at ${Number(trip.startKm || 0).toLocaleString()} km without end odometer`,
+      daysLeft: -1
+    });
+  });
+
   allAlerts.sort((a, b) => {
+    if (a.type === 'unfinishedTrip' && b.type !== 'unfinishedTrip') return -1;
+    if (a.type !== 'unfinishedTrip' && b.type === 'unfinishedTrip') return 1;
     if (a.severity === 'critical' && b.severity !== 'critical') return -1;
     if (a.severity !== 'critical' && b.severity === 'critical') return 1;
     return (a.daysLeft ?? 999) - (b.daysLeft ?? 999);
@@ -111,10 +147,17 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
       alert.type === 'rovinietaExpiry' ? 'rovinieta' :
       alert.type === 'cascoExpiry' ? 'casco' :
       alert.type.includes('service') ? 'service' :
-      alert.type.includes('tire') ? 'tires' : 'general'
+      alert.type.includes('tire') ? 'tires' :
+      alert.type === 'unfinishedTrip' ? 'weekendTrip' : 'general'
     );
 
     switch (cat) {
+      case 'weekendTrip':
+        return {
+          tag: t.unfinishedTripBadge || t.weekendTripsBadge || '🚗 CURSĂ WEEKEND',
+          color: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30',
+          icon: Navigation
+        };
       case 'rca':
         return {
           tag: t.rcaBadge || '🛡️ RCA',
@@ -161,6 +204,9 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
   };
 
   const getAlertTitle = (alert) => {
+    if (alert.type === 'unfinishedTrip') {
+      return t.unfinishedTripAlertTitle || "Cursă weekend neterminată";
+    }
     if (alert.type === 'serviceKm') {
       return alert.kmLeft <= 0 
         ? (t.serviceOverdue || 'Revizie / Schimb Ulei DEPĂȘIT!')
@@ -195,6 +241,13 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
   };
 
   const getAlertDetail = (alert) => {
+    if (alert.type === 'unfinishedTrip') {
+      const startKmStr = Number(alert.startKm || 0).toLocaleString(lang === 'ro' ? 'ro-RO' : 'en-US');
+      const dateStr = alert.startDate ? ` (${alert.startDate})` : '';
+      return (t.unfinishedTripAlertDetail || "Ai o cursă de weekend începută fără kilometraj de final. Apasă pentru a o finaliza.")
+        .replace('{km}', startKmStr)
+        .replace('{date}', dateStr);
+    }
     if (alert.type === 'serviceKm') {
       if (alert.kmLeft <= 0) {
         return (t.kmOverdue || "Depășit cu {km} km (Limită: {limit} km)")
@@ -282,7 +335,13 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
             return (
               <div 
                 key={idx}
-                onClick={() => onSelectVehicle && onSelectVehicle(alert.vehicleId)}
+                onClick={() => {
+                  if (alert.isPersonalTrip && onOpenPersonalTrip) {
+                    onOpenPersonalTrip(alert.trip);
+                  } else if (onSelectVehicle) {
+                    onSelectVehicle(alert.vehicleId);
+                  }
+                }}
                 className={`p-3 rounded-2xl border transition-all cursor-pointer shadow-xs ${
                   isCrit 
                     ? 'bg-rose-100/70 dark:bg-rose-950/40 border-rose-300/80 dark:border-rose-900/60 hover:border-rose-500' 
@@ -306,7 +365,9 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
                       ? 'bg-rose-600 text-white animate-pulse' 
                       : 'bg-amber-500 text-slate-950 font-black'
                   }`}>
-                    {isCrit ? (alert.daysLeft !== undefined && alert.daysLeft < 0 ? (t.expiredUpper || "EXPIRAT") : (t.urgent || "URGENT")) : (t.warning || "ATENȚIE")}
+                    {alert.type === 'unfinishedTrip'
+                      ? (t.unfinishedUpper || "NETERMINAT")
+                      : (isCrit ? (alert.daysLeft !== undefined && alert.daysLeft < 0 ? (t.expiredUpper || "EXPIRAT") : (t.urgent || "URGENT")) : (t.warning || "ATENȚIE"))}
                   </span>
                 </div>
 
@@ -346,6 +407,26 @@ export const AlertsBanner = ({ vehicles, onSelectVehicle, onOpenAlertsTab, lang,
                         </span>
                       )}
                     </div>
+
+                    {/* RÂNDUL 4: Buton rapid pentru finalizare cursă personală */}
+                    {alert.isPersonalTrip && (
+                      <div className="mt-2.5 pt-2 border-t border-rose-200/60 dark:border-rose-900/40 flex items-center justify-between gap-2">
+                        <span className="text-[11px] font-semibold text-rose-700 dark:text-rose-300 truncate">
+                          {t.ongoingTripSubtitle || "Cursă fără kilometraj de final"}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenPersonalTrip && onOpenPersonalTrip(alert.trip);
+                          }}
+                          className="px-2.5 py-1 text-[11px] font-black text-white bg-rose-600 hover:bg-rose-500 rounded-lg shadow-xs cursor-pointer flex items-center gap-1 active:scale-95 transition-all shrink-0"
+                        >
+                          <span>🏁</span>
+                          <span>{t.finishTripButton || "Finalizează"}</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -386,5 +386,11 @@
   "overduePluralShort": "terminy",
   "warningSingularShort": "wkrótce",
   "warningPluralShort": "wkrótce",
-  "expiredByFeminine": "Wygasła od"
+  "expiredByFeminine": "Wygasła od",
+  "unfinishedTripAlertTitle": "Niedokończona trasa weekendowa",
+  "unfinishedTripAlertDetail": "Masz trwającą trasę weekendową bez końcowego przebiegu. Dotknij, aby ją dokończyć.",
+  "unfinishedTripBadge": "🚗 WEEKEND",
+  "unfinishedTripCardDesc": "Masz niedokończoną trasę weekendową, którą należy sfinalizować",
+  "finishTripButton": "Zakończ",
+  "unfinishedUpper": "NIEDOKOŃCZONA"
 }

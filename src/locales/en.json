@@ -386,5 +386,11 @@
   "rankingImpact": "Ranking Impact",
   "validityAndExpiry": "Validity & Alert Deadline",
   "itpStation": "MOT Station",
-  "insuranceCompany": "Insurance Company"
+  "insuranceCompany": "Insurance Company",
+  "unfinishedTripAlertTitle": "Unfinished weekend trip",
+  "unfinishedTripAlertDetail": "You have an ongoing weekend trip without an ending odometer. Tap to complete it.",
+  "unfinishedTripBadge": "🚗 WEEKEND TRIP",
+  "unfinishedTripCardDesc": "You have an unfinished weekend trip that needs to be completed",
+  "finishTripButton": "Complete",
+  "unfinishedUpper": "UNFINISHED"
 }

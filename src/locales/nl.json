@@ -386,5 +386,11 @@
   "overduePluralShort": "vervallen",
   "warningSingularShort": "binnenkort",
   "warningPluralShort": "binnenkort",
-  "expiredByFeminine": "Verlopen sinds"
+  "expiredByFeminine": "Verlopen sinds",
+  "unfinishedTripAlertTitle": "Onvoltooide weekendrit",
+  "unfinishedTripAlertDetail": "U heeft een lopende weekendrit zonder eindkilometerstand. Tik om deze te voltooien.",
+  "unfinishedTripBadge": "🚗 WEEKEND",
+  "unfinishedTripCardDesc": "U heeft een onvoltooide weekendrit die voltooid moet worden",
+  "finishTripButton": "Voltooien",
+  "unfinishedUpper": "ONVOLTOOID"
 }

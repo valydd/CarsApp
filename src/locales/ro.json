@@ -386,5 +386,11 @@
   "rankingImpact": "Impact în Clasament",
   "validityAndExpiry": "Valabilitate & Scadență Alertă",
   "itpStation": "Stație ITP",
-  "insuranceCompany": "Companie Asigurare"
+  "insuranceCompany": "Companie Asigurare",
+  "unfinishedTripAlertTitle": "Cursă weekend neterminată",
+  "unfinishedTripAlertDetail": "Ai o cursă de weekend începută fără kilometraj de final. Apasă pentru a o finaliza.",
+  "unfinishedTripBadge": "🚗 CURSĂ WEEKEND",
+  "unfinishedTripCardDesc": "Ai o cursă de weekend neterminată ce necesită finalizare",
+  "finishTripButton": "Finalizează",
+  "unfinishedUpper": "NETERMINAT"
 }

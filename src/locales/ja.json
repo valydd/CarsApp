@@ -386,5 +386,11 @@
   "overduePluralShort": "期限切れ",
   "warningSingularShort": "まもなく期限",
   "warningPluralShort": "まもなく期限",
-  "expiredByFeminine": "期限切れ"
+  "expiredByFeminine": "期限切れ",
+  "unfinishedTripAlertTitle": "未完了の週末走行",
+  "unfinishedTripAlertDetail": "終了走行距離が未入力の週末走行があります。タップして完了してください。",
+  "unfinishedTripBadge": "🚗 週末走行",
+  "unfinishedTripCardDesc": "完了が必要な未完了の週末走行があります",
+  "finishTripButton": "完了",
+  "unfinishedUpper": "未完了"
 }

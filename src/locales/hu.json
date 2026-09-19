@@ -386,5 +386,11 @@
   "overduePluralShort": "lejárt",
   "warningSingularShort": "hamarosan",
   "warningPluralShort": "hamarosan",
-  "expiredByFeminine": "Lejárt"
+  "expiredByFeminine": "Lejárt",
+  "unfinishedTripAlertTitle": "Befejezetlen hétvégi utazás",
+  "unfinishedTripAlertDetail": "Folyamatban lévő hétvégi utazása van végkilométer-állás nélkül. Érintse meg a befejezéshez.",
+  "unfinishedTripBadge": "🚗 HÉTVÉGE",
+  "unfinishedTripCardDesc": "Befejezetlen hétvégi utazása van, amelyet le kell zárni",
+  "finishTripButton": "Befejezés",
+  "unfinishedUpper": "BEFEJEZETLEN"
 }
