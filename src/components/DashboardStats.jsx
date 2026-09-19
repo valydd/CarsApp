@@ -51,7 +51,7 @@ export const DashboardStats = ({
   const tiresTotal = tiresRecords.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
 
   // Arched single checkmark ("un singur v și mai arcuit")
-  const ArchedCheck = ({ className = "w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400 shrink-0" }) => (
+  const ArchedCheck = ({ className = "w-3 h-3 text-emerald-600 dark:text-emerald-400" }) => (
     <svg 
       viewBox="0 0 20 20" 
       fill="none" 
@@ -66,7 +66,7 @@ export const DashboardStats = ({
     </svg>
   );
 
-  // Helper to render main value: date bold and slightly larger (or fleet summary)
+  // Helper to render main value: exact format of amounts displayed in other cards
   const renderDocumentMainValue = (expiryDate, expiredCount, totalCount) => {
     if (selectedVehicle) {
       if (expiryDate) {
@@ -77,12 +77,12 @@ export const DashboardStats = ({
               ? "text-amber-600 dark:text-amber-400" 
               : "text-slate-900 dark:text-white");
         return (
-          <div className={`text-base sm:text-lg font-black tracking-tight font-mono truncate ${colorClass}`}>
+          <div className={`text-base sm:text-lg font-black tracking-tight truncate ${colorClass}`}>
             {formatDateRo(expiryDate)}
           </div>
         );
       }
-      return <div className="text-base sm:text-lg font-black text-slate-400 dark:text-slate-500">—</div>;
+      return <div className="text-base sm:text-lg font-black text-slate-400 dark:text-slate-500 tracking-tight">—</div>;
     } else {
       if (expiredCount > 0) {
         return (
@@ -100,22 +100,50 @@ export const DashboardStats = ({
     }
   };
 
-  // Helper to render status icon at the bottom right where the date used to be
+  // Helper to render status icon in fine round circle border ("chenar fin rotund")
   const renderDocumentStatusIcon = (expiryDate, expiredCount) => {
     if (selectedVehicle) {
       if (expiryDate) {
         const diffDays = getDaysRemaining(expiryDate);
         if (diffDays < 0) {
-          return <X className="w-4 h-4 text-rose-600 dark:text-rose-400 stroke-[2.8] shrink-0" title="Expirat" />;
+          return (
+            <span 
+              className="w-5 h-5 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 flex items-center justify-center shrink-0"
+              title="Expirat"
+            >
+              <X className="w-3 h-3 text-rose-600 dark:text-rose-400 stroke-[3]" />
+            </span>
+          );
         }
-        return <ArchedCheck className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400 shrink-0" />;
+        return (
+          <span 
+            className="w-5 h-5 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 flex items-center justify-center shrink-0"
+            title="Valid"
+          >
+            <ArchedCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+          </span>
+        );
       }
       return null;
     } else {
       if (expiredCount > 0) {
-        return <X className="w-4 h-4 text-rose-600 dark:text-rose-400 stroke-[2.8] shrink-0" title="Atenție: expirate" />;
+        return (
+          <span 
+            className="w-5 h-5 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 flex items-center justify-center shrink-0"
+            title="Atenție: expirate"
+          >
+            <X className="w-3 h-3 text-rose-600 dark:text-rose-400 stroke-[3]" />
+          </span>
+        );
       }
-      return <ArchedCheck className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400 shrink-0" />;
+      return (
+        <span 
+          className="w-5 h-5 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 flex items-center justify-center shrink-0"
+          title="Toate valide"
+        >
+          <ArchedCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+        </span>
+      );
     }
   };
 
