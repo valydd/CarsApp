@@ -168,10 +168,10 @@ export const DashboardStats = ({
   return (
     <div className="space-y-2 sm:space-y-3 mb-3">
       
-      {/* GRILA 1: Costuri, Consum Mediu, Cost / Km, Consum Personal */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
+      {/* GRILA PRINCIPALA: 10 Carduri (2 coloane pe mobil, 5 coloane pe ecran mare) */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-2.5">
         
-        {/* 1. Total Cheltuieli - Pale Emerald */}
+        {/* 1. Total Cheltuieli - Pale Emerald (Col 1, Rând 1) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('rankings')}
           className="bg-emerald-50/45 dark:bg-emerald-950/25 border border-emerald-200/60 dark:border-emerald-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-emerald-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
@@ -206,43 +206,7 @@ export const DashboardStats = ({
           </div>
         </div>
 
-        {/* 2. Consum Mediu - Pale Sky */}
-        <div 
-          onClick={() => onNavigateTab && onNavigateTab('fuel')}
-          className="bg-sky-50/45 dark:bg-sky-950/25 border border-sky-200/60 dark:border-sky-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-sky-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
-        >
-          <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
-              {selectedVehicle 
-                ? `${t.consumption || 'Consum'} ${selectedVehicle.plate}` 
-                : isMultiSelection 
-                  ? `${t.consumption || 'Consum'} (${selectedCount})`
-                  : t.avgFleetConsumption}
-            </span>
-            <div className="p-1 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 transition-colors shrink-0">
-              <Fuel className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div>
-            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-              {avgConsumption ? (
-                <>
-                  {avgConsumption} <span className="text-[10px] font-bold text-sky-600 dark:text-sky-400">L/100</span>
-                </>
-              ) : (
-                <span className="text-sm font-bold text-slate-400 dark:text-slate-500">—</span>
-              )}
-            </div>
-            <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate text-sky-600 dark:text-sky-400 font-semibold">
-                {t.viewLogs || 'Vezi alimentări →'}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 3. Cost / Km - Pale Purple */}
+        {/* 2. Cost / Km - Pale Purple (Col 2, Rând 1) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('costPerKm')}
           className="bg-purple-50/45 dark:bg-purple-950/25 border border-purple-200/60 dark:border-purple-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-purple-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
@@ -280,7 +244,155 @@ export const DashboardStats = ({
           </div>
         </div>
 
-        {/* 4. Curse Weekend & Personal - Pale Rose */}
+        {/* 3. Reparații - Pale Amber (Col 1, Rând 2) */}
+        <div 
+          onClick={() => onNavigateTab && onNavigateTab('repairs')}
+          className="bg-amber-50/45 dark:bg-amber-950/25 border border-amber-200/60 dark:border-amber-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          title="Apasă pentru detalii reparații"
+        >
+          <div className="flex items-center justify-between mb-0.5">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+              {t.repairsAndParts || "Reparații & Piese"}
+            </span>
+            <div className="p-1 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 transition-colors shrink-0">
+              <Wrench className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div>
+            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+              {repairTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">RON</span>
+            </div>
+            <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="truncate">
+                {repairRecords.length} {t.interventions || "intervenții"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Revizii & Service - Pale Teal (Col 2, Rând 2) */}
+        <div 
+          onClick={() => onNavigateTab && onNavigateTab('service')}
+          className="bg-teal-50/45 dark:bg-teal-950/25 border border-teal-200/60 dark:border-teal-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          title="Apasă pentru detalii revizii"
+        >
+          <div className="flex items-center justify-between mb-0.5">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+              {t.servicesAndOil || "Revizii & Service"}
+            </span>
+            <div className="p-1 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 transition-colors shrink-0">
+              <Sparkles className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div>
+            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+              {serviceTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">RON</span>
+            </div>
+            <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="truncate">
+                {selectedVehicle?.nextServiceKm 
+                  ? `${t.nextService || 'Următoarea'}: ${selectedVehicle.nextServiceKm.toLocaleString()} km`
+                  : `${serviceRecords.length} ${t.services || 'revizii'}`}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 5. Inspecție ITP - Pale Indigo (Col 1, Rând 3) */}
+        <div 
+          onClick={() => onNavigateTab && onNavigateTab('itp')}
+          className="bg-indigo-50/45 dark:bg-indigo-950/25 border border-indigo-200/60 dark:border-indigo-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          title="Apasă pentru detalii ITP"
+        >
+          <div className="flex items-center justify-between mb-0.5">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+              {t.itpInspection || "Inspecție ITP"}
+            </span>
+            <div className="p-1 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors shrink-0">
+              <CheckSquare className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div>
+            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${itpStatusColor}`}>
+              {itpStatusText}
+            </div>
+            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="truncate">{itpSubText}</span>
+              {selectedVehicle?.itpExpiry && (
+                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 shrink-0 ml-1">
+                  {formatDateRo(selectedVehicle.itpExpiry)}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* 6. Consum Mediu - Pale Sky (Col 2, Rând 3) */}
+        <div 
+          onClick={() => onNavigateTab && onNavigateTab('fuel')}
+          className="bg-sky-50/45 dark:bg-sky-950/25 border border-sky-200/60 dark:border-sky-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-sky-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          title={t.fuelConsumptionTitle || "Apasă pentru date despre carburant & consum"}
+        >
+          <div className="flex items-center justify-between mb-0.5">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+              {selectedVehicle 
+                ? `${t.consumption || 'Consum'} ${selectedVehicle.plate}` 
+                : isMultiSelection 
+                  ? `${t.consumption || 'Consum'} (${selectedCount})`
+                  : t.avgFleetConsumption}
+            </span>
+            <div className="p-1 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500/20 transition-colors shrink-0">
+              <Fuel className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div>
+            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+              {avgConsumption ? (
+                <>
+                  {avgConsumption} <span className="text-[10px] font-bold text-sky-600 dark:text-sky-400">L/100</span>
+                </>
+              ) : (
+                <span className="text-sm font-bold text-slate-400 dark:text-slate-500">—</span>
+              )}
+            </div>
+            <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="truncate text-sky-600 dark:text-sky-400 font-semibold">
+                {t.viewLogs || 'Vezi alimentări →'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 7. Asigurare RCA - Pale Orange (Col 1, Rând 4) */}
+        <div 
+          onClick={() => onNavigateTab && onNavigateTab('insurance')}
+          className="bg-orange-50/45 dark:bg-orange-950/25 border border-orange-200/60 dark:border-orange-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-orange-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          title="Apasă pentru detalii asigurare RCA"
+        >
+          <div className="flex items-center justify-between mb-0.5">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
+              {t.mandatoryInsurance || "Asigurare RCA"}
+            </span>
+            <div className="p-1 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 transition-colors shrink-0">
+              <FileText className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <div>
+            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rcaStatusColor}`}>
+              {rcaStatusText}
+            </div>
+            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="truncate">{rcaSubText}</span>
+              {selectedVehicle?.rcaExpiry && (
+                <span className="font-mono font-bold text-orange-600 dark:text-orange-400 shrink-0 ml-1">
+                  {formatDateRo(selectedVehicle.rcaExpiry)}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* 8. Curse Weekend & Personal - Pale Rose (Col 2, Rând 4) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('personal')}
           className="bg-rose-50/45 dark:bg-rose-950/25 border border-rose-200/60 dark:border-rose-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-rose-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
@@ -324,66 +436,36 @@ export const DashboardStats = ({
           </div>
         </div>
 
-      </div>
-
-      {/* GRILA 2: Reparații, Revizii, Anvelope, Asigurare RCA, ITP, Rovinietă */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
-        
-        {/* 5. Reparații - Pale Amber */}
+        {/* 9. Rovinietă & Taxe - Pale Lime (Col 1, Rând 5) */}
         <div 
-          onClick={() => onNavigateTab && onNavigateTab('repairs')}
-          className="bg-amber-50/45 dark:bg-amber-950/25 border border-amber-200/60 dark:border-amber-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-amber-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru detalii reparații"
+          onClick={() => onNavigateTab && onNavigateTab('rovinieta')}
+          className="bg-lime-50/45 dark:bg-lime-950/25 border border-lime-200/60 dark:border-lime-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-lime-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
+          title="Apasă pentru detalii Rovinietă"
         >
           <div className="flex items-center justify-between mb-0.5">
             <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
-              {t.repairsAndParts || "Reparații & Piese"}
+              {t.vignetteAndTaxes || "Rovinietă & Taxe"}
             </span>
-            <div className="p-1 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500/20 transition-colors shrink-0">
-              <Wrench className="w-3.5 h-3.5" />
+            <div className="p-1 rounded-xl bg-lime-500/10 text-lime-700 dark:text-lime-400 group-hover:bg-lime-500/20 transition-colors shrink-0">
+              <MapPin className="w-3.5 h-3.5" />
             </div>
           </div>
           <div>
-            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-              {repairTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">RON</span>
+            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rovStatusColor}`}>
+              {rovStatusText}
             </div>
-            <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">
-                {repairRecords.length} {t.interventions || "intervenții"}
-              </span>
+            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="truncate">{rovSubText}</span>
+              {selectedVehicle?.rovinietaExpiry && (
+                <span className="font-mono font-bold text-lime-700 dark:text-lime-400 shrink-0 ml-1">
+                  {formatDateRo(selectedVehicle.rovinietaExpiry)}
+                </span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* 6. Revizii & Service - Pale Teal */}
-        <div 
-          onClick={() => onNavigateTab && onNavigateTab('service')}
-          className="bg-teal-50/45 dark:bg-teal-950/25 border border-teal-200/60 dark:border-teal-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-teal-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru detalii revizii"
-        >
-          <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
-              {t.servicesAndOil || "Revizii & Service"}
-            </span>
-            <div className="p-1 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-500/20 transition-colors shrink-0">
-              <Sparkles className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div>
-            <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-              {serviceTotal.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">RON</span>
-            </div>
-            <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">
-                {selectedVehicle?.nextServiceKm 
-                  ? `${t.nextService || 'Următoarea'}: ${selectedVehicle.nextServiceKm.toLocaleString()} km`
-                  : `${serviceRecords.length} ${t.services || 'revizii'}`}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 7. Anvelope & Roți - Pale Slate / Silver */}
+        {/* 10. Anvelope & Roți - Pale Slate / Silver (Col 2, Rând 5) */}
         <div 
           onClick={() => onNavigateTab && onNavigateTab('tires')}
           className="bg-slate-100/60 dark:bg-slate-800/35 border border-slate-300/70 dark:border-slate-700/50 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-slate-400/60 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
@@ -415,93 +497,6 @@ export const DashboardStats = ({
                   ? `${tiresRecords.length} ${t.tireRecords || 'achiziții / schimburi'}`
                   : (selectedVehicle?.tires ? `${selectedVehicle.tires.brand} (${selectedVehicle.tires.type})` : (t.tireManagement || 'Gestiune anvelope'))}
               </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 8. Asigurare RCA - Pale Orange */}
-        <div 
-          onClick={() => onNavigateTab && onNavigateTab('insurance')}
-          className="bg-orange-50/45 dark:bg-orange-950/25 border border-orange-200/60 dark:border-orange-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-orange-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru detalii asigurare RCA"
-        >
-          <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
-              {t.mandatoryInsurance || "Asigurare RCA"}
-            </span>
-            <div className="p-1 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500/20 transition-colors shrink-0">
-              <FileText className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div>
-            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rcaStatusColor}`}>
-              {rcaStatusText}
-            </div>
-            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">{rcaSubText}</span>
-              {selectedVehicle?.rcaExpiry && (
-                <span className="font-mono font-bold text-orange-600 dark:text-orange-400 shrink-0 ml-1">
-                  {formatDateRo(selectedVehicle.rcaExpiry)}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* 9. ITP - Pale Indigo */}
-        <div 
-          onClick={() => onNavigateTab && onNavigateTab('itp')}
-          className="bg-indigo-50/45 dark:bg-indigo-950/25 border border-indigo-200/60 dark:border-indigo-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-indigo-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru detalii ITP"
-        >
-          <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
-              {t.itpInspection || "Inspecție ITP"}
-            </span>
-            <div className="p-1 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 transition-colors shrink-0">
-              <CheckSquare className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div>
-            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${itpStatusColor}`}>
-              {itpStatusText}
-            </div>
-            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">{itpSubText}</span>
-              {selectedVehicle?.itpExpiry && (
-                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 shrink-0 ml-1">
-                  {formatDateRo(selectedVehicle.itpExpiry)}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* 10. Rovinietă & Taxe - Pale Lime */}
-        <div 
-          onClick={() => onNavigateTab && onNavigateTab('rovinieta')}
-          className="bg-lime-50/45 dark:bg-lime-950/25 border border-lime-200/60 dark:border-lime-800/40 rounded-2xl flex flex-col justify-between min-h-[104px] sm:min-h-[109px] p-2.5 sm:p-3 relative overflow-hidden group hover:border-lime-400/50 transition-all shadow-xs cursor-pointer active:scale-[0.98]"
-          title="Apasă pentru detalii Rovinietă"
-        >
-          <div className="flex items-center justify-between mb-0.5">
-            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate">
-              {t.vignetteAndTaxes || "Rovinietă & Taxe"}
-            </span>
-            <div className="p-1 rounded-xl bg-lime-500/10 text-lime-700 dark:text-lime-400 group-hover:bg-lime-500/20 transition-colors shrink-0">
-              <MapPin className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div>
-            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rovStatusColor}`}>
-              {rovStatusText}
-            </div>
-            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">{rovSubText}</span>
-              {selectedVehicle?.rovinietaExpiry && (
-                <span className="font-mono font-bold text-lime-700 dark:text-lime-400 shrink-0 ml-1">
-                  {formatDateRo(selectedVehicle.rovinietaExpiry)}
-                </span>
-              )}
             </div>
           </div>
         </div>
