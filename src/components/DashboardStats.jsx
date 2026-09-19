@@ -100,7 +100,7 @@ export const DashboardStats = ({
     }
   };
 
-  // Helper to render status icon in fine round circle border ("chenar fin rotund")
+  // Helper to render status icon in fine round circle border matching '+' button size in Curse Weekend
   const renderDocumentStatusIcon = (expiryDate, expiredCount) => {
     if (selectedVehicle) {
       if (expiryDate) {
@@ -108,19 +108,19 @@ export const DashboardStats = ({
         if (diffDays < 0) {
           return (
             <span 
-              className="w-5 h-5 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 flex items-center justify-center shrink-0"
+              className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
               title="Expirat"
             >
-              <X className="w-3 h-3 text-rose-600 dark:text-rose-400 stroke-[3]" />
+              <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-rose-600 dark:text-rose-400 stroke-[2.8]" />
             </span>
           );
         }
         return (
           <span 
-            className="w-5 h-5 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 flex items-center justify-center shrink-0"
+            className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
             title="Valid"
           >
-            <ArchedCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+            <ArchedCheck className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-600 dark:text-emerald-400 stroke-[2.8]" />
           </span>
         );
       }
@@ -129,19 +129,19 @@ export const DashboardStats = ({
       if (expiredCount > 0) {
         return (
           <span 
-            className="w-5 h-5 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 flex items-center justify-center shrink-0"
+            className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-rose-400/50 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
             title="Atenție: expirate"
           >
-            <X className="w-3 h-3 text-rose-600 dark:text-rose-400 stroke-[3]" />
+            <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-rose-600 dark:text-rose-400 stroke-[2.8]" />
           </span>
         );
       }
       return (
         <span 
-          className="w-5 h-5 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 flex items-center justify-center shrink-0"
+          className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full border border-emerald-400/50 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/15 shadow-xs flex items-center justify-center shrink-0 mb-0.5"
           title="Toate valide"
         >
-          <ArchedCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+          <ArchedCheck className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-600 dark:text-emerald-400 stroke-[2.8]" />
         </span>
       );
     }
@@ -321,20 +321,22 @@ export const DashboardStats = ({
               <CheckSquare className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div>
-            {renderDocumentMainValue(selectedVehicle?.itpExpiry, itpExpiredCount, vehicles.length)}
-            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span className="truncate">
-                {getDocumentSubText(
-                  selectedVehicle?.itpExpiry, 
-                  itpExpiredCount, 
-                  vehicles.length, 
-                  t.activeInspections || "inspecții la zi", 
-                  t.inspectionOverdue || "Inspecție depășită"
-                )}
-              </span>
-              {renderDocumentStatusIcon(selectedVehicle?.itpExpiry, itpExpiredCount)}
+          <div className="flex items-end justify-between gap-1.5 mt-auto">
+            <div className="min-w-0 flex-1">
+              {renderDocumentMainValue(selectedVehicle?.itpExpiry, itpExpiredCount, vehicles.length)}
+              <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                <span className="truncate">
+                  {getDocumentSubText(
+                    selectedVehicle?.itpExpiry, 
+                    itpExpiredCount, 
+                    vehicles.length, 
+                    t.activeInspections || "inspecții la zi", 
+                    t.inspectionOverdue || "Inspecție depășită"
+                  )}
+                </span>
+              </div>
             </div>
+            {renderDocumentStatusIcon(selectedVehicle?.itpExpiry, itpExpiredCount)}
           </div>
         </div>
 
@@ -388,20 +390,22 @@ export const DashboardStats = ({
               <FileText className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div>
-            {renderDocumentMainValue(selectedVehicle?.rcaExpiry, rcaExpiredCount, vehicles.length)}
-            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span className="truncate">
-                {getDocumentSubText(
-                  selectedVehicle?.rcaExpiry, 
-                  rcaExpiredCount, 
-                  vehicles.length, 
-                  t.activePolicies || "polițe active", 
-                  t.requiresRenewal || "Necesită reînnoire"
-                )}
-              </span>
-              {renderDocumentStatusIcon(selectedVehicle?.rcaExpiry, rcaExpiredCount)}
+          <div className="flex items-end justify-between gap-1.5 mt-auto">
+            <div className="min-w-0 flex-1">
+              {renderDocumentMainValue(selectedVehicle?.rcaExpiry, rcaExpiredCount, vehicles.length)}
+              <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                <span className="truncate">
+                  {getDocumentSubText(
+                    selectedVehicle?.rcaExpiry, 
+                    rcaExpiredCount, 
+                    vehicles.length, 
+                    t.activePolicies || "polițe active", 
+                    t.requiresRenewal || "Necesită reînnoire"
+                  )}
+                </span>
+              </div>
             </div>
+            {renderDocumentStatusIcon(selectedVehicle?.rcaExpiry, rcaExpiredCount)}
           </div>
         </div>
 
@@ -463,20 +467,22 @@ export const DashboardStats = ({
               <MapPin className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div>
-            {renderDocumentMainValue(selectedVehicle?.rovinietaExpiry, rovExpiredCount, (vehicles || []).length)}
-            <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span className="truncate">
-                {getDocumentSubText(
-                  selectedVehicle?.rovinietaExpiry, 
-                  rovExpiredCount, 
-                  (vehicles || []).length, 
-                  t.activeVignettes || "roviniete active", 
-                  t.requiresPurchase || "Necesită achiziție"
-                )}
-              </span>
-              {renderDocumentStatusIcon(selectedVehicle?.rovinietaExpiry, rovExpiredCount)}
+          <div className="flex items-end justify-between gap-1.5 mt-auto">
+            <div className="min-w-0 flex-1">
+              {renderDocumentMainValue(selectedVehicle?.rovinietaExpiry, rovExpiredCount, (vehicles || []).length)}
+              <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                <span className="truncate">
+                  {getDocumentSubText(
+                    selectedVehicle?.rovinietaExpiry, 
+                    rovExpiredCount, 
+                    (vehicles || []).length, 
+                    t.activeVignettes || "roviniete active", 
+                    t.requiresPurchase || "Necesită achiziție"
+                  )}
+                </span>
+              </div>
             </div>
+            {renderDocumentStatusIcon(selectedVehicle?.rovinietaExpiry, rovExpiredCount)}
           </div>
         </div>
 
