@@ -1,5 +1,4 @@
-import React from 'react';
-import { DollarSign, Fuel, Gauge, TrendingUp, AlertTriangle, ShieldCheck, Wrench, Sparkles, FileText, CheckSquare, Navigation, Disc, MapPin, Plus } from 'lucide-react';
+import { DollarSign, Fuel, Gauge, TrendingUp, AlertTriangle, ShieldCheck, Wrench, Sparkles, FileText, CheckSquare, Navigation, Disc, MapPin, Plus, CheckCheck, X } from 'lucide-react';
 import { translations } from '../i18n';
 import { getDaysRemaining, formatDateRo } from '../utils/calculations';
 
@@ -51,119 +50,76 @@ export const DashboardStats = ({
   const tiresRecords = relevantRecords.filter(r => r.category === 'tires');
   const tiresTotal = tiresRecords.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
 
-  // 3. ASIGURARE RCA STATS
-  let rcaStatusText = '';
-  let rcaStatusColor = 'text-slate-900 dark:text-white';
-  let rcaSubText = '';
-
-  if (selectedVehicle) {
-    if (selectedVehicle.rcaExpiry) {
-      const diffDays = getDaysRemaining(selectedVehicle.rcaExpiry);
-      if (diffDays < 0) {
-        rcaStatusText = t.expiredFeminine || t.expired || "Expirată!";
-        rcaStatusColor = "text-rose-600 dark:text-rose-400";
-        rcaSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
-      } else if (diffDays <= 30) {
-        rcaStatusText = `${diffDays} ${t.days || "zile"}`;
-        rcaStatusColor = "text-amber-600 dark:text-amber-400";
-        rcaSubText = t.expiresSoon || "Expiră în curând";
-      } else {
-        rcaStatusText = t.validFeminine || t.valid || "Validă";
-        rcaStatusColor = "text-emerald-600 dark:text-emerald-400";
-        rcaSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
+  // Helper to render document status icon/value (ITP, RCA, Rovinieta)
+  const renderDocumentStatus = (expiryDate, expiredCount) => {
+    if (selectedVehicle) {
+      if (expiryDate) {
+        const diffDays = getDaysRemaining(expiryDate);
+        if (diffDays < 0) {
+          return (
+            <span className="inline-flex items-center text-rose-600 dark:text-rose-400" title="Expirată (nu este în termen)">
+              <X className="w-6 h-6 stroke-[3]" />
+            </span>
+          );
+        } else if (diffDays <= 30) {
+          return (
+            <span className="text-base sm:text-lg font-black tracking-tight text-amber-600 dark:text-amber-400 truncate">
+              {diffDays} {t.days || "zile"}
+            </span>
+          );
+        } else {
+          return (
+            <span className="inline-flex items-center text-emerald-600 dark:text-emerald-400" title="În termen (validă)">
+              <CheckCheck className="w-6 h-6 stroke-[2.8]" />
+            </span>
+          );
+        }
       }
+      return <span className="text-base sm:text-lg font-black text-slate-400">—</span>;
     } else {
-      rcaStatusText = "—";
-      rcaSubText = t.notSet || "Nespecificat";
-    }
-  } else {
-    const expiredCount = vehicles.filter(v => v.rcaExpiry && (getDaysRemaining(v.rcaExpiry) < 0)).length;
-    if (expiredCount > 0) {
-      rcaStatusText = `${expiredCount} ${t.expired || "expirate"}`;
-      rcaStatusColor = "text-rose-600 dark:text-rose-400";
-      rcaSubText = t.requiresRenewal || "Necesită reînnoire";
-    } else {
-      rcaStatusText = t.allValid || "Toate Valide";
-      rcaStatusColor = "text-emerald-600 dark:text-emerald-400";
-      rcaSubText = `${vehicles.length} ${t.activePolicies || "polițe active"}`;
-    }
-  }
-
-  // 4. ITP STATS
-  let itpStatusText = '';
-  let itpStatusColor = 'text-slate-900 dark:text-white';
-  let itpSubText = '';
-
-  if (selectedVehicle) {
-    if (selectedVehicle.itpExpiry) {
-      const diffDays = getDaysRemaining(selectedVehicle.itpExpiry);
-      if (diffDays < 0) {
-        itpStatusText = t.expiredFeminine || t.expired || "Expirată!";
-        itpStatusColor = "text-rose-600 dark:text-rose-400";
-        itpSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
-      } else if (diffDays <= 30) {
-        itpStatusText = `${diffDays} ${t.days || "zile"}`;
-        itpStatusColor = "text-amber-600 dark:text-amber-400";
-        itpSubText = t.expiresSoon || "Expiră în curând";
+      if (expiredCount > 0) {
+        return (
+          <span className="inline-flex items-center gap-1 text-rose-600 dark:text-rose-400 text-base sm:text-lg font-black tracking-tight truncate">
+            <X className="w-5 h-5 stroke-[3] shrink-0" />
+            <span>{expiredCount} {t.expired || "expirate"}</span>
+          </span>
+        );
       } else {
-        itpStatusText = t.validFeminine || t.valid || "Validă";
-        itpStatusColor = "text-emerald-600 dark:text-emerald-400";
-        itpSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
+        return (
+          <span className="inline-flex items-center text-emerald-600 dark:text-emerald-400" title="Toate la zi / În termen">
+            <CheckCheck className="w-6 h-6 stroke-[2.8]" />
+          </span>
+        );
       }
-    } else {
-      itpStatusText = "—";
-      itpSubText = t.notSet || "Nespecificat";
     }
-  } else {
-    const expiredCount = vehicles.filter(v => v.itpExpiry && (getDaysRemaining(v.itpExpiry) < 0)).length;
-    if (expiredCount > 0) {
-      itpStatusText = `${expiredCount} ${t.expired || "expirate"}`;
-      itpStatusColor = "text-rose-600 dark:text-rose-400";
-      itpSubText = t.inspectionOverdue || "Inspecție depășită";
+  };
+
+  // Helper for document card subtext
+  const getDocumentSubText = (expiryDate, expiredCount, totalCount, activeLabel, overdueLabel) => {
+    if (selectedVehicle) {
+      if (expiryDate) {
+        const diffDays = getDaysRemaining(expiryDate);
+        if (diffDays < 0) {
+          return `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
+        } else if (diffDays <= 30) {
+          return t.expiresSoon || "Expiră în curând";
+        } else {
+          return `${diffDays} ${t.daysLeft || "zile rămase"}`;
+        }
+      }
+      return t.notSet || "Nespecificat";
     } else {
-      itpStatusText = t.allUpToDate || t.allValid || "Toate la zi";
-      itpStatusColor = "text-emerald-600 dark:text-emerald-400";
-      itpSubText = `${vehicles.length} ${t.activeInspections || "inspecții la zi"}`;
-    }
-  }
-
-  // 5. ROVINIETA STATS
-  let rovStatusText = '';
-  let rovStatusColor = 'text-slate-900 dark:text-white';
-  let rovSubText = '';
-
-  if (selectedVehicle) {
-    if (selectedVehicle.rovinietaExpiry) {
-      const diffDays = getDaysRemaining(selectedVehicle.rovinietaExpiry);
-      if (diffDays < 0) {
-        rovStatusText = t.expiredFeminine || t.expired || "Expirată!";
-        rovStatusColor = "text-rose-600 dark:text-rose-400";
-        rovSubText = `${t.expiredBy || "Expirat de"} ${Math.abs(diffDays)} ${t.days || "zile"}`;
-      } else if (diffDays <= 30) {
-        rovStatusText = `${diffDays} ${t.days || "zile"}`;
-        rovStatusColor = "text-amber-600 dark:text-amber-400";
-        rovSubText = t.expiresSoon || "Expiră în curând";
+      if (expiredCount > 0) {
+        return overdueLabel;
       } else {
-        rovStatusText = t.validFeminine || t.valid || "Validă";
-        rovStatusColor = "text-emerald-600 dark:text-emerald-400";
-        rovSubText = `${diffDays} ${t.daysLeft || "zile rămase"}`;
+        return `${totalCount} ${activeLabel}`;
       }
-    } else {
-      rovStatusText = "—";
-      rovSubText = t.notSet || "Nespecificat";
     }
-  } else {
-    const expiredCount = (vehicles || []).filter(v => v && v.rovinietaExpiry && (getDaysRemaining(v.rovinietaExpiry) < 0)).length;
-    if (expiredCount > 0) {
-      rovStatusText = `${expiredCount} ${t.expired || "expirate"}`;
-      rovStatusColor = "text-rose-600 dark:text-rose-400";
-      rovSubText = t.requiresPurchase || "Necesită achiziție";
-    } else {
-      rovStatusText = t.allValid || "Toate Valide";
-      rovStatusColor = "text-emerald-600 dark:text-emerald-400";
-      rovSubText = `${(vehicles || []).length} ${t.activeVignettes || "roviniete active"}`;
-    }
-  }
+  };
+
+  const rcaExpiredCount = vehicles.filter(v => v && v.rcaExpiry && (getDaysRemaining(v.rcaExpiry) < 0)).length;
+  const itpExpiredCount = vehicles.filter(v => v && v.itpExpiry && (getDaysRemaining(v.itpExpiry) < 0)).length;
+  const rovExpiredCount = (vehicles || []).filter(v => v && v.rovinietaExpiry && (getDaysRemaining(v.rovinietaExpiry) < 0)).length;
 
   return (
     <div className="space-y-2 sm:space-y-3 mb-3">
@@ -313,11 +269,19 @@ export const DashboardStats = ({
             </div>
           </div>
           <div>
-            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${itpStatusColor}`}>
-              {itpStatusText}
+            <div className="h-7 flex items-center">
+              {renderDocumentStatus(selectedVehicle?.itpExpiry, itpExpiredCount)}
             </div>
             <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">{itpSubText}</span>
+              <span className="truncate">
+                {getDocumentSubText(
+                  selectedVehicle?.itpExpiry, 
+                  itpExpiredCount, 
+                  vehicles.length, 
+                  t.activeInspections || "inspecții la zi", 
+                  t.inspectionOverdue || "Inspecție depășită"
+                )}
+              </span>
               {selectedVehicle?.itpExpiry && (
                  <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 shrink-0 ml-1">
                   {formatDateRo(selectedVehicle.itpExpiry)}
@@ -378,11 +342,19 @@ export const DashboardStats = ({
             </div>
           </div>
           <div>
-            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rcaStatusColor}`}>
-              {rcaStatusText}
+            <div className="h-7 flex items-center">
+              {renderDocumentStatus(selectedVehicle?.rcaExpiry, rcaExpiredCount)}
             </div>
             <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">{rcaSubText}</span>
+              <span className="truncate">
+                {getDocumentSubText(
+                  selectedVehicle?.rcaExpiry, 
+                  rcaExpiredCount, 
+                  vehicles.length, 
+                  t.activePolicies || "polițe active", 
+                  t.requiresRenewal || "Necesită reînnoire"
+                )}
+              </span>
               {selectedVehicle?.rcaExpiry && (
                 <span className="font-mono font-bold text-orange-600 dark:text-orange-400 shrink-0 ml-1">
                   {formatDateRo(selectedVehicle.rcaExpiry)}
@@ -451,11 +423,19 @@ export const DashboardStats = ({
             </div>
           </div>
           <div>
-            <div className={`text-base sm:text-lg font-black tracking-tight truncate ${rovStatusColor}`}>
-              {rovStatusText}
+            <div className="h-7 flex items-center">
+              {renderDocumentStatus(selectedVehicle?.rovinietaExpiry, rovExpiredCount)}
             </div>
             <div className="mt-0.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 truncate">
-              <span className="truncate">{rovSubText}</span>
+              <span className="truncate">
+                {getDocumentSubText(
+                  selectedVehicle?.rovinietaExpiry, 
+                  rovExpiredCount, 
+                  (vehicles || []).length, 
+                  t.activeVignettes || "roviniete active", 
+                  t.requiresPurchase || "Necesită achiziție"
+                )}
+              </span>
               {selectedVehicle?.rovinietaExpiry && (
                 <span className="font-mono font-bold text-lime-700 dark:text-lime-400 shrink-0 ml-1">
                   {formatDateRo(selectedVehicle.rovinietaExpiry)}
