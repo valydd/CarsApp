@@ -442,12 +442,11 @@ export function App() {
 
     // Horizontal swipe: moved at least 60px horizontally in either direction (left or right),
     // mostly horizontal (|diffY| < 55px), within 650ms
+    // Only triggers goBack() when a modal is open or on secondary/detail pages
     if (Math.abs(diffX) > 60 && Math.abs(diffY) < 55 && elapsed < 650) {
       const current = navStateRef.current;
       if (current.isAnyModalOpen || !MAIN_TABS.includes(current.activeTab)) {
         goBackRef.current();
-      } else {
-        setIsReceiptScanOpen(true);
       }
     }
     touchStartRef.current = null;
