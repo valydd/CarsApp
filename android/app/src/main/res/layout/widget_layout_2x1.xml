@@ -12,86 +12,136 @@
         android:src="@drawable/widget_rounded_bg"
         android:scaleType="fitXY" />
 
-    <!-- Content Layout -->
+    <!-- Content: Vertical Layout for Full Width Amount & Large Buttons -->
     <LinearLayout
         android:id="@+id/widget_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp">
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
-        <!-- Left: Unpaid Amount Info -->
+        <!-- Top Section: Amount & Details (Full Width, No Truncation) -->
         <LinearLayout
             android:id="@+id/widget_click_info"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_marginBottom="6dp">
 
-            <TextView
-                android:id="@+id/widget_label"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="RĂMAS WEEKEND"
-                android:textSize="9sp"
-                android:textStyle="bold"
-                android:textColor="#94A3B8"
-                android:singleLine="true" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/widget_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CURSE WEEKEND"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="#A78BFA"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/widget_subtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 cursă de plată"
+                    android:textSize="9.5sp"
+                    android:textColor="#94A3B8"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <!-- Prominent Amount on Right -->
             <TextView
                 android:id="@+id/widget_unpaid_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 RON"
-                android:textSize="15sp"
+                android:text="0,00 RON"
+                android:textSize="17sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:singleLine="true" />
-
-            <TextView
-                android:id="@+id/widget_subtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 curse neachitate"
-                android:textSize="9sp"
-                android:textColor="#64748B"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:gravity="end" />
         </LinearLayout>
 
-        <!-- Right: Action Buttons -->
+        <!-- Bottom Section: Two Large Action Buttons (50% Width Each) -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:orientation="horizontal">
 
-            <!-- Add Fuel Button -->
-            <ImageView
+            <!-- Big Fuel Button -->
+            <LinearLayout
                 android:id="@+id/btn_widget_fuel"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="6dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/widget_button_bg_fuel"
-                android:src="@drawable/ic_widget_fuel"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:contentDescription="Adaugă Alimentare" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp">
 
-            <!-- Add Weekend Trip Button -->
-            <ImageView
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_widget_fuel"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/btn_fuel_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Alimentare"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <!-- Big Weekend Trip Button -->
+            <LinearLayout
                 android:id="@+id/btn_widget_trip"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
                 android:background="@drawable/widget_button_bg_trip"
-                android:src="@drawable/ic_widget_trip"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:contentDescription="Adaugă Cursă Weekend" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_widget_trip"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/btn_trip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Cursă"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:singleLine="true" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

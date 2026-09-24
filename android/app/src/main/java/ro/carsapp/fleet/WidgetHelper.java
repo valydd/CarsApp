@@ -97,7 +97,7 @@ public class WidgetHelper {
 
             views.setTextViewText(R.id.widget_unpaid_amount, amount);
             views.setTextViewText(R.id.widget_plate_badge, plate);
-            String subtext = count == 1 ? "1 cursă weekend neachitată" : count + " curse weekend neachitate";
+            String subtext = count == 1 ? "1 cursă de plată" : count + " curse de plată";
             views.setTextViewText(R.id.widget_subtext, subtext);
 
             // Intents

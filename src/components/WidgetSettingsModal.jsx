@@ -156,28 +156,32 @@ export const WidgetSettingsModal = ({
                     opacity: opacityVal,
                     borderColor: isLight ? '#E2E8F0' : 'rgba(255, 255, 255, 0.15)'
                   }}
-                  className={`w-full max-w-[280px] p-3 rounded-[20px] border shadow-xl flex items-center justify-between gap-2.5 transition-all ${
+                  className={`w-full max-w-[280px] p-3 rounded-[20px] border shadow-xl flex flex-col gap-2 transition-all ${
                     isLight ? 'text-slate-900' : 'text-white'
                   }`}
                 >
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[9px] font-black uppercase tracking-wider block opacity-70">
-                      RĂMAS WEEKEND
-                    </span>
-                    <span className="text-sm font-black font-mono tracking-tight block">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[9px] font-black uppercase tracking-wider block text-purple-400">
+                        CURSE WEEKEND
+                      </span>
+                      <span className="text-[9.5px] font-semibold block opacity-60">
+                        {unpaidCount} {unpaidCount === 1 ? 'cursă' : 'curse'} de plată
+                      </span>
+                    </div>
+                    <span className="text-base font-black font-mono tracking-tight">
                       {formattedAmount}
-                    </span>
-                    <span className="text-[9px] font-semibold block opacity-60">
-                      {unpaidCount} {unpaidCount === 1 ? 'cursă' : 'curse'} de plată
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-xs">
+                  <div className="grid grid-cols-2 gap-1.5 pt-0.5">
+                    <div className="h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center justify-center gap-1.5 shadow-xs font-bold text-xs">
                       <Fuel className="w-4 h-4 stroke-[2.5]" />
+                      <span>Alimentare</span>
                     </div>
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-center shadow-xs">
+                    <div className="h-10 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-center gap-1.5 shadow-xs font-bold text-xs">
                       <Navigation className="w-4 h-4 stroke-[2.5]" />
+                      <span>Cursă</span>
                     </div>
                   </div>
                 </div>
@@ -191,34 +195,34 @@ export const WidgetSettingsModal = ({
                     opacity: opacityVal,
                     borderColor: isLight ? '#E2E8F0' : 'rgba(255, 255, 255, 0.15)'
                   }}
-                  className={`w-full p-3.5 rounded-[22px] border shadow-xl flex items-center justify-between gap-3 transition-all ${
+                  className={`w-full p-3 rounded-[22px] border shadow-xl flex items-center justify-between gap-3 transition-all ${
                     isLight ? 'text-slate-900' : 'text-white'
                   }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-[9px] font-black bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 rounded font-mono">
+                      <span className="text-[9.5px] font-black bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 rounded font-mono">
                         {activePlate}
                       </span>
-                      <span className="text-[9px] font-black uppercase tracking-wider opacity-70">
-                        CURSE WEEKEND • DE PLATĂ
+                      <span className="text-[9px] font-black uppercase tracking-wider text-purple-400">
+                        WEEKEND
                       </span>
                     </div>
-                    <div className="text-base font-black font-mono tracking-tight leading-tight">
+                    <div className="text-lg font-black font-mono tracking-tight leading-tight">
                       {formattedAmount}
                     </div>
                     <span className="text-[9.5px] font-semibold opacity-60">
-                      {unpaidCount} curse decontabile neachitate
+                      {unpaidCount} {unpaidCount === 1 ? 'cursă' : 'curse'} de plată
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <div className="h-9 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center gap-1.5 shadow-xs font-bold text-xs">
-                      <Fuel className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <div className="h-11 px-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white flex items-center gap-1.5 shadow-xs font-black text-xs">
+                      <Fuel className="w-4 h-4 stroke-[2.5]" />
                       <span>Alimentare</span>
                     </div>
-                    <div className="h-9 px-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center gap-1.5 shadow-xs font-bold text-xs">
-                      <Navigation className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <div className="h-11 px-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center gap-1.5 shadow-xs font-black text-xs">
+                      <Navigation className="w-4 h-4 stroke-[2.5]" />
                       <span>Cursă</span>
                     </div>
                   </div>
