@@ -4,4 +4,7 @@
     <string name="title_activity_main">CarsApp</string>
     <string name="package_name">ro.carsapp.fleet</string>
     <string name="custom_url_scheme">ro.carsapp.fleet</string>
+    <string name="widget_desc_2x1">CarsApp: Alimentare &amp; Cursă Weekend (Compact 2x1)</string>
+    <string name="widget_desc_4x1">CarsApp: Bară Alimentare, Cursă &amp; Rămas de plată (4x1)</string>
+    <string name="widget_desc_4x3">CarsApp: Dashboard Complet Curse Weekend &amp; Acțiuni Rapide (4x3)</string>
 </resources>

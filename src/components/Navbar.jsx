@@ -19,7 +19,8 @@ import {
   CloudUpload,
   ChevronDown,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Smartphone
 } from 'lucide-react';
 import { translations, getLanguageConfig } from '../i18n';
 import { APP_VERSION } from '../version';
@@ -37,6 +38,7 @@ export const Navbar = ({
   onOpenExport,
   onOpenConnect,
   onOpenVehicles,
+  onOpenWidgetSettings,
   urgentAlertsCount = 0,
   totalAlertsCount = 0,
   hasUnfinishedTrip = false,
@@ -318,7 +320,31 @@ export const Navbar = ({
                         </button>
                       )}
 
-                      {/* 5. Fullscreen / Immersive */}
+                      {/* 5. Widget Ecran Pornire */}
+                      {onOpenWidgetSettings && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsAppMenuOpen(false);
+                            onOpenWidgetSettings();
+                          }}
+                          className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-left transition-colors cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-6 h-6 rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                              <Smartphone className="w-3.5 h-3.5" />
+                            </div>
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                              {t.widgetSettings || "Widget Ecran (4x1, 2x1, 4x3)"}
+                            </span>
+                          </div>
+                          <span className="text-[9px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded">
+                            Nou
+                          </span>
+                        </button>
+                      )}
+
+                      {/* 6. Fullscreen / Immersive */}
                       <button
                         type="button"
                         onClick={() => {

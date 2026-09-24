@@ -35,6 +35,48 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
+
+        <!-- Home Screen Widget 2x1 (Compact) -->
+        <receiver
+            android:name=".CarsAppWidget2x1"
+            android:label="CarsApp (2x1)"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ro.carsapp.fleet.WIDGET_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_2x1" />
+        </receiver>
+
+        <!-- Home Screen Widget 4x1 (Wide Bar) -->
+        <receiver
+            android:name=".CarsAppWidget4x1"
+            android:label="CarsApp Bar (4x1)"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ro.carsapp.fleet.WIDGET_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_4x1" />
+        </receiver>
+
+        <!-- Home Screen Widget 4x3 (Dashboard) -->
+        <receiver
+            android:name=".CarsAppWidget4x3"
+            android:label="CarsApp Dashboard (4x3)"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ro.carsapp.fleet.WIDGET_REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_4x3" />
+        </receiver>
     </application>
 
     <!-- Permissions -->

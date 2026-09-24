@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root_4x3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Dynamically Tinted Background -->
+    <ImageView
+        android:id="@+id/widget_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/widget_rounded_bg"
+        android:scaleType="fitXY" />
+
+    <!-- Content Layout -->
+    <LinearLayout
+        android:id="@+id/widget_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+        <!-- Top Header Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- App Title & Plate Badge -->
+            <TextView
+                android:id="@+id/widget_app_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CarsApp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/widget_plate_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="#20FFFFFF"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:text="FLOTĂ"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="#10B981"
+                android:singleLine="true" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- Refresh Button -->
+            <ImageView
+                android:id="@+id/btn_widget_refresh"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_widget_refresh"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="Actualizează" />
+        </LinearLayout>
+
+        <!-- Center Highlight Card: Unpaid Weekend Trips -->
+        <LinearLayout
+            android:id="@+id/widget_click_info"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/widget_card_inner_bg"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/widget_card_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="CURSE WEEKEND • RĂMAS DE ACHITAT"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#A78BFA"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/widget_status_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DE PLATĂ"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="#F59E0B"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/widget_unpaid_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="0,00 RON"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/widget_subtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="0 curse neachitate • Apasă pentru jurnal"
+                android:textSize="10sp"
+                android:textColor="#94A3B8"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- Bottom Action Buttons: Full Width Comfortable Touch Targets -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <!-- Fuel Action Button -->
+            <LinearLayout
+                android:id="@+id/btn_widget_fuel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/widget_button_bg_fuel"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_widget_fuel"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/btn_fuel_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="+ Alimentare"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <!-- Weekend Trip Action Button -->
+            <LinearLayout
+                android:id="@+id/btn_widget_trip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/widget_button_bg_trip"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_widget_trip"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/btn_trip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="+ Cursă Weekend"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

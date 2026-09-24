@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root_4x1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Dynamically Tinted Background -->
+    <ImageView
+        android:id="@+id/widget_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/widget_rounded_bg"
+        android:scaleType="fitXY" />
+
+    <!-- Content Layout -->
+    <LinearLayout
+        android:id="@+id/widget_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
+
+        <!-- Left: Summary Info -->
+        <LinearLayout
+            android:id="@+id/widget_click_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/widget_plate_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FLOTĂ"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="#10B981"
+                    android:layout_marginEnd="6dp"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/widget_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CURSE WEEKEND • DE PLATĂ"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="#94A3B8"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/widget_unpaid_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0,00 RON"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/widget_subtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 curse neachitate"
+                android:textSize="9sp"
+                android:textColor="#64748B"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- Right: Action Buttons with icon + text -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Add Fuel Button -->
+            <LinearLayout
+                android:id="@+id/btn_widget_fuel"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/widget_button_bg_fuel"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_widget_fuel"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/btn_fuel_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Alimentare"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <!-- Add Weekend Trip Button -->
+            <LinearLayout
+                android:id="@+id/btn_widget_trip"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@drawable/widget_button_bg_trip"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_widget_trip"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/btn_trip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Cursă"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

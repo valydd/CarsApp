@@ -18,6 +18,8 @@ import { CostPerKmView } from './components/CostPerKmView';
 import { ConnectModal } from './components/ConnectModal';
 import { LanguageModal } from './components/LanguageModal';
 import { ReceiptScanModal } from './components/ReceiptScanModal';
+import { WidgetSettingsModal } from './components/WidgetSettingsModal';
+import { syncWidgetData, checkInitialWidgetAction, addWidgetActionListener } from './services/widgetService';
 
 import { 
   getStoredVehicles, 
@@ -99,6 +101,7 @@ export function App() {
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
   const [isReceiptScanOpen, setIsReceiptScanOpen] = useState(false);
   const [prefilledScannedData, setPrefilledScannedData] = useState(null);
+  const [isWidgetSettingsOpen, setIsWidgetSettingsOpen] = useState(false);
 
   // Personal Trips State
   const [personalTrips, setPersonalTrips] = useState(getStoredPersonalTrips);
@@ -357,6 +360,10 @@ export function App() {
       setIsLanguageModalOpen(false);
       return;
     }
+    if (isWidgetSettingsOpen) {
+      setIsWidgetSettingsOpen(false);
+      return;
+    }
 
     if (activeTab !== 'dashboard') {
       setActiveTab('dashboard');
@@ -376,7 +383,8 @@ export function App() {
     isVehiclesModalOpen ||
     isExportOpen ||
     isConnectOpen ||
-    isLanguageModalOpen
+    isLanguageModalOpen ||
+    isWidgetSettingsOpen
   );
 
   // Keep live references to prevent stale closures in window touch listeners
@@ -489,6 +497,7 @@ export function App() {
           isExportOpen ||
           isConnectOpen ||
           isLanguageModalOpen ||
+          isWidgetSettingsOpen ||
           activeTab !== 'dashboard'
         ) {
           goBack();
@@ -518,7 +527,8 @@ export function App() {
     selectedVehicleForDetails,
     isExportOpen,
     isConnectOpen,
-    isLanguageModalOpen
+    isLanguageModalOpen,
+    isWidgetSettingsOpen
   ]);
 
   const isAllSelected = selectedVehicleIds.length === vehicles.length;
@@ -584,6 +594,43 @@ export function App() {
   const totalAlertsCount = allAlerts.length;
   const totalKmSum = (activeVehicles || []).reduce((sum, v) => sum + (v?.currentKm || 0), 0);
 
+  // Synchronize Widget Data (Unpaid weekend trips, plate, theme, colors) with Android Home Screen Widget
+  useEffect(() => {
+    syncWidgetData({
+      personalTrips,
+      vehicles,
+      activeVehicle,
+      currentTheme: theme
+    });
+  }, [personalTrips, vehicles, activeVehicle, theme]);
+
+  // Handle Home Screen Widget Actions (Add Fuel, Add Weekend Trip, Open Trips)
+  useEffect(() => {
+    const handleWidgetAction = (action) => {
+      if (!action) return;
+      if (action === 'add_fuel') {
+        setQuickAddCategory('fuel');
+        setRecordToEdit(null);
+        setIsQuickAddOpen(true);
+      } else if (action === 'add_trip') {
+        setTripToEdit(null);
+        setIsPersonalModalOpen(true);
+      } else if (action === 'open_trips') {
+        setActiveTab('personal');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    checkInitialWidgetAction().then(handleWidgetAction);
+
+    const listenerSub = addWidgetActionListener(handleWidgetAction);
+    return () => {
+      if (listenerSub && listenerSub.remove) {
+        listenerSub.remove();
+      }
+    };
+  }, []);
+
   return (
     <div 
       className={`min-h-screen bg-slate-100 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 ${
@@ -605,6 +652,7 @@ export function App() {
         onOpenExport={() => setIsExportOpen(true)}
         onOpenConnect={() => setIsConnectOpen(true)}
         onOpenVehicles={() => setIsVehiclesModalOpen(true)}
+        onOpenWidgetSettings={() => setIsWidgetSettingsOpen(true)}
         urgentAlertsCount={urgentAlertsCount}
         totalAlertsCount={totalAlertsCount}
         hasUnfinishedTrip={hasUnfinishedTrip}
@@ -1219,6 +1267,19 @@ export function App() {
           onClose={() => setIsLanguageModalOpen(false)}
           currentLang={lang}
           onSelectLang={setLang}
+        />
+      )}
+
+      {isWidgetSettingsOpen && (
+        <WidgetSettingsModal
+          isOpen={isWidgetSettingsOpen}
+          onClose={() => setIsWidgetSettingsOpen(false)}
+          personalTrips={personalTrips}
+          vehicles={vehicles}
+          activeVehicle={activeVehicle}
+          currentTheme={theme}
+          lang={lang}
+          onShowToast={(msg) => setToastMessage(msg)}
         />
       )}
 
