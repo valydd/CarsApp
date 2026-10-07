@@ -28,6 +28,8 @@ import {
   saveStoredRecords, 
   getStoredPersonalTrips,
   saveStoredPersonalTrips,
+  getStoredTripsAdvance,
+  saveStoredTripsAdvance,
   getStoredSelectedVehicleIds,
   saveStoredSelectedVehicleIds,
   getStoredLanguage, 
@@ -105,6 +107,7 @@ export function App() {
 
   // Personal Trips State
   const [personalTrips, setPersonalTrips] = useState(getStoredPersonalTrips);
+  const [tripsAdvance, setTripsAdvance] = useState(getStoredTripsAdvance);
   const [isPersonalModalOpen, setIsPersonalModalOpen] = useState(false);
   const [tripToEdit, setTripToEdit] = useState(null);
   const [ongoingTripAlert, setOngoingTripAlert] = useState(null);
@@ -308,7 +311,21 @@ export function App() {
     setIsPersonalModalOpen(true);
   };
 
+  const handleUpdateTripsAdvance = (newAmount) => {
+    const val = Math.max(0, Number(newAmount) || 0);
+    setTripsAdvance(val);
+    saveStoredTripsAdvance(val);
+  };
+
   const handleToggleTripPaid = (tripId) => {
+    const trip = personalTrips.find(t => t.id === tripId);
+    if (trip && !trip.isPaid && tripsAdvance > 0) {
+      const cost = Number(trip.tripCost) || 0;
+      const consumed = Math.min(tripsAdvance, cost);
+      const nextAdvance = Math.max(0, Number((tripsAdvance - consumed).toFixed(2)));
+      setTripsAdvance(nextAdvance);
+      saveStoredTripsAdvance(nextAdvance);
+    }
     const updated = personalTrips.map(t => t.id === tripId ? { ...t, isPaid: !t.isPaid } : t);
     setPersonalTrips(updated);
     saveStoredPersonalTrips(updated);
@@ -594,15 +611,16 @@ export function App() {
   const totalAlertsCount = allAlerts.length;
   const totalKmSum = (activeVehicles || []).reduce((sum, v) => sum + (v?.currentKm || 0), 0);
 
-  // Synchronize Widget Data (Unpaid weekend trips, plate, theme, colors) with Android Home Screen Widget
+  // Synchronize Widget Data (Unpaid weekend trips, plate, theme, colors, advance) with Android Home Screen Widget
   useEffect(() => {
     syncWidgetData({
       personalTrips,
       vehicles,
       activeVehicle,
-      currentTheme: theme
+      currentTheme: theme,
+      tripsAdvance
     });
-  }, [personalTrips, vehicles, activeVehicle, theme]);
+  }, [personalTrips, vehicles, activeVehicle, theme, tripsAdvance]);
 
   // Handle Home Screen Widget Actions (Add Fuel, Add Weekend Trip, Open Trips)
   useEffect(() => {
@@ -722,6 +740,7 @@ export function App() {
               records={filteredRecords}
               vehicles={vehicles}
               personalTrips={personalTrips}
+              tripsAdvance={tripsAdvance}
               hasUnfinishedTrip={hasUnfinishedTrip}
               lang={lang}
             />
@@ -1058,6 +1077,8 @@ export function App() {
             onEditTrip={handleEditPersonalTrip}
             onDeleteTrip={handleDeletePersonalTrip}
             onToggleTripPaid={handleToggleTripPaid}
+            tripsAdvance={tripsAdvance}
+            onUpdateTripsAdvance={handleUpdateTripsAdvance}
             lang={lang}
           />
         )}
@@ -1278,6 +1299,7 @@ export function App() {
           vehicles={vehicles}
           activeVehicle={activeVehicle}
           currentTheme={theme}
+          tripsAdvance={tripsAdvance}
           lang={lang}
           onShowToast={(msg) => setToastMessage(msg)}
         />

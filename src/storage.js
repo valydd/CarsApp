@@ -6,6 +6,7 @@ import { Share } from '@capacitor/share';
 const VEHICLES_KEY = 'carsapp_vehicles_v1';
 const RECORDS_KEY = 'carsapp_records_v1';
 const PERSONAL_TRIPS_KEY = 'carsapp_personal_trips_v1';
+const TRIPS_ADVANCE_KEY = 'carsapp_trips_advance_v1';
 const SELECTED_VEHICLES_KEY = 'carsapp_selected_vehicles_v1';
 const LANGUAGE_KEY = 'carsapp_lang_v1';
 const THEME_KEY = 'carsapp_theme_v1';
@@ -244,6 +245,27 @@ export const getStoredPersonalTrips = () => {
 export const saveStoredPersonalTrips = (trips) => {
   localStorage.setItem(PERSONAL_TRIPS_KEY, JSON.stringify(trips));
   persistDatabaseToFile(null, null, trips);
+};
+
+export const getStoredTripsAdvance = () => {
+  try {
+    const raw = localStorage.getItem(TRIPS_ADVANCE_KEY);
+    if (!raw) return 0;
+    const val = parseFloat(raw);
+    return isNaN(val) ? 0 : val;
+  } catch (_) {
+    return 0;
+  }
+};
+
+export const saveStoredTripsAdvance = (advance) => {
+  try {
+    const num = Math.max(0, Number(advance) || 0);
+    localStorage.setItem(TRIPS_ADVANCE_KEY, String(num));
+    return num;
+  } catch (_) {
+    return advance;
+  }
 };
 
 export const resetToDefaultData = () => {

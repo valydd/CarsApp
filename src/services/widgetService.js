@@ -48,14 +48,16 @@ export const saveStoredWidgetSettings = (settings) => {
 /**
  * Synchronizes fleet stats and user preferences with the native Android widget
  */
-export const syncWidgetData = async ({ personalTrips = [], vehicles = [], activeVehicle = null, currentTheme = 'dark' } = {}) => {
+export const syncWidgetData = async ({ personalTrips = [], vehicles = [], activeVehicle = null, currentTheme = 'dark', tripsAdvance = 0 } = {}) => {
   if (!Capacitor.isNativePlatform()) return;
 
   try {
     const settings = getStoredWidgetSettings();
     const unpaidTrips = (personalTrips || []).filter(t => t && !t.isPaid);
     const unpaidAmountNum = unpaidTrips.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0);
-    const formattedAmount = `${unpaidAmountNum.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON`;
+    const advanceNum = Number(tripsAdvance) || 0;
+    const netAmountNum = Number((unpaidAmountNum - advanceNum).toFixed(2));
+    const formattedAmount = `${netAmountNum.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON`;
 
     const activePlate = activeVehicle?.plate 
       ? activeVehicle.plate 

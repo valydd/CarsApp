@@ -68,8 +68,14 @@ public class WidgetHelper {
             int count = prefs.getInt(KEY_UNPAID_COUNT, 0);
 
             views.setTextViewText(R.id.widget_unpaid_amount, amount);
-            String subtext = count == 1 ? "1 cursă de plată" : count + " curse de plată";
-            views.setTextViewText(R.id.widget_subtext, subtext);
+            if (amount != null && amount.startsWith("-")) {
+                views.setTextColor(R.id.widget_unpaid_amount, Color.parseColor("#34D399"));
+                views.setTextViewText(R.id.widget_label, "BANI ÎN AVANS");
+                views.setTextViewText(R.id.widget_subtext, "Sold în avans ✓");
+            } else {
+                String subtext = count == 1 ? "1 cursă de plată" : count + " curse de plată";
+                views.setTextViewText(R.id.widget_subtext, subtext);
+            }
 
             // Intents
             views.setOnClickPendingIntent(R.id.btn_widget_fuel, createActionPendingIntent(context, ACTION_ADD_FUEL, 101));
@@ -97,8 +103,14 @@ public class WidgetHelper {
 
             views.setTextViewText(R.id.widget_unpaid_amount, amount);
             views.setTextViewText(R.id.widget_plate_badge, plate);
-            String subtext = count == 1 ? "1 cursă de plată" : count + " curse de plată";
-            views.setTextViewText(R.id.widget_subtext, subtext);
+            if (amount != null && amount.startsWith("-")) {
+                views.setTextColor(R.id.widget_unpaid_amount, Color.parseColor("#34D399"));
+                views.setTextViewText(R.id.widget_label, "AVANS");
+                views.setTextViewText(R.id.widget_subtext, "Bani dați în avans ✓");
+            } else {
+                String subtext = count == 1 ? "1 cursă de plată" : count + " curse de plată";
+                views.setTextViewText(R.id.widget_subtext, subtext);
+            }
 
             // Intents
             views.setOnClickPendingIntent(R.id.btn_widget_fuel, createActionPendingIntent(context, ACTION_ADD_FUEL, 201));
@@ -126,8 +138,15 @@ public class WidgetHelper {
 
             views.setTextViewText(R.id.widget_unpaid_amount, amount);
             views.setTextViewText(R.id.widget_plate_badge, plate);
-            String subtext = count == 1 ? "1 cursă weekend neachitată • Apasă pentru detalii" : count + " curse weekend neachitate • Apasă pentru detalii";
-            views.setTextViewText(R.id.widget_subtext, subtext);
+            if (amount != null && amount.startsWith("-")) {
+                views.setTextColor(R.id.widget_unpaid_amount, Color.parseColor("#34D399"));
+                views.setTextViewText(R.id.widget_card_title, "CURSE WEEKEND • BANI ÎN AVANS");
+                views.setTextViewText(R.id.widget_status_badge, "AVANS ✓");
+                views.setTextViewText(R.id.widget_subtext, "Plătit în plus • Se scade din curse viitoare");
+            } else {
+                String subtext = count == 1 ? "1 cursă weekend neachitată • Apasă pentru detalii" : count + " curse weekend neachitate • Apasă pentru detalii";
+                views.setTextViewText(R.id.widget_subtext, subtext);
+            }
 
             // Intents
             views.setOnClickPendingIntent(R.id.btn_widget_fuel, createActionPendingIntent(context, ACTION_ADD_FUEL, 301));

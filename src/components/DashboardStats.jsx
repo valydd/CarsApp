@@ -16,6 +16,7 @@ export const DashboardStats = ({
   records = [],
   vehicles = [],
   personalTrips = [],
+  tripsAdvance = 0,
   hasUnfinishedTrip = false,
   lang = 'ro'
 }) => {
@@ -36,6 +37,8 @@ export const DashboardStats = ({
   // Unpaid personal trips for the dashboard card
   const unpaidTrips = relevantTrips.filter(t => !t.isPaid);
   const unpaidPersonalCost = Number(unpaidTrips.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0).toFixed(2));
+  const advanceNum = Number(tripsAdvance) || 0;
+  const netUnpaidPersonalCost = Number((unpaidPersonalCost - advanceNum).toFixed(2));
   const unpaidPersonalKm = unpaidTrips.reduce((sum, t) => sum + (Number(t.kmDriven) || 0), 0);
   const totalPersonalCost = Number(relevantTrips.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0).toFixed(2));
 
@@ -427,13 +430,15 @@ export const DashboardStats = ({
           <div className="flex items-end justify-between gap-1.5 mt-auto">
             <div className="min-w-0 flex-1">
               <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                {unpaidPersonalCost.toLocaleString('ro-RO')} <span className="text-[10px] font-bold text-rose-700 dark:text-rose-300">RON</span>
+                {netUnpaidPersonalCost.toLocaleString('ro-RO')} <span className={`text-[10px] font-bold ${netUnpaidPersonalCost < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-300'}`}>RON</span>
               </div>
               <div className="mt-0.5 flex items-center text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                <span className="truncate text-rose-700 dark:text-rose-300 font-semibold">
-                  {unpaidPersonalCost > 0 
-                    ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length} ${unpaidTrips.length === 1 ? (t.trip || 'cursă') : (t.trips || 'curse')})` 
-                    : (totalPersonalCost > 0 ? (t.allSettled || "Toate achitate ✓") : (t.noTrips || "0 curse"))}
+                <span className={`truncate font-semibold ${netUnpaidPersonalCost < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-300'}`}>
+                  {netUnpaidPersonalCost < 0
+                    ? `Avans / Sold: ${advanceNum.toLocaleString('ro-RO')} lei ✓`
+                    : (unpaidPersonalCost > 0 
+                      ? `${unpaidPersonalKm.toLocaleString('ro-RO')} km (${unpaidTrips.length} ${unpaidTrips.length === 1 ? (t.trip || 'cursă') : (t.trips || 'curse')})` 
+                      : (totalPersonalCost > 0 ? (t.allSettled || "Toate achitate ✓") : (t.noTrips || "0 curse")))}
                 </span>
               </div>
             </div>

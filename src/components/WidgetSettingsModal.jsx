@@ -29,6 +29,7 @@ export const WidgetSettingsModal = ({
   vehicles = [],
   activeVehicle = null,
   currentTheme = 'dark',
+  tripsAdvance = 0,
   lang = 'ro',
   onShowToast
 }) => {
@@ -41,7 +42,9 @@ export const WidgetSettingsModal = ({
 
   const unpaidTrips = (personalTrips || []).filter(t => t && !t.isPaid);
   const unpaidAmountNum = unpaidTrips.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0);
-  const formattedAmount = `${unpaidAmountNum.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON`;
+  const advanceNum = Number(tripsAdvance) || 0;
+  const netAmountNum = Number((unpaidAmountNum - advanceNum).toFixed(2));
+  const formattedAmount = `${netAmountNum.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON`;
   const unpaidCount = unpaidTrips.length;
   const activePlate = activeVehicle?.plate 
     ? activeVehicle.plate 
@@ -62,7 +65,8 @@ export const WidgetSettingsModal = ({
       personalTrips,
       vehicles,
       activeVehicle,
-      currentTheme
+      currentTheme,
+      tripsAdvance
     });
   };
 
@@ -72,7 +76,8 @@ export const WidgetSettingsModal = ({
       personalTrips,
       vehicles,
       activeVehicle,
-      currentTheme
+      currentTheme,
+      tripsAdvance
     });
     setSavedSuccess(true);
     if (onShowToast) {

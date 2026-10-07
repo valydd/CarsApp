@@ -13,7 +13,9 @@ import {
   Circle, 
   Clock, 
   Sparkles,
-  CheckCheck
+  CheckCheck,
+  Wallet,
+  X
 } from 'lucide-react';
 import { translations } from '../i18n';
 
@@ -27,10 +29,16 @@ export const PersonalTripsView = ({
   onEditTrip,
   onDeleteTrip,
   onToggleTripPaid,
+  tripsAdvance = 0,
+  onUpdateTripsAdvance,
   lang = 'ro'
 }) => {
   const t = translations[lang] || translations.ro;
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'unpaid' | 'paid'
+  const [isAdvanceModalOpen, setIsAdvanceModalOpen] = useState(false);
+  const [tempAdvanceInput, setTempAdvanceInput] = useState('');
+
+  const advanceNum = Number(tripsAdvance) || 0;
 
   // Filter trips if a specific vehicle is selected
   const vehicleFilteredTrips = selectedVehicle
@@ -47,6 +55,7 @@ export const PersonalTripsView = ({
   const unpaidKm = unpaidTrips.reduce((sum, trip) => sum + (Number(trip.kmDriven) || 0), 0);
   const unpaidLiters = Number(unpaidTrips.reduce((sum, trip) => sum + (Number(trip.litersUsed) || 0), 0).toFixed(2));
   const unpaidCost = Number(unpaidTrips.reduce((sum, trip) => sum + (Number(trip.tripCost) || 0), 0).toFixed(2));
+  const netUnpaidCost = Number((unpaidCost - advanceNum).toFixed(2));
 
   // Compute stats for PAID trips (Deja Achitat)
   const paidTrips = vehicleFilteredTrips.filter(trip => trip.isPaid);
@@ -132,6 +141,14 @@ export const PersonalTripsView = ({
       if (!window.confirm(warningMessage)) {
         return;
       }
+    } else {
+      // Marking an UNPAID trip as PAID: automatically deduct from advance
+      if (advanceNum > 0 && onUpdateTripsAdvance) {
+        const cost = Number(trip.tripCost) || 0;
+        const consumed = Math.min(advanceNum, cost);
+        const nextAdvance = Math.max(0, Number((advanceNum - consumed).toFixed(2)));
+        onUpdateTripsAdvance(nextAdvance);
+      }
     }
     if (onToggleTripPaid) {
       onToggleTripPaid(trip.id);
@@ -151,15 +168,35 @@ export const PersonalTripsView = ({
           <span>{t.back || "Înapoi"}</span>
         </button>
 
-        {onOpenAddTrip && (
+        <div className="flex items-center gap-2">
+          {/* Button: Sold / Plată în Plus */}
           <button
-            onClick={onOpenAddTrip}
-            className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
+            type="button"
+            onClick={() => {
+              setTempAdvanceInput(advanceNum > 0 ? String(advanceNum) : '');
+              setIsAdvanceModalOpen(true);
+            }}
+            className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border transition-all cursor-pointer shadow-2xs active:scale-95 ${
+              advanceNum > 0
+                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/25'
+                : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-purple-300'
+            }`}
+            title="Ajustează suma plătită suplimentar (avans/sold)"
           >
-            <Plus className="w-3.5 h-3.5 stroke-[3]" />
-            <span>{t.addPersonalTripModalTitle || "Cursă Nouă Weekend"}</span>
+            <Wallet className="w-3.5 h-3.5 text-emerald-500" />
+            <span>{advanceNum > 0 ? `Sold: +${advanceNum} lei` : "Sold / Plată în plus"}</span>
           </button>
-        )}
+
+          {onOpenAddTrip && (
+            <button
+              onClick={onOpenAddTrip}
+              className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 stroke-[3]" />
+              <span>{t.addPersonalTripModalTitle || "Cursă Nouă Weekend"}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Summary Header Banner */}
@@ -189,24 +226,60 @@ export const PersonalTripsView = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/15">
             
             {/* 1. RĂMAS DE ACHITAT (Principal) */}
-            <div className="bg-amber-500/20 backdrop-blur-md p-3.5 rounded-2xl border border-amber-400/40 relative overflow-hidden">
+            <div className={`p-3.5 rounded-2xl border backdrop-blur-md relative overflow-hidden transition-all ${
+              netUnpaidCost < 0
+                ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-100'
+                : 'bg-amber-500/20 border-amber-400/40 text-amber-100'
+            }`}>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                <span className={`text-xs font-black uppercase tracking-wider flex items-center gap-1.5 ${
+                  netUnpaidCost < 0 ? 'text-emerald-300' : 'text-amber-300'
+                }`}>
                   <Clock className="w-3.5 h-3.5" />
-                  <span>{t.unpaidTrips || "Rămas de Achitat"}</span>
+                  <span>{netUnpaidCost < 0 ? "Bani în Avans (Credit)" : (t.unpaidTrips || "Rămas de Achitat")}</span>
                 </span>
-                <span className="text-[10px] font-bold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-md">
-                  {unpaidTrips.length} {unpaidTrips.length === 1 ? (t.trip || "cursă") : (t.trips || "curse")}
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                  netUnpaidCost < 0 ? 'bg-emerald-400 text-slate-950 font-black' : 'bg-amber-400 text-slate-950'
+                }`}>
+                  {netUnpaidCost < 0 
+                    ? `Sold: +${advanceNum.toLocaleString('ro-RO')} lei`
+                    : `${unpaidTrips.length} ${unpaidTrips.length === 1 ? (t.trip || "cursă") : (t.trips || "curse")}`}
                 </span>
               </div>
 
-              <div className="text-2xl sm:text-3xl font-black text-amber-300 font-mono tracking-tight my-1">
-                {unpaidCost.toLocaleString('ro-RO')} <span className="text-sm font-bold text-white">RON</span>
+              <div className={`text-2xl sm:text-3xl font-black font-mono tracking-tight my-1 ${
+                netUnpaidCost < 0 ? 'text-emerald-300' : 'text-amber-300'
+              }`}>
+                {netUnpaidCost.toLocaleString('ro-RO')} <span className="text-sm font-bold text-white">RON</span>
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-purple-100 font-semibold pt-1 border-t border-amber-400/20">
-                <span>🛣️ <strong>{unpaidKm.toLocaleString('ro-RO')} km</strong></span>
-                <span>• ⛽ <strong>{unpaidLiters} L</strong></span>
+              {advanceNum > 0 && unpaidCost > 0 && (
+                <div className="text-[11px] font-medium text-amber-200/90 pt-0.5 pb-1">
+                  Calcul: {unpaidCost.toLocaleString('ro-RO')} RON curse - {advanceNum.toLocaleString('ro-RO')} RON avans
+                </div>
+              )}
+
+              {netUnpaidCost < 0 && (
+                <div className="text-[11px] font-medium text-emerald-200/90 pt-0.5 pb-1">
+                  Bani achitați în plus, vor fi scăzuți automat din cursele viitoare
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-xs text-purple-100 font-semibold pt-1 border-t border-white/10">
+                <div className="flex items-center gap-2">
+                  <span>🛣️ <strong>{unpaidKm.toLocaleString('ro-RO')} km</strong></span>
+                  <span>• ⛽ <strong>{unpaidLiters} L</strong></span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTempAdvanceInput(advanceNum > 0 ? String(advanceNum) : '');
+                    setIsAdvanceModalOpen(true);
+                  }}
+                  className="text-[10.5px] font-bold text-white/90 hover:text-white underline underline-offset-2 cursor-pointer"
+                >
+                  {advanceNum > 0 ? "Modifică sold" : "+ Adaugă sold avans"}
+                </button>
               </div>
             </div>
 
@@ -489,6 +562,112 @@ export const PersonalTripsView = ({
           </div>
         )}
       </div>
+
+      {/* Modal Ajustare Sold / Plată în Plus (Avans) */}
+      {isAdvanceModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 border border-purple-200 dark:border-purple-900/60 rounded-3xl p-5 max-w-md w-full shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-400">
+                  <Wallet className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
+                    Sold / Plată în Plus la Curse
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Bani plătiți suplimentar, scăzuți automat din cursele viitoare
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAdvanceModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                Suma plătită în plus față de total (RON)
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={tempAdvanceInput}
+                  onChange={(e) => setTempAdvanceInput(e.target.value)}
+                  placeholder="ex: 5.00"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 py-3 text-lg font-mono font-black text-slate-900 dark:text-white outline-none focus:border-purple-500 transition-colors"
+                  autoFocus
+                />
+                <span className="absolute right-4 top-3.5 font-bold text-xs text-slate-400">
+                  RON
+                </span>
+              </div>
+
+              {/* Butoane rapide de adăugare / preset */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                <span className="text-[11px] text-slate-400 font-semibold mr-1">Preset:</span>
+                {[5, 10, 20, 50].map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => {
+                      const cur = parseFloat(tempAdvanceInput) || 0;
+                      setTempAdvanceInput(String(cur + val));
+                    }}
+                    className="px-2.5 py-1 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-300 text-xs font-bold border border-purple-500/20 transition-colors cursor-pointer"
+                  >
+                    +{val} lei
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setTempAdvanceInput('0')}
+                  className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 text-xs font-bold ml-auto transition-colors cursor-pointer"
+                >
+                  Reset la 0
+                </button>
+              </div>
+
+              <div className="bg-purple-50/70 dark:bg-purple-950/30 p-3 rounded-2xl border border-purple-200/60 dark:border-purple-900/40 text-xs text-purple-900 dark:text-purple-200 space-y-1">
+                <p className="font-semibold">💡 Cum funcționează:</p>
+                <p className="text-[11.5px] text-purple-800 dark:text-purple-300/90 leading-relaxed">
+                  Când toate cursele sunt achitate, această sumă apare ca <strong>-{tempAdvanceInput || 0} RON</strong> la curse neachitate. La următoarea cursă închisă, banii din sold se vor scădea automat din totalul calculat, iar soldul va reveni la 0 lei!
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setIsAdvanceModalOpen(false)}
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              >
+                Anulează
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const val = Math.max(0, parseFloat(tempAdvanceInput) || 0);
+                  if (onUpdateTripsAdvance) {
+                    onUpdateTripsAdvance(val);
+                  }
+                  setIsAdvanceModalOpen(false);
+                }}
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-black shadow-md shadow-purple-500/20 cursor-pointer"
+              >
+                Salvează Sold
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
