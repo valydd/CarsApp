@@ -165,8 +165,13 @@ export const generateWeekendTripsPDF = ({
     const startKm = trip.startKm !== undefined && trip.startKm !== null ? Number(trip.startKm).toLocaleString() : '-';
     const endKm = trip.endKm !== undefined && trip.endKm !== null ? Number(trip.endKm).toLocaleString() : '-';
     const kmDriven = trip.kmDriven ? Number(trip.kmDriven).toLocaleString() : '-';
-    const liters = trip.litersUsed ? Number(trip.litersUsed).toFixed(2) : '-';
-    const price = trip.fuelPriceAtTime ? Number(trip.fuelPriceAtTime).toFixed(2) : '-';
+    let price = '-';
+    const rawPrice = trip.fuelPrice || trip.pricePerLiter || trip.fuelPriceAtTime;
+    if (rawPrice && Number(rawPrice) > 0) {
+      price = Number(rawPrice).toFixed(2);
+    } else if (Number(trip.tripCost) > 0 && Number(trip.litersUsed) > 0) {
+      price = (Number(trip.tripCost) / Number(trip.litersUsed)).toFixed(2);
+    }
     const cost = trip.tripCost ? `${Number(trip.tripCost).toFixed(2)} lei` : '0.00 lei';
     
     let status = 'DE ACHITAT';

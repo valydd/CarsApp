@@ -197,16 +197,33 @@ export const PersonalTripsView = ({
     <div className="space-y-4 animate-in fade-in duration-200">
       
       {/* Top Action Bar */}
-      <div className="flex items-center justify-between gap-2 px-1">
-        <button
-          onClick={onNavigateBack}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>{t.back || "Înapoi"}</span>
-        </button>
+      <div className="flex items-end justify-between gap-2 px-1">
+        {/* Partea stângă: Buton PDF deasupra butonului Înapoi */}
+        <div className="flex flex-col items-start gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => {
+              setPdfFilterStatus(statusFilter);
+              setIsPdfModalOpen(true);
+            }}
+            className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-all cursor-pointer shadow-2xs active:scale-95"
+            title="Exportă raport PDF (WhatsApp / Salvare)"
+          >
+            <FileText className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+            <span>PDF</span>
+          </button>
 
-        <div className="flex items-center gap-2">
+          <button
+            onClick={onNavigateBack}
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-2xs transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>{t.back || "Înapoi"}</span>
+          </button>
+        </div>
+
+        {/* Partea dreaptă: Sold și Cursă Nouă Weekend */}
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           {/* Button: Sold / Plată în Plus */}
           <button
             type="button"
@@ -225,24 +242,10 @@ export const PersonalTripsView = ({
             <span>{advanceNum > 0 ? `Sold: +${advanceNum} lei` : "Sold / Plată în plus"}</span>
           </button>
 
-          {/* Button: Export PDF & WhatsApp */}
-          <button
-            type="button"
-            onClick={() => {
-              setPdfFilterStatus(statusFilter);
-              setIsPdfModalOpen(true);
-            }}
-            className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/80 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-all cursor-pointer shadow-2xs active:scale-95"
-            title="Exportă raport PDF (WhatsApp / Salvare)"
-          >
-            <FileText className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-            <span>PDF</span>
-          </button>
-
           {onOpenAddTrip && (
             <button
               onClick={onOpenAddTrip}
-              className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-black text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 px-3.5 py-1.5 rounded-xl shadow-md shadow-purple-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap"
             >
               <Plus className="w-3.5 h-3.5 stroke-[3]" />
               <span>{t.addPersonalTripModalTitle || "Cursă Nouă Weekend"}</span>
