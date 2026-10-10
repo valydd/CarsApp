@@ -70,7 +70,12 @@ export const PersonalTripsView = ({
       }, 2000);
     } catch (err) {
       console.error('Export error:', err);
-      alert('Eroare la generarea raportului PDF.');
+      const msg = String(err?.message || err || '');
+      if (msg.toLowerCase().includes('cancel')) {
+        setIsPdfModalOpen(false);
+        return;
+      }
+      alert('Eroare la generarea raportului PDF: ' + (err?.message || 'Verifică datele curselor.'));
     } finally {
       setIsExporting(false);
     }

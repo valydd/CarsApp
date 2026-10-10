@@ -1,8 +1,17 @@
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import autoTable, { applyPlugin } from 'jspdf-autotable';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { Capacitor } from '@capacitor/core';
+
+// Safely register autoTable plugin on jsPDF if available
+try {
+  if (typeof applyPlugin === 'function') {
+    applyPlugin(jsPDF);
+  } else if (autoTable && typeof autoTable.applyPlugin === 'function') {
+    autoTable.applyPlugin(jsPDF);
+  }
+} catch (_) {}
 
 export const sanitizeForPdf = (text) => {
   if (text === null || text === undefined) return '';
@@ -20,15 +29,20 @@ export const sanitizeForPdf = (text) => {
 const formatDateSafe = (startDate, endDate) => {
   if (!startDate) return '-';
   if (!endDate || startDate === endDate) {
-    const parts = startDate.split('-');
-    return parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : startDate;
+    const parts = String(startDate).split('-');
+    return parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : String(startDate);
   }
-  const [sY, sM, sD] = startDate.split('-');
-  const [eY, eM, eD] = endDate.split('-');
-  if (sY === eY && sM === eM) {
-    return `${sD}-${eD}.${sM}.${sY}`;
+  const sParts = String(startDate).split('-');
+  const eParts = String(endDate).split('-');
+  if (sParts.length === 3 && eParts.length === 3) {
+    const [sY, sM, sD] = sParts;
+    const [eY, eM, eD] = eParts;
+    if (sY === eY && sM === eM) {
+      return `${sD}-${eD}.${sM}.${sY}`;
+    }
+    return `${sD}.${sM}-${eD}.${eM}.${eY}`;
   }
-  return `${sD}.${sM}-${eD}.${eM}.${eY}`;
+  return `${startDate} - ${endDate}`;
 };
 
 export const generateWeekendTripsPDF = ({
@@ -47,30 +61,30 @@ export const generateWeekendTripsPDF = ({
   const advanceNum = Math.max(0, Number(tripsAdvance) || 0);
 
   // Filter trips if needed
-  let tripsToExport = [...personalTrips];
-  if (selectedVehicle) {
-    tripsToExport = tripsToExport.filter(t => t.vehicleId === selectedVehicle.id);
+  let tripsToExport = Array.isArray(personalTrips) ? [...personalTrips] : [];
+  if (selectedVehicle && selectedVehicle.id) {
+    tripsToExport = tripsToExport.filter(t => t && t.vehicleId === selectedVehicle.id);
   }
   if (filterStatus === 'unpaid') {
-    tripsToExport = tripsToExport.filter(t => !t.isPaid);
+    tripsToExport = tripsToExport.filter(t => t && !t.isPaid);
   } else if (filterStatus === 'paid') {
-    tripsToExport = tripsToExport.filter(t => t.isPaid);
+    tripsToExport = tripsToExport.filter(t => t && t.isPaid);
   }
 
   // Calculate totals
-  const totalKm = tripsToExport.reduce((sum, t) => sum + (Number(t.kmDriven) || 0), 0);
-  const totalLiters = Number(tripsToExport.reduce((sum, t) => sum + (Number(t.litersUsed) || 0), 0).toFixed(2));
-  const totalCost = Number(tripsToExport.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0).toFixed(2));
+  const totalKm = tripsToExport.reduce((sum, t) => sum + (Number(t?.kmDriven) || 0), 0);
+  const totalLiters = Number(tripsToExport.reduce((sum, t) => sum + (Number(t?.litersUsed) || 0), 0).toFixed(2));
+  const totalCost = Number(tripsToExport.reduce((sum, t) => sum + (Number(t?.tripCost) || 0), 0).toFixed(2));
 
-  const unpaidTrips = tripsToExport.filter(t => !t.isPaid);
-  const unpaidCost = Number(unpaidTrips.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0).toFixed(2));
+  const unpaidTrips = tripsToExport.filter(t => t && !t.isPaid);
+  const unpaidCost = Number(unpaidTrips.reduce((sum, t) => sum + (Number(t?.tripCost) || 0), 0).toFixed(2));
   const netUnpaidCost = Number((unpaidCost - advanceNum).toFixed(2));
 
-  const paidTrips = tripsToExport.filter(t => t.isPaid);
-  const paidCost = Number(paidTrips.reduce((sum, t) => sum + (Number(t.tripCost) || 0), 0).toFixed(2));
+  const paidTrips = tripsToExport.filter(t => t && t.isPaid);
+  const paidCost = Number(paidTrips.reduce((sum, t) => sum + (Number(t?.tripCost) || 0), 0).toFixed(2));
 
   const vehicleLabel = selectedVehicle 
-    ? `${selectedVehicle.plate} (${selectedVehicle.makeModel || 'Vehicul'})` 
+    ? `${selectedVehicle.plate || 'Auto'} (${selectedVehicle.makeModel || 'Vehicul'})` 
     : 'Toate Vehiculele din Flota';
 
   const filterLabel = filterStatus === 'unpaid' 
@@ -121,7 +135,7 @@ export const generateWeekendTripsPDF = ({
   doc.setFontSize(11);
   doc.setTextColor(15, 23, 42);
   doc.setFont('helvetica', 'bold');
-  doc.text(sanitizeForPdf(`${totalKm.toLocaleString()} km | ${totalLiters.toFixed(1)} L`), 20, 56);
+  doc.text(sanitizeForPdf(`${totalKm.toLocaleString('ro-RO')} km | ${totalLiters.toFixed(1)} L`), 20, 56);
   doc.text(sanitizeForPdf(`${totalCost.toFixed(2)} lei`), 75, 56);
 
   // Deja achitat
@@ -159,20 +173,43 @@ export const generateWeekendTripsPDF = ({
 
   // 4. Detailed Table
   const tableData = tripsToExport.map((trip, idx) => {
-    const veh = vehicles.find(v => v.id === trip.vehicleId);
+    if (!trip) return [];
+    const veh = (vehicles || []).find(v => v && v.id === trip.vehicleId);
     const vPlate = veh ? veh.plate : (trip.vehicleId || '-');
     const dateRange = formatDateSafe(trip.startDate, trip.endDate);
-    const startKm = trip.startKm !== undefined && trip.startKm !== null ? Number(trip.startKm).toLocaleString() : '-';
-    const endKm = trip.endKm !== undefined && trip.endKm !== null ? Number(trip.endKm).toLocaleString() : '-';
-    const kmDriven = trip.kmDriven ? Number(trip.kmDriven).toLocaleString() : '-';
+    
+    let startKm = '-';
+    if (trip.startKm !== undefined && trip.startKm !== null && !isNaN(Number(trip.startKm))) {
+      startKm = Number(trip.startKm).toLocaleString('ro-RO');
+    }
+    
+    let endKm = '-';
+    if (trip.endKm !== undefined && trip.endKm !== null && !isNaN(Number(trip.endKm))) {
+      endKm = Number(trip.endKm).toLocaleString('ro-RO');
+    }
+    
+    let kmDriven = '-';
+    if (trip.kmDriven !== undefined && trip.kmDriven !== null && !isNaN(Number(trip.kmDriven))) {
+      kmDriven = Number(trip.kmDriven).toLocaleString('ro-RO');
+    }
+    
+    let liters = '-';
+    if (trip.litersUsed !== undefined && trip.litersUsed !== null && !isNaN(Number(trip.litersUsed))) {
+      liters = Number(trip.litersUsed).toFixed(2);
+    }
+    
     let price = '-';
     const rawPrice = trip.fuelPrice || trip.pricePerLiter || trip.fuelPriceAtTime;
-    if (rawPrice && Number(rawPrice) > 0) {
+    if (rawPrice !== undefined && rawPrice !== null && !isNaN(Number(rawPrice)) && Number(rawPrice) > 0) {
       price = Number(rawPrice).toFixed(2);
     } else if (Number(trip.tripCost) > 0 && Number(trip.litersUsed) > 0) {
       price = (Number(trip.tripCost) / Number(trip.litersUsed)).toFixed(2);
     }
-    const cost = trip.tripCost ? `${Number(trip.tripCost).toFixed(2)} lei` : '0.00 lei';
+    
+    let cost = '0.00 lei';
+    if (trip.tripCost !== undefined && trip.tripCost !== null && !isNaN(Number(trip.tripCost))) {
+      cost = `${Number(trip.tripCost).toFixed(2)} lei`;
+    }
     
     let status = 'DE ACHITAT';
     if (!trip.endKm || trip.isOngoing) {
@@ -198,7 +235,21 @@ export const generateWeekendTripsPDF = ({
     ];
   });
 
-  autoTable(doc, {
+  // Call autoTable safely
+  const runAutoTable = (targetDoc, options) => {
+    if (typeof autoTable === 'function') {
+      return autoTable(targetDoc, options);
+    }
+    if (autoTable && typeof autoTable.default === 'function') {
+      return autoTable.default(targetDoc, options);
+    }
+    if (typeof targetDoc.autoTable === 'function') {
+      return targetDoc.autoTable(options);
+    }
+    throw new Error('Modulul de generare tabel PDF (autoTable) nu a putut fi initializat.');
+  };
+
+  runAutoTable(doc, {
     startY: 70,
     head: [[
       '#',
@@ -256,15 +307,17 @@ export const generateWeekendTripsPDF = ({
     },
     didDrawPage: () => {
       // Footer
-      const pageCount = doc.internal.getNumberOfPages();
-      const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
-      doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184);
-      doc.text(
-        sanitizeForPdf(`CarsApp • Pagina ${currentPage} din ${pageCount} • Decont personal`),
-        14,
-        202
-      );
+      try {
+        const pageCount = doc.internal.getNumberOfPages();
+        const currentPage = doc.internal.getCurrentPageInfo ? doc.internal.getCurrentPageInfo().pageNumber : 1;
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184);
+        doc.text(
+          sanitizeForPdf(`CarsApp • Pagina ${currentPage} din ${pageCount} • Decont personal`),
+          14,
+          202
+        );
+      } catch (_) {}
     },
     margin: { left: 14, right: 14, bottom: 12 }
   });
@@ -278,7 +331,7 @@ export const exportWeekendTripsPDF = async ({
   selectedVehicle = null,
   tripsAdvance = 0,
   filterStatus = 'all',
-  target = 'share' // 'share' (WhatsApp/Share Sheet) | 'download'
+  target = 'whatsapp' // 'whatsapp' | 'share' | 'download'
 }) => {
   const doc = generateWeekendTripsPDF({
     personalTrips,
@@ -288,8 +341,8 @@ export const exportWeekendTripsPDF = async ({
     filterStatus
   });
 
-  const vehSlug = selectedVehicle 
-    ? selectedVehicle.plate.replace(/[^a-zA-Z0-9]/g, '_') 
+  const vehSlug = selectedVehicle && selectedVehicle.plate 
+    ? String(selectedVehicle.plate).replace(/[^a-zA-Z0-9]/g, '_') 
     : 'Flota';
   const dateSlug = new Date().toISOString().slice(0, 10);
   const fileName = `Raport_Curse_Weekend_${vehSlug}_${dateSlug}.pdf`;
@@ -299,38 +352,66 @@ export const exportWeekendTripsPDF = async ({
   if (Capacitor.isNativePlatform()) {
     try {
       const pdfBase64 = doc.output('datauristring').split(',')[1];
+      
+      // Always write to Cache directory so it's shareable via FileProvider
       const writeResult = await Filesystem.writeFile({
         path: fileName,
         data: pdfBase64,
-        directory: Directory.Cache
+        directory: Directory.Cache,
+        recursive: true
       });
 
-      if (target === 'whatsapp' || target === 'share') {
+      if (target === 'download') {
+        // Also save to Documents directory for permanent local storage
+        try {
+          await Filesystem.writeFile({
+            path: fileName,
+            data: pdfBase64,
+            directory: Directory.Documents,
+            recursive: true
+          });
+        } catch (docErr) {
+          console.warn("Could not save to Documents directory:", docErr);
+        }
+
+        try {
+          await Share.share({
+            title: "Raport PDF CarsApp",
+            text: `Raport Curse Weekend (${fileName})`,
+            url: writeResult.uri,
+            dialogTitle: "Deschide sau Salvează Fișier PDF"
+          });
+        } catch (shareErr) {
+          const msg = String(shareErr?.message || shareErr);
+          if (!msg.toLowerCase().includes('cancel')) {
+            console.warn("Share dialog status:", shareErr);
+          }
+        }
+        return { success: true, method: 'download', fileName };
+      }
+
+      // target === 'whatsapp' or 'share'
+      try {
         await Share.share({
           title: "Raport Curse Weekend CarsApp",
           text: `Raport Curse Weekend CarsApp (${vehicleLabel}) - ${dateSlug}`,
           url: writeResult.uri,
           dialogTitle: "Trimite Raport PDF (WhatsApp, Salvare, etc.)"
         });
-        return { success: true, method: 'share', fileName };
-      } else {
-        await Share.share({
-          title: "Salveaza Raport PDF CarsApp",
-          text: `Salvare Raport PDF (${fileName})`,
-          url: writeResult.uri,
-          dialogTitle: "Deschide sau Salveaza Fisier PDF"
-        });
-        return { success: true, method: 'download', fileName };
+      } catch (shareErr) {
+        const msg = String(shareErr?.message || shareErr);
+        if (!msg.toLowerCase().includes('cancel')) {
+          console.warn("Share dialog status:", shareErr);
+        }
       }
+      return { success: true, method: 'share', fileName };
     } catch (err) {
-      console.error("Eroare la export/partajare PDF nativ:", err);
-      // Fallback
-      doc.save(fileName);
-      return { success: true, method: 'browser-download', fileName };
+      console.error("Eroare la scriere/partajare PDF nativ:", err);
+      throw err;
     }
   }
 
-  // Web Browser Platform
+  // Web Browser Platform (fallback)
   if (target === 'whatsapp') {
     const pdfBlob = doc.output('blob');
     const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
@@ -354,7 +435,7 @@ export const exportWeekendTripsPDF = async ({
     const advanceInfo = tripsAdvance > 0 ? `\nSold/Avans curent: +${tripsAdvance} lei` : '';
     const summaryMsg = encodeURIComponent(
       `Raport Curse Weekend CarsApp (${vehicleLabel})\n` +
-      `Fisierul PDF (${fileName}) a fost descarcat pe dispozitiv.${advanceInfo}`
+      `Fișierul PDF (${fileName}) a fost descărcat pe dispozitiv.${advanceInfo}`
     );
     window.open(`https://api.whatsapp.com/send?text=${summaryMsg}`, '_blank');
     return { success: true, method: 'whatsapp-web', fileName };
