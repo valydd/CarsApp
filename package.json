@@ -1,7 +1,7 @@
 {
   "name": "carsapp",
   "private": true,
-  "version": "1.9.37",
+  "version": "1.9.38",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,6 +19,8 @@
     "@tailwindcss/vite": "^4.3.3",
     "canvas-confetti": "^1.9.4",
     "html5-qrcode": "^2.3.8",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lucide-react": "^1.38.0",
     "qrcode": "^1.5.4",
     "react": "^19.2.8",
