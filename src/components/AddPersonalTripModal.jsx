@@ -201,9 +201,8 @@ export const AddPersonalTripModal = ({
       setIsMultiDay(false);
       setTripTime(getCurrentTimeStr());
       
-      // Auto-suggest starting km from vehicle's latest odometer
-      const suggestedKm = getLatestVehicleKm(vId);
-      setStartKm(suggestedKm);
+      // User wants startKm to be empty initially, with suggested km shown as an example (placeholder)
+      setStartKm('');
       setEndKm('');
       setCustomAvgL100('');
       setCustomFuelPrice('');
@@ -315,12 +314,7 @@ export const AddPersonalTripModal = ({
             <select
               value={vehicleId}
               onChange={(e) => {
-                const nextId = e.target.value;
-                setVehicleId(nextId);
-                if (!tripToEdit) {
-                  const sug = getLatestVehicleKm(nextId);
-                  if (sug) setStartKm(sug);
-                }
+                setVehicleId(e.target.value);
               }}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
               required
@@ -428,17 +422,19 @@ export const AddPersonalTripModal = ({
                     type="number"
                     value={startKm}
                     onChange={(e) => setStartKm(e.target.value)}
-                    placeholder="Km plecare"
-                    className="w-full font-mono font-black text-sm sm:text-base text-purple-700 dark:text-purple-300 bg-transparent outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600 placeholder:text-xs placeholder:font-medium"
+                    placeholder={latestSuggested ? `ex: ${latestSuggested}` : "Km plecare"}
+                    className="w-full font-mono font-black text-sm sm:text-base text-purple-700 dark:text-purple-300 bg-transparent outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:text-xs placeholder:font-normal placeholder:font-sans"
                     required
                   />
-                  {latestSuggested && startKm !== latestSuggested && (
+                  {latestSuggested && (
                     <button
                       type="button"
                       onClick={() => setStartKm(latestSuggested)}
-                      className="text-[9.5px] font-bold text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 mt-1 block truncate transition-colors cursor-pointer"
+                      className="text-[9.5px] font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 mt-1 block truncate transition-colors cursor-pointer"
                     >
-                      Copiază ({Number(latestSuggested).toLocaleString('ro-RO')})
+                      {startKm === latestSuggested
+                        ? `✓ Folosit (${Number(latestSuggested).toLocaleString('ro-RO')})`
+                        : `+ Folosește (${Number(latestSuggested).toLocaleString('ro-RO')})`}
                     </button>
                   )}
                 </div>
