@@ -211,12 +211,9 @@ export const AddPersonalTripModal = ({
       setIsPaid(false);
       setShowAdvancedDetails(false);
 
+      // When starting a new trip, ALWAYS focus startKm so the user can immediately edit or confirm it!
       setTimeout(() => {
-        if (!suggestedKm) {
-          startKmInputRef.current?.focus();
-        } else {
-          endKmInputRef.current?.focus();
-        }
+        startKmInputRef.current?.focus();
       }, 150);
     }
   }, [isOpen, tripToEdit, defaultVehicleId, vehicles]);
@@ -352,21 +349,21 @@ export const AddPersonalTripModal = ({
 
               <div className="grid grid-cols-2 gap-2.5 items-center">
                 <div className="bg-white/80 dark:bg-slate-900/80 p-2.5 rounded-xl border border-amber-300/60 dark:border-amber-800/60">
-                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block mb-0.5">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 block mb-0.5 truncate">
                     KM PLECARE (START)
                   </span>
                   <input
                     type="number"
                     value={startKm}
                     onChange={(e) => setStartKm(e.target.value)}
-                    className="w-full font-mono font-black text-sm text-slate-800 dark:text-slate-200 bg-transparent outline-none"
+                    className="w-full font-mono font-black text-sm sm:text-base text-slate-800 dark:text-slate-200 bg-transparent outline-none"
                     required
                   />
                 </div>
 
                 <div className="bg-white dark:bg-slate-900 p-2.5 rounded-xl border-2 border-purple-500 shadow-md ring-2 ring-purple-500/20">
-                  <label className="text-[10px] font-black text-purple-700 dark:text-purple-300 block mb-0.5">
-                    👉 KM SOSIRE (SFÂRȘIT) *
+                  <label className="text-[10px] sm:text-[11px] font-black text-purple-700 dark:text-purple-300 block mb-0.5 truncate">
+                    👉 KM SOSIRE *
                   </label>
                   <input
                     ref={endKmInputRef}
@@ -374,8 +371,8 @@ export const AddPersonalTripModal = ({
                     type="number"
                     value={endKm}
                     onChange={(e) => setEndKm(e.target.value)}
-                    placeholder="ex: 137650"
-                    className="w-full font-mono font-black text-base text-purple-700 dark:text-purple-300 bg-transparent outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600"
+                    placeholder="Km final"
+                    className="w-full font-mono font-black text-sm sm:text-base text-purple-700 dark:text-purple-300 bg-transparent outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600 placeholder:text-xs placeholder:font-medium"
                     required
                   />
                 </div>
@@ -401,63 +398,66 @@ export const AddPersonalTripModal = ({
               </div>
             </div>
           ) : (
-            /* CARD NORMAL PENTRU CURSĂ NOUĂ SAU EDITARE COMPLETĂ */
-            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2.5">
+            /* CARD PENTRU CURSĂ NOUĂ - KM ÎNCEPUT EVIDENȚIAT */
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/80 dark:border-purple-900/60 shadow-xs space-y-3">
               <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
-                <span className="flex items-center gap-1.5">
-                  <Gauge className="w-4 h-4 text-purple-500" />
-                  <span>Kilometraj Cursă (Început & Sosire)</span>
+                <span className="flex items-center gap-1.5 text-purple-900 dark:text-purple-300">
+                  <Gauge className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <span>Kilometraj Cursă (Plecare & Sosire)</span>
                 </span>
-                {latestSuggested && !startKm && (
+                {latestSuggested && (
                   <button
                     type="button"
                     onClick={() => setStartKm(latestSuggested)}
-                    className="text-[10.5px] text-purple-600 dark:text-purple-400 font-bold hover:underline cursor-pointer"
+                    className="text-[10.5px] px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-700 dark:text-purple-300 font-bold hover:bg-purple-500/25 transition-colors cursor-pointer"
                   >
                     📍 Sugerat: {Number(latestSuggested).toLocaleString('ro-RO')} km
                   </button>
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-3 items-start">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                    🟢 {t.startOdometer || "Km Început (Plecare)"} *
+              <div className="grid grid-cols-2 gap-2.5 items-start">
+                {/* KM ÎNCEPUT - EVIDENȚIAT LA PORNIREA CURSEI NOI */}
+                <div className="bg-white dark:bg-slate-900 p-2.5 rounded-xl border-2 border-purple-500 shadow-md ring-2 ring-purple-500/20">
+                  <label className="text-[10px] sm:text-[11px] font-black text-purple-700 dark:text-purple-300 block mb-0.5 truncate">
+                    👉 KM ÎNCEPUT *
                   </label>
                   <input
                     ref={startKmInputRef}
+                    autoFocus
                     type="number"
                     value={startKm}
                     onChange={(e) => setStartKm(e.target.value)}
-                    placeholder="ex: 136200"
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-sm font-mono font-black text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden"
+                    placeholder="Km plecare"
+                    className="w-full font-mono font-black text-sm sm:text-base text-purple-700 dark:text-purple-300 bg-transparent outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600 placeholder:text-xs placeholder:font-medium"
                     required
                   />
-                  {latestSuggested && (
+                  {latestSuggested && startKm !== latestSuggested && (
                     <button
                       type="button"
                       onClick={() => setStartKm(latestSuggested)}
-                      className="text-[10px] font-bold text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 mt-1 block transition-colors cursor-pointer"
+                      className="text-[9.5px] font-bold text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 mt-1 block truncate transition-colors cursor-pointer"
                     >
-                      Copiază ultimul km ({Number(latestSuggested).toLocaleString('ro-RO')})
+                      Copiază ({Number(latestSuggested).toLocaleString('ro-RO')})
                     </button>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
-                    🏁 {t.endOdometer || "Km Sfârșit (Sosire)"}
+                {/* KM SFÂRȘIT - OPȚIONAL */}
+                <div className="bg-white/80 dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <label className="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400 block mb-0.5 truncate">
+                    🏁 KM SFÂRȘIT
                   </label>
                   <input
                     ref={endKmInputRef}
                     type="number"
                     value={endKm}
                     onChange={(e) => setEndKm(e.target.value)}
-                    placeholder="ex: 136450"
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-sm font-mono font-black text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden"
+                    placeholder="Opțional"
+                    className="w-full font-mono font-bold text-sm sm:text-base text-slate-800 dark:text-slate-200 bg-transparent outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600 placeholder:text-xs placeholder:font-medium"
                   />
-                  <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 mt-1 block">
-                    {t.optionalNow || "(Opțional - lasă gol dacă pleci acum)"}
+                  <span className="text-[9.5px] font-semibold text-purple-600 dark:text-purple-400 mt-1 block truncate">
+                    {t.optionalNow || "(Opțional acum)"}
                   </span>
                 </div>
               </div>
