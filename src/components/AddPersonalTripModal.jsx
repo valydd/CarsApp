@@ -1,5 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { X, Navigation, Calendar, Gauge, Fuel, DollarSign, Check, AlertCircle, ScanLine, Camera, Clock } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  X, 
+  Navigation, 
+  Calendar, 
+  Gauge, 
+  Fuel, 
+  DollarSign, 
+  Check, 
+  AlertCircle, 
+  ScanLine, 
+  Camera, 
+  Clock, 
+  Flag, 
+  ChevronDown, 
+  ChevronUp,
+  Sparkles,
+  ArrowRight
+} from 'lucide-react';
 import { translations } from '../i18n';
 import { calculateVehicleConsumption } from '../utils/calculations';
 import { ReceiptScanModal } from './ReceiptScanModal';
@@ -11,6 +28,7 @@ export const AddPersonalTripModal = ({
   tripToEdit = null,
   vehicles = [],
   records = [],
+  personalTrips = [],
   defaultVehicleId = '',
   lang = 'ro'
 }) => {
@@ -20,6 +38,9 @@ export const AddPersonalTripModal = ({
     const now = new Date();
     return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
   };
+
+  const endKmInputRef = useRef(null);
+  const startKmInputRef = useRef(null);
 
   const [vehicleId, setVehicleId] = useState('');
   const [title, setTitle] = useState('');
@@ -34,6 +55,33 @@ export const AddPersonalTripModal = ({
   const [isPaid, setIsPaid] = useState(false);
   const [isReceiptScanOpen, setIsReceiptScanOpen] = useState(false);
   const [scannedReceipt, setScannedReceipt] = useState(null);
+  const [showAdvancedDetails, setShowAdvancedDetails] = useState(false);
+  const [isMultiDay, setIsMultiDay] = useState(false);
+
+  // Helper to find latest odometer for vehicle
+  const getLatestVehicleKm = (vId) => {
+    if (!vId) return '';
+    const veh = vehicles.find(v => v.id === vId);
+    let maxKm = Number(veh?.currentKm) || 0;
+
+    (records || []).forEach(r => {
+      if (r && r.vehicleId === vId && r.odometer) {
+        const odo = Number(r.odometer) || 0;
+        if (odo > maxKm) maxKm = odo;
+      }
+    });
+
+    (personalTrips || []).forEach(t => {
+      if (t && t.vehicleId === vId) {
+        const e = Number(t.endKm) || 0;
+        const s = Number(t.startKm) || 0;
+        if (e > maxKm) maxKm = e;
+        else if (s > maxKm) maxKm = s;
+      }
+    });
+
+    return maxKm > 0 ? String(maxKm) : '';
+  };
 
   const formatDateToDisplay = (dStr) => {
     if (!dStr) return '';
@@ -46,7 +94,7 @@ export const AddPersonalTripModal = ({
 
   const handleStartDateChange = (val) => {
     setStartDate(val);
-    if (!endDate || endDate < val) {
+    if (!endDate || endDate < val || !isMultiDay) {
       setEndDate(val);
     }
     const disp = formatDateToDisplay(val);
@@ -60,6 +108,14 @@ export const AddPersonalTripModal = ({
       }
       return `${prev} (${disp})`;
     });
+  };
+
+  const triggerPicker = (e) => {
+    try {
+      if (e.target && typeof e.target.showPicker === 'function') {
+        e.target.showPicker();
+      }
+    } catch (_) {}
   };
 
   const handleApplyReceiptData = (data) => {
@@ -107,20 +163,32 @@ export const AddPersonalTripModal = ({
     ? Number((kmDriven * fuelStats.costPerKm).toFixed(2))
     : Number((calculatedLiters * effectiveFuelPrice).toFixed(2)));
 
+  const isFinishingOngoing = Boolean(tripToEdit && (!tripToEdit.endKm || tripToEdit.isOngoing));
+
   // Initialize or reset form
   useEffect(() => {
     if (tripToEdit) {
       setVehicleId(tripToEdit.vehicleId || '');
       setTitle(tripToEdit.title || '');
       setStartDate(tripToEdit.startDate || '');
-      setEndDate(tripToEdit.endDate || '');
+      const isMulti = Boolean(tripToEdit.endDate && tripToEdit.endDate !== tripToEdit.startDate);
+      setIsMultiDay(isMulti);
+      setEndDate(tripToEdit.endDate || tripToEdit.startDate || '');
       setTripTime(tripToEdit.time || (tripToEdit.createdAt ? new Date(tripToEdit.createdAt).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' }) : getCurrentTimeStr()));
-      setStartKm(tripToEdit.startKm ? String(tripToEdit.startKm) : '');
-      setEndKm(tripToEdit.endKm ? String(tripToEdit.endKm) : '');
+      setStartKm(tripToEdit.startKm !== undefined && tripToEdit.startKm !== null ? String(tripToEdit.startKm) : '');
+      setEndKm(tripToEdit.endKm !== undefined && tripToEdit.endKm !== null ? String(tripToEdit.endKm) : '');
       setCustomAvgL100(tripToEdit.avgL100 ? String(tripToEdit.avgL100) : '');
       setCustomFuelPrice(tripToEdit.fuelPrice ? String(tripToEdit.fuelPrice) : '');
       setNotes(tripToEdit.notes || '');
       setIsPaid(Boolean(tripToEdit.isPaid));
+      setShowAdvancedDetails(false);
+
+      // Auto-focus the endKm input if finishing an ongoing trip
+      if (!tripToEdit.endKm || tripToEdit.isOngoing) {
+        setTimeout(() => {
+          endKmInputRef.current?.focus();
+        }, 150);
+      }
     } else {
       const vId = defaultVehicleId || (vehicles[0]?.id || '');
       setVehicleId(vId);
@@ -130,13 +198,26 @@ export const AddPersonalTripModal = ({
       setTitle(`${prefix} (${formattedToday})`);
       setStartDate(todayStr);
       setEndDate(todayStr);
+      setIsMultiDay(false);
       setTripTime(getCurrentTimeStr());
-      setStartKm('');
+      
+      // Auto-suggest starting km from vehicle's latest odometer
+      const suggestedKm = getLatestVehicleKm(vId);
+      setStartKm(suggestedKm);
       setEndKm('');
       setCustomAvgL100('');
       setCustomFuelPrice('');
       setNotes('');
       setIsPaid(false);
+      setShowAdvancedDetails(false);
+
+      setTimeout(() => {
+        if (!suggestedKm) {
+          startKmInputRef.current?.focus();
+        } else {
+          endKmInputRef.current?.focus();
+        }
+      }, 150);
     }
   }, [isOpen, tripToEdit, defaultVehicleId, vehicles]);
 
@@ -186,46 +267,64 @@ export const AddPersonalTripModal = ({
     onClose();
   };
 
+  const latestSuggested = getLatestVehicleKm(vehicleId);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[94vh]">
         
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/60">
+        <div className="px-5 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/70">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
-              <Navigation className="w-4 h-4" />
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-xs ${
+              isFinishingOngoing 
+                ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400' 
+                : 'bg-purple-500/20 text-purple-600 dark:text-purple-400'
+            }`}>
+              {isFinishingOngoing ? <Flag className="w-5 h-5" /> : <Navigation className="w-4 h-4" />}
             </div>
             <div>
-              <h2 className="text-base font-black text-slate-900 dark:text-white">
-                {tripToEdit 
-                  ? (t.editPersonalTrip || "Editează Cursă Personală")
+              <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
+                {isFinishingOngoing 
+                  ? "🏁 Finalizează Cursa Weekend" 
+                  : tripToEdit 
+                  ? (t.editPersonalTrip || "Editează Cursă Weekend")
                   : (t.addPersonalTripModalTitle || "Cursă Nouă Weekend")}
               </h2>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                {t.addPersonalTripSubtitle || "Calculează consumul și costul carburantului"}
+                {isFinishingOngoing
+                  ? "Introdu kilometrajul de final pentru a calcula decontul"
+                  : (t.addPersonalTripSubtitle || "Kilometraj, dată, oră și calcul consum")}
               </p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Form Body */}
-        <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-4 flex-1">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1">
           
-          {/* 1. Select Vehicle */}
+          {/* SECȚIUNEA 1: VEHICUL */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
               {t.selectVehicle || "Vehicul"}
             </label>
             <select
               value={vehicleId}
-              onChange={(e) => setVehicleId(e.target.value)}
+              onChange={(e) => {
+                const nextId = e.target.value;
+                setVehicleId(nextId);
+                if (!tripToEdit) {
+                  const sug = getLatestVehicleKm(nextId);
+                  if (sug) setStartKm(sug);
+                }
+              }}
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
               required
             >
@@ -237,182 +336,241 @@ export const AddPersonalTripModal = ({
             </select>
           </div>
 
-          {/* Quick Scan Receipt Option */}
-          <div className="p-3 rounded-2xl bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-blue-500/10 border border-purple-500/20 dark:border-purple-500/30 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-                <ScanLine className="w-4 h-4" />
+          {/* SECȚIUNEA 2: KILOMETRAJ (START & SFÂRȘIT) - POZIȚIE PRIORITARĂ LA ÎNCEPUTUL PAGINII */}
+          {isFinishingOngoing ? (
+            /* SPECIAL FOCUSED CARD CÂND SE FINALIZEAZĂ O CURSĂ ÎN DESFĂȘURARE */
+            <div className="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border-2 border-amber-400/80 dark:border-amber-600/70 shadow-sm space-y-3">
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                  <Flag className="w-4 h-4 text-amber-500" />
+                  <span>Kilometraj Cursă</span>
+                </span>
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-200/80 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 font-extrabold">
+                  În Desfășurare
+                </span>
               </div>
-              <div className="min-w-0">
-                <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
-                  {t.scanReceipt || "Scanare Bon Carburant"}
-                </h4>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                  {t.scanReceiptDesc || "Cod QR, Cod de bare sau Foto Bon"}
-                </p>
+
+              <div className="grid grid-cols-2 gap-2.5 items-center">
+                <div className="bg-white/80 dark:bg-slate-900/80 p-2.5 rounded-xl border border-amber-300/60 dark:border-amber-800/60">
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block mb-0.5">
+                    KM PLECARE (START)
+                  </span>
+                  <input
+                    type="number"
+                    value={startKm}
+                    onChange={(e) => setStartKm(e.target.value)}
+                    className="w-full font-mono font-black text-sm text-slate-800 dark:text-slate-200 bg-transparent outline-none"
+                    required
+                  />
+                </div>
+
+                <div className="bg-white dark:bg-slate-900 p-2.5 rounded-xl border-2 border-purple-500 shadow-md ring-2 ring-purple-500/20">
+                  <label className="text-[10px] font-black text-purple-700 dark:text-purple-300 block mb-0.5">
+                    👉 KM SOSIRE (SFÂRȘIT) *
+                  </label>
+                  <input
+                    ref={endKmInputRef}
+                    autoFocus
+                    type="number"
+                    value={endKm}
+                    onChange={(e) => setEndKm(e.target.value)}
+                    placeholder="ex: 137650"
+                    className="w-full font-mono font-black text-base text-purple-700 dark:text-purple-300 bg-transparent outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Butoane rapide de adăugare km */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                <span className="text-[10.5px] font-semibold text-slate-500 dark:text-slate-400 mr-1">
+                  Adaugă rapid la plecare:
+                </span>
+                {[10, 25, 50, 100].map(val => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => {
+                      if (sKm > 0) setEndKm(String(sKm + val));
+                    }}
+                    className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-300/80 dark:border-amber-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:border-purple-400 transition-colors cursor-pointer"
+                  >
+                    +{val} km
+                  </button>
+                ))}
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsReceiptScanOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all shrink-0 cursor-pointer"
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>{t.scanButton || "Scanează"}</span>
-            </button>
-          </div>
-
-          {(scannedReceipt || customFuelPrice) && (
-            <div className="p-3 bg-purple-50/50 dark:bg-purple-950/20 rounded-2xl border border-purple-500/20 dark:border-purple-500/30 space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-purple-700 dark:text-purple-400">
+          ) : (
+            /* CARD NORMAL PENTRU CURSĂ NOUĂ SAU EDITARE COMPLETĂ */
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2.5">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
                 <span className="flex items-center gap-1.5">
-                  <Fuel className="w-3.5 h-3.5" />
-                  {t.receiptAndPrice || "Date Bon & Preț Carburant"}
+                  <Gauge className="w-4 h-4 text-purple-500" />
+                  <span>Kilometraj Cursă (Început & Sosire)</span>
                 </span>
-                {scannedReceipt && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-bold">
-                    {scannedReceipt.fuelType === 'diesel' ? '⛽ Motorină' : scannedReceipt.fuelType === 'gpl' ? '🟢 GPL' : '⛽ Benzină'}
-                  </span>
+                {latestSuggested && !startKm && (
+                  <button
+                    type="button"
+                    onClick={() => setStartKm(latestSuggested)}
+                    className="text-[10.5px] text-purple-600 dark:text-purple-400 font-bold hover:underline cursor-pointer"
+                  >
+                    📍 Sugerat: {Number(latestSuggested).toLocaleString('ro-RO')} km
+                  </button>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
+
+              <div className="grid grid-cols-2 gap-3 items-start">
                 <div>
-                  <label className="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
-                    {t.pricePerLiter || "Preț per litru (RON)"}
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                    🟢 {t.startOdometer || "Km Început (Plecare)"} *
                   </label>
                   <input
+                    ref={startKmInputRef}
                     type="number"
-                    step="0.01"
-                    value={customFuelPrice}
-                    onChange={(e) => setCustomFuelPrice(e.target.value)}
-                    placeholder={detectedFuelPrice.toString()}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
+                    value={startKm}
+                    onChange={(e) => setStartKm(e.target.value)}
+                    placeholder="ex: 136200"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-sm font-mono font-black text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden"
+                    required
                   />
+                  {latestSuggested && (
+                    <button
+                      type="button"
+                      onClick={() => setStartKm(latestSuggested)}
+                      className="text-[10px] font-bold text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 mt-1 block transition-colors cursor-pointer"
+                    >
+                      Copiază ultimul km ({Number(latestSuggested).toLocaleString('ro-RO')})
+                    </button>
+                  )}
                 </div>
+
                 <div>
-                  <label className="block text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
-                    {t.avgConsumptionShort || "Consum mediu (L/100km)"}
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                    🏁 {t.endOdometer || "Km Sfârșit (Sosire)"}
                   </label>
                   <input
+                    ref={endKmInputRef}
                     type="number"
-                    step="0.1"
-                    value={customAvgL100}
-                    onChange={(e) => setCustomAvgL100(e.target.value)}
-                    placeholder={detectedAvgL100.toString()}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
+                    value={endKm}
+                    onChange={(e) => setEndKm(e.target.value)}
+                    placeholder="ex: 136450"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-sm font-mono font-black text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden"
                   />
+                  <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 mt-1 block">
+                    {t.optionalNow || "(Opțional - lasă gol dacă pleci acum)"}
+                  </span>
                 </div>
               </div>
-              {scannedReceipt?.amount && (
-                <div className="text-[10.5px] text-slate-500 dark:text-slate-400 flex items-center justify-between pt-1 border-t border-purple-200/40 dark:border-purple-800/40">
-                  <span>Valoare bon: <strong className="text-slate-800 dark:text-slate-200">{scannedReceipt.amount} RON</strong> ({scannedReceipt.liters || 0} L)</span>
-                  {scannedReceipt.station && <span>Stație: <strong className="text-slate-800 dark:text-slate-200">{scannedReceipt.station}</strong></span>}
-                </div>
-              )}
             </div>
           )}
 
-          {/* 2. Trip Title / Period */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-              {t.periodDesc || "Descriere Perioadă (ex: Weekend, Concediu)"}
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={t.periodPlaceholder || "ex: Weekend 29-30 Aug, Deplasare munte"}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-              required
-            />
-          </div>
-
-          {/* 3. Dates & Time (Start Date, Ora, End Date) */}
-          <div className="grid grid-cols-12 gap-2.5">
-            <div className="col-span-7 sm:col-span-5">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
-                <span className="truncate">{t.startDate || "Data Început"}</span>
-              </label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => handleStartDateChange(e.target.value)}
-                className="w-full min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-                required
-              />
-            </div>
-            <div className="col-span-5 sm:col-span-3">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
-                <Clock className="w-3 h-3 text-purple-500 shrink-0" />
-                <span className="truncate">{t.time || "Ora Cursă"}</span>
-              </label>
-              <input
-                type="time"
-                value={tripTime}
-                onChange={(e) => setTripTime(e.target.value)}
-                className="w-full min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-              />
-            </div>
-            <div className="col-span-12 sm:col-span-4">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-purple-500 shrink-0" />
-                <span className="truncate">{t.endDate || "Data Sfârșit"}</span>
-              </label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-                required
-              />
-            </div>
-          </div>
-
-          {/* 4. Odometer: Start Km & End Km (pe același rând) */}
-          <div className="grid grid-cols-2 gap-3 items-start">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1 whitespace-nowrap">
-                <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
-                <span>{t.startOdometer || "Km Început"}</span>
-              </label>
-              <input
-                type="number"
-                value={startKm}
-                onChange={(e) => setStartKm(e.target.value)}
-                placeholder="ex: 136200"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1 whitespace-nowrap">
-                <Gauge className="w-3 h-3 text-purple-500 shrink-0" />
-                <span>{t.endOdometer || "Km Sfârșit"}</span>
-              </label>
-              <input
-                type="number"
-                value={endKm}
-                onChange={(e) => setEndKm(e.target.value)}
-                placeholder="ex: 136450"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-              />
-              <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 mt-1 block">
-                {t.optionalNow || "(Opțional acum)"}
+          {/* SECȚIUNEA 3: DATA ȘI ORA (COMPLET EDITABILE, TOUCH-FRIENDLY, RAPID DE ACCESAT) */}
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2.5">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-purple-500" />
+                <span>Dată & Oră (Apasă pentru modificare)</span>
               </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleStartDateChange(new Date().toISOString().slice(0, 10))}
+                  className="px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 hover:bg-purple-500/20 text-[10.5px] font-black transition-colors cursor-pointer"
+                >
+                  📅 Azi
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTripTime(getCurrentTimeStr())}
+                  className="px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 hover:bg-purple-500/20 text-[10.5px] font-black transition-colors cursor-pointer"
+                >
+                  ⏰ Acum
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                  {t.startDate || "Data Cursă"} *
+                </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onClick={triggerPicker}
+                  onChange={(e) => handleStartDateChange(e.target.value)}
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden cursor-pointer"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                  {t.time || "Ora Cursă"}
+                </label>
+                <input
+                  type="time"
+                  value={tripTime}
+                  onClick={triggerPicker}
+                  onChange={(e) => setTripTime(e.target.value)}
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden cursor-pointer"
+                />
+              </div>
+            </div>
+
+            {/* Opțiune Cursă pe mai multe zile (ex: Weekend întreg) */}
+            <div className="pt-1 border-t border-slate-200/60 dark:border-slate-800/60">
+              {!isMultiDay ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMultiDay(true);
+                    if (!endDate || endDate < startDate) setEndDate(startDate);
+                  }}
+                  className="text-[11px] text-purple-600 dark:text-purple-400 font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                >
+                  <span>+ Setează dată sfârșit diferită (weekend prelungit)</span>
+                </button>
+              ) : (
+                <div className="space-y-1.5 animate-in fade-in">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                      {t.endDate || "Data Sfârșit (Sosire)"}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMultiDay(false);
+                        setEndDate(startDate);
+                      }}
+                      className="text-[10px] text-slate-400 hover:text-rose-500 cursor-pointer"
+                    >
+                      Anulează dată sfârșit separată
+                    </button>
+                  </div>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onClick={triggerPicker}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/40 outline-hidden cursor-pointer"
+                    required
+                  />
+                </div>
+              )}
             </div>
           </div>
 
-          {/* LIVE COMPUTED RESULT CARD - Doar după ce se introduce km început */}
+          {/* SECȚIUNEA 4: CALCUL LIVE (DISTANȚĂ, CONSUM, COST) */}
           {sKm > 0 && (
             isOngoing ? (
-              <div className="bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 rounded-2xl p-3.5 space-y-1.5 animate-in fade-in">
+              <div className="bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/40 rounded-2xl p-3 space-y-1.5 animate-in fade-in">
                 <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-black text-xs">
                   <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
                   <span>{t.ongoingTripTitle || "Cursă În Desfășurare (Activă)"}</span>
                 </div>
                 <p className="text-[11px] text-amber-700/90 dark:text-amber-300/90">
-                  {t.ongoingTripSubtitle || "Cursă activă fără kilometraj de final"} ({sKm.toLocaleString('ro-RO')} km).
+                  {t.ongoingTripSubtitle || "Cursă activă fără kilometraj de final"} ({sKm.toLocaleString('ro-RO')} km). O poți finaliza oricând la sosire.
                 </p>
               </div>
             ) : (
@@ -444,65 +602,159 @@ export const AddPersonalTripModal = ({
                   </span>
                 </div>
 
-                <div className="text-[10.5px] text-slate-500 dark:text-slate-400 pt-1">
+                <div className="text-[10.5px] text-slate-500 dark:text-slate-400 pt-0.5">
                   {`(${effectiveAvgL100} L/100km • ${effectiveFuelPrice} RON/L)`}
                 </div>
               </div>
             )
           )}
 
-          {/* Status Achitat / Decontat */}
-          {!isOngoing && (
-            <div className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex items-center justify-between">
-              <div>
-                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
-                  {t.settledTrip || "Cursă Achitată / Decontată"}
-                </span>
-                <span className="text-[10.5px] text-slate-500 dark:text-slate-400 block">
-                  {t.settledTripDesc || "Bifează dacă această cursă a fost deja plătită / decontată"}
-                </span>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={isPaid}
-                  onChange={(e) => setIsPaid(e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-emerald-500"></div>
-              </label>
-            </div>
-          )}
+          {/* SECȚIUNEA 5: DETALII OPȚIONALE (TITLU, BON, CONSUM, OBSERVAȚII) */}
+          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowAdvancedDetails(!showAdvancedDetails)}
+              className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950/60 hover:bg-slate-100 dark:hover:bg-slate-800/60 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between transition-colors cursor-pointer"
+            >
+              <span>{showAdvancedDetails ? "Ascunde detalii opționale" : "+ Detalii opționale (Titlu, Bon, Preț, Note)"}</span>
+              {showAdvancedDetails ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+            </button>
 
-          {/* Notes */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-              {t.notes || "Observații"}
-            </label>
-            <input
-              type="text"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder={t.notesPlaceholder || "Mențiuni opționale..."}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500/30 outline-hidden"
-            />
+            {showAdvancedDetails && (
+              <div className="p-3.5 space-y-3.5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 animate-in fade-in">
+                {/* Titlu / Descriere Cursă */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    {t.periodDesc || "Titlu / Destinație Cursă"}
+                  </label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="ex: Cursă Weekend - Pitești, Cumpărături..."
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white outline-hidden focus:ring-2 focus:ring-purple-500/30"
+                  />
+                </div>
+
+                {/* Scanare Bon Carburant */}
+                <div className="p-2.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-500/20 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <ScanLine className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                      Scanare Bon Carburant (Opțional)
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsReceiptScanOpen(true)}
+                    className="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center gap-1 shadow-xs cursor-pointer shrink-0"
+                  >
+                    <Camera className="w-3 h-3" />
+                    <span>Scanează</span>
+                  </button>
+                </div>
+
+                {/* Preț per litru & Consum mediu */}
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <label className="block text-[10.5px] font-bold text-slate-600 dark:text-slate-400 mb-0.5">
+                      Preț carburant (RON/L)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={customFuelPrice}
+                      onChange={(e) => setCustomFuelPrice(e.target.value)}
+                      placeholder={detectedFuelPrice.toString()}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10.5px] font-bold text-slate-600 dark:text-slate-400 mb-0.5">
+                      Consum mediu (L/100km)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={customAvgL100}
+                      onChange={(e) => setCustomAvgL100(e.target.value)}
+                      placeholder={detectedAvgL100.toString()}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-purple-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Observații */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    {t.notes || "Observații"}
+                  </label>
+                  <input
+                    type="text"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Mențiuni opționale..."
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white outline-hidden focus:ring-2 focus:ring-purple-500/30"
+                  />
+                </div>
+
+                {/* Status Achitat */}
+                {!isOngoing && (
+                  <div className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
+                        {t.settledTrip || "Cursă Deja Achitată / Decontată"}
+                      </span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
+                        Bifează dacă banii au fost deja achitați
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isPaid}
+                        onChange={(e) => setIsPaid(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-5.5 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all dark:border-slate-600 peer-checked:bg-emerald-500"></div>
+                    </label>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Submit Button */}
+          {/* SECȚIUNEA 6: BUTON SALVARE / FINALIZEAZĂ (MARE, ACCESIBIL) */}
           <div className="pt-2">
             <button
               type="submit"
-              className={`w-full py-3 text-white font-black text-xs rounded-xl shadow-md transition-all active:scale-95 cursor-pointer ${
+              className={`w-full py-3.5 text-white font-black text-xs sm:text-sm rounded-2xl shadow-lg transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2 ${
                 isOngoing
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-amber-500/25'
+                  ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 shadow-amber-500/25'
                   : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-purple-500/25'
               }`}
             >
-              {isOngoing
-                ? (t.saveTripInProgress || "Salvează Cursa (În Desfășurare)")
-                : (tripToEdit 
-                    ? (t.updateTrip || "Actualizează Cursa")
-                    : (t.finishAndSave || "Salvează & Finalizează Cursa"))}
+              {isOngoing ? (
+                <>
+                  <span>⏳</span>
+                  <span>{t.saveTripInProgress || "Salvează Cursa (În Desfășurare)"}</span>
+                </>
+              ) : isFinishingOngoing ? (
+                <>
+                  <span>🏁</span>
+                  <span>Finalizează & Salvează Cursa</span>
+                </>
+              ) : tripToEdit ? (
+                <>
+                  <span>✓</span>
+                  <span>{t.updateTrip || "Actualizează Cursa"}</span>
+                </>
+              ) : (
+                <>
+                  <span>✓</span>
+                  <span>{t.finishAndSave || "Salvează & Calculează Cursa"}</span>
+                </>
+              )}
             </button>
           </div>
 

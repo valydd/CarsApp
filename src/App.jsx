@@ -1277,6 +1277,7 @@ export function App() {
           tripToEdit={tripToEdit}
           vehicles={vehicles}
           records={records}
+          personalTrips={personalTrips}
           defaultVehicleId={activeVehicle ? activeVehicle.id : (activeVehicles[0]?.id || (vehicles[0]?.id || ''))}
           lang={lang}
         />
